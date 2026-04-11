@@ -2,7 +2,7 @@
 
 <div
   id="chain-toggle"
-  class="fixed right-6 top-0 z-50 flex cursor-pointer flex-col items-center select-none"
+  class="fixed right-6 top-0 z-50 flex flex-col items-center select-none"
   role="button"
   tabindex="0"
   aria-label="Toggle theme"
@@ -38,7 +38,7 @@
     var DAMP = 0.97;
     var ITERS = 10;
     var BALL_R = 2;
-    var RING_R = 10;
+    var RING_R = 11;
     var BALL_HIT = RING_R * PX + 4;
 
     var pts = [];
@@ -132,7 +132,7 @@
           var f = ((REST - dist) / dist) * 0.5;
           var fx = dx * f,
             fy = dy * f;
-          var pinA = i === 0 || (dragging && i === last);
+          var pinA = i === 0;
           var pinB = dragging && i + 1 === last;
           if (pinA && pinB) continue;
           if (pinA) {
@@ -183,13 +183,16 @@
       }
     }
 
-    function fillBall(cx, cy, r) {
+    function fillBall(cx, cy, r, hi, base, lo) {
       var gx = Math.round(cx / PX),
         gy = Math.round(cy / PX);
       for (var dy = -r; dy <= r; dy++)
         for (var dx = -r; dx <= r; dx++)
-          if (dx * dx + dy * dy <= r * r + r)
+          if (dx * dx + dy * dy <= r * r + r) {
+            var s = dx + dy;
+            ctx.fillStyle = s < -1 ? hi : s > 1 ? lo : base;
             ctx.fillRect((gx + dx) * PX, (gy + dy) * PX, PX, PX);
+          }
     }
 
     function strokeCircle(cx, cy, r) {
@@ -230,8 +233,9 @@
       for (var i = 0; i < N - 1; i++)
         drawSeg(pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y);
 
-      ctx.fillStyle = dk ? "#c4a265" : "#8b7340";
-      fillBall(pts[N - 1].x, pts[N - 1].y, BALL_R);
+      var bp = pts[N - 1];
+      if (dk) fillBall(bp.x, bp.y, BALL_R, "#d4b275", "#c4a265", "#a8884a");
+      else fillBall(bp.x, bp.y, BALL_R, "#9b8350", "#8b7340", "#6b5a28");
     }
 
     draw();
@@ -279,8 +283,8 @@
     function endDrag() {
       dragging = false;
       didDrag = true;
-      hovering = false;
-      document.body.style.cursor = "";
+      hovering = nearBall(dragX, dragY);
+      document.body.style.cursor = hovering ? "grab" : "";
       toggleTheme();
     }
 
@@ -299,7 +303,10 @@
       }
       var was = hovering;
       hovering = nearBall(e.clientX, e.clientY);
-      if (was !== hovering && !looping) draw();
+      if (was !== hovering) {
+        document.body.style.cursor = hovering ? "grab" : "";
+        if (!looping) draw();
+      }
     });
 
     window.addEventListener("mouseup", function () {
