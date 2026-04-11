@@ -1,0 +1,362 @@
+<canvas id="chain-canvas"></canvas>
+
+<div
+  id="chain-toggle"
+  class="fixed right-6 top-0 z-50 flex cursor-pointer flex-col items-center select-none"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle theme"
+>
+  <div id="chain-spacer" class="w-[60px]"></div>
+</div>
+
+<style>
+  #chain-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 40;
+    pointer-events: none;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var canvas = document.getElementById("chain-canvas");
+    var ctx = canvas.getContext("2d");
+    var toggle = document.getElementById("chain-toggle");
+    var spacer = document.getElementById("chain-spacer");
+    var html = document.documentElement;
+
+    var PX = 3;
+    var N = 28;
+    var REST = PX * 1.1;
+    var GRAV = 0.5;
+    var DAMP = 0.97;
+    var ITERS = 10;
+    var BALL_R = 2;
+    var RING_R = 10;
+    var BALL_HIT = RING_R * PX + 4;
+
+    var pts = [];
+    var dragging = false;
+    var dragX = 0;
+    var dragY = 0;
+    var didDrag = false;
+    var looping = false;
+    var hovering = false;
+
+    function isDark() {
+      return html.classList.contains("dark");
+    }
+
+    function anchorPos() {
+      var r = toggle.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top };
+    }
+
+    function nearBall(cx, cy) {
+      var b = pts[N - 1];
+      var dx = cx - b.x,
+        dy = cy - b.y;
+      return dx * dx + dy * dy < BALL_HIT * BALL_HIT;
+    }
+
+    // ---- Init ----
+    function initChain() {
+      var a = anchorPos();
+      pts = [];
+      for (var i = 0; i < N; i++) {
+        pts.push({ x: a.x, y: a.y + i * REST, ox: a.x, oy: a.y + i * REST });
+      }
+    }
+
+    function warmUp() {
+      for (var i = 0; i < 120; i++) step();
+      for (var i = 0; i < N; i++) {
+        pts[i].ox = pts[i].x;
+        pts[i].oy = pts[i].y;
+      }
+      var a = anchorPos();
+      spacer.style.height = pts[N - 1].y - a.y + BALL_R * PX + PX + "px";
+    }
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      if (!looping) {
+        initChain();
+        warmUp();
+        draw();
+      }
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    // ---- Physics ----
+    function step() {
+      var a = anchorPos();
+      var last = N - 1;
+
+      for (var i = 1; i < N; i++) {
+        if (dragging && i === last) continue;
+        var p = pts[i];
+        var vx = (p.x - p.ox) * DAMP;
+        var vy = (p.y - p.oy) * DAMP;
+        p.ox = p.x;
+        p.oy = p.y;
+        p.x += vx;
+        p.y += vy + GRAV;
+      }
+
+      if (dragging) {
+        var d = pts[last];
+        d.ox = d.x;
+        d.oy = d.y;
+        d.x = dragX;
+        d.y = dragY;
+      }
+
+      for (var iter = 0; iter < ITERS; iter++) {
+        for (var i = 0; i < last; i++) {
+          var pa = pts[i],
+            pb = pts[i + 1];
+          var dx = pb.x - pa.x,
+            dy = pb.y - pa.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 0.001) continue;
+          var f = ((REST - dist) / dist) * 0.5;
+          var fx = dx * f,
+            fy = dy * f;
+          var pinA = i === 0 || (dragging && i === last);
+          var pinB = dragging && i + 1 === last;
+          if (pinA && pinB) continue;
+          if (pinA) {
+            pb.x += fx * 2;
+            pb.y += fy * 2;
+          } else if (pinB) {
+            pa.x -= fx * 2;
+            pa.y -= fy * 2;
+          } else {
+            pa.x -= fx;
+            pa.y -= fy;
+            pb.x += fx;
+            pb.y += fy;
+          }
+        }
+        pts[0].x = a.x;
+        pts[0].y = a.y;
+        if (dragging) {
+          pts[last].x = dragX;
+          pts[last].y = dragY;
+        }
+      }
+    }
+
+    // ---- Render ----
+    function drawSeg(x0, y0, x1, y1) {
+      var gx = Math.round(x0 / PX),
+        gy = Math.round(y0 / PX);
+      var gx1 = Math.round(x1 / PX),
+        gy1 = Math.round(y1 / PX);
+      var dx = Math.abs(gx1 - gx),
+        dy = Math.abs(gy1 - gy);
+      var sx = gx < gx1 ? 1 : -1,
+        sy = gy < gy1 ? 1 : -1;
+      var err = dx - dy;
+      while (true) {
+        ctx.fillRect(gx * PX, gy * PX, PX, PX);
+        if (gx === gx1 && gy === gy1) break;
+        var e2 = 2 * err;
+        if (e2 > -dy) {
+          err -= dy;
+          gx += sx;
+        }
+        if (e2 < dx) {
+          err += dx;
+          gy += sy;
+        }
+      }
+    }
+
+    function fillBall(cx, cy, r) {
+      var gx = Math.round(cx / PX),
+        gy = Math.round(cy / PX);
+      for (var dy = -r; dy <= r; dy++)
+        for (var dx = -r; dx <= r; dx++)
+          if (dx * dx + dy * dy <= r * r + r)
+            ctx.fillRect((gx + dx) * PX, (gy + dy) * PX, PX, PX);
+    }
+
+    function strokeCircle(cx, cy, r) {
+      var gx = Math.round(cx / PX),
+        gy = Math.round(cy / PX);
+      var bx = r,
+        by = 0,
+        err = 1 - r;
+      while (bx >= by) {
+        ctx.fillRect((gx + bx) * PX, (gy + by) * PX, PX, PX);
+        ctx.fillRect((gx - bx) * PX, (gy + by) * PX, PX, PX);
+        ctx.fillRect((gx + bx) * PX, (gy - by) * PX, PX, PX);
+        ctx.fillRect((gx - bx) * PX, (gy - by) * PX, PX, PX);
+        ctx.fillRect((gx + by) * PX, (gy + bx) * PX, PX, PX);
+        ctx.fillRect((gx - by) * PX, (gy + bx) * PX, PX, PX);
+        ctx.fillRect((gx + by) * PX, (gy - bx) * PX, PX, PX);
+        ctx.fillRect((gx - by) * PX, (gy - bx) * PX, PX, PX);
+        by++;
+        if (err < 0) err += 2 * by + 1;
+        else {
+          bx--;
+          err += 2 * (by - bx) + 1;
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var dk = isDark();
+
+      if (hovering && !dragging) {
+        var bp = pts[N - 1];
+        ctx.fillStyle = dk ? "rgba(255,107,157,0.5)" : "rgba(214,51,132,0.5)";
+        strokeCircle(bp.x, bp.y, RING_R);
+      }
+
+      ctx.fillStyle = dk ? "#8b7355" : "#6b5235";
+      for (var i = 0; i < N - 1; i++)
+        drawSeg(pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y);
+
+      ctx.fillStyle = dk ? "#c4a265" : "#8b7340";
+      fillBall(pts[N - 1].x, pts[N - 1].y, BALL_R);
+    }
+
+    draw();
+
+    // ---- Loop ----
+    function loop() {
+      step();
+      draw();
+      var energy = 0;
+      for (var i = 1; i < N; i++)
+        energy +=
+          Math.abs(pts[i].x - pts[i].ox) + Math.abs(pts[i].y - pts[i].oy);
+      if (energy > 0.1 || dragging) requestAnimationFrame(loop);
+      else looping = false;
+    }
+
+    function kick() {
+      if (!looping) {
+        looping = true;
+        requestAnimationFrame(loop);
+      }
+    }
+
+    // ---- Theme ----
+    function toggleTheme() {
+      html.classList.toggle("dark");
+      localStorage.setItem("theme", isDark() ? "dark" : "light");
+    }
+
+    function pullImpulse() {
+      var half = Math.floor(N / 2);
+      for (var i = half; i < N; i++)
+        pts[i].oy -= 12 * ((i - half + 1) / (N - half));
+    }
+
+    // ---- Interaction ----
+    function beginDrag(cx, cy) {
+      dragX = cx;
+      dragY = cy;
+      dragging = true;
+      document.body.style.cursor = "grabbing";
+      kick();
+    }
+
+    function endDrag() {
+      dragging = false;
+      didDrag = true;
+      hovering = false;
+      document.body.style.cursor = "";
+      toggleTheme();
+    }
+
+    window.addEventListener("mousedown", function (e) {
+      if (nearBall(e.clientX, e.clientY)) {
+        beginDrag(e.clientX, e.clientY);
+        e.preventDefault();
+      }
+    });
+
+    window.addEventListener("mousemove", function (e) {
+      if (dragging) {
+        dragX = e.clientX;
+        dragY = e.clientY;
+        return;
+      }
+      var was = hovering;
+      hovering = nearBall(e.clientX, e.clientY);
+      if (was !== hovering && !looping) draw();
+    });
+
+    window.addEventListener("mouseup", function () {
+      if (dragging) endDrag();
+    });
+
+    window.addEventListener(
+      "touchstart",
+      function (e) {
+        var t = e.touches[0];
+        if (nearBall(t.clientX, t.clientY)) {
+          beginDrag(t.clientX, t.clientY);
+          e.preventDefault();
+        }
+      },
+      { passive: false },
+    );
+
+    window.addEventListener(
+      "touchmove",
+      function (e) {
+        if (!dragging) return;
+        dragX = e.touches[0].clientX;
+        dragY = e.touches[0].clientY;
+        e.preventDefault();
+      },
+      { passive: false },
+    );
+
+    window.addEventListener("touchend", function () {
+      if (dragging) endDrag();
+    });
+
+    window.addEventListener("touchcancel", function () {
+      if (dragging) {
+        dragging = false;
+        document.body.style.cursor = "";
+      }
+    });
+
+    toggle.addEventListener("click", function () {
+      if (didDrag) {
+        didDrag = false;
+        return;
+      }
+      toggleTheme();
+      pullImpulse();
+      kick();
+    });
+
+    toggle.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleTheme();
+        pullImpulse();
+        kick();
+      }
+    });
+  })();
+</script>

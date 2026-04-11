@@ -12,6 +12,15 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.1.5"
+    "@fontsource/press-start-2p": "^5.2.7",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.5",
+    "gsap": "^3.14.2",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.7.2"
   }
 }
