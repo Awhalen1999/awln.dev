@@ -8,11 +8,6 @@
   --on-surface: #1a1a1a;
   --on-surface-muted: #666666;
   --surface-alt: #d4d4d4;
-
-  --rocket-body-light: #3a3a3a;
-  --rocket-body-mid: #555555;
-  --rocket-window: #2288bb;
-  --rocket-accent: #cc3333;
 }
 
 .dark {
@@ -20,11 +15,6 @@
   --on-surface: #ffffff;
   --on-surface-muted: #888888;
   --surface-alt: #222222;
-
-  --rocket-body-light: #e0e0e0;
-  --rocket-body-mid: #aaaaaa;
-  --rocket-window: #55ccff;
-  --rocket-accent: #ff5555;
 }
 
 @theme {
