@@ -114,6 +114,8 @@ const { count } = Astro.props;
     align-items: center;
     overflow: hidden;
     touch-action: none;
+    transform-origin: center center;
+    will-change: transform;
   }
 
   .carousel-strip {
@@ -176,6 +178,11 @@ const { count } = Astro.props;
     count: number;
   };
 
+  // How much the strip scales up at the edges.
+  const EDGE_SCALE = 1.20;
+  // Fraction of total scroll range where the effect ramps in.
+  const EDGE_ZONE = 0.05;
+
   function init({ viewport, strip, track, cursor, count }: Refs) {
     if (count < 1) return;
 
@@ -200,8 +207,18 @@ const { count } = Astro.props;
       apply();
     }
 
+    function edgeScale(): number {
+      // Disable when scroll range is too small (e.g. extreme zoom-out).
+      if (maxScroll < viewport.clientWidth * 0.5) return 1;
+      const zone = maxScroll * EDGE_ZONE;
+      const startT = 1 - clamp(current / zone, 0, 1);
+      const endT = 1 - clamp((maxScroll - current) / zone, 0, 1);
+      return 1 + (EDGE_SCALE - 1) * Math.max(startT, endT);
+    }
+
     function apply() {
       strip.style.transform = `translate3d(${-current}px, 0, 0)`;
+      viewport.style.transform = `scale(${edgeScale()})`;
       const progress = maxScroll > 0 ? current / maxScroll : 0;
       cursor.style.transform = `translateX(${progress * trackSpan}px)`;
     }
