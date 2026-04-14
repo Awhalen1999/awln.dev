@@ -1,11 +1,22 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Carousel from "../components/Carousel.astro";
+import Panel from "../components/Panel.astro";
+
+const panels = [
+  { title: "About" },
+  { title: "Work" },
+  { title: "Craft" },
+  { title: "Writing" },
+  { title: "Photos" },
+  { title: "Contact" },
+];
 ---
 
 <Layout>
   <main>
-    <section id="hero" class="flex min-h-screen items-center justify-center">
-      <h1 class="font-pixel text-2xl">awln.dev</h1>
-    </section>
+    <Carousel count={panels.length}>
+      {panels.map(({ title }) => <Panel title={title} />)}
+    </Carousel>
   </main>
 </Layout>

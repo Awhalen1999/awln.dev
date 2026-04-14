@@ -8,6 +8,13 @@
   --on-surface: #1a1a1a;
   --on-surface-muted: #666666;
   --surface-alt: #d4d4d4;
+
+  --panel-bg: #ffffff;
+  --panel-fg: #0a0a0a;
+
+  --panel-width: 60vw;
+  --panel-height: 65vh;
+  --panel-gap: 1.5vw;
 }
 
 .dark {
@@ -15,6 +22,9 @@
   --on-surface: #ffffff;
   --on-surface-muted: #888888;
   --surface-alt: #222222;
+
+  --panel-bg: #161616;
+  --panel-fg: #fafafa;
 }
 
 @theme {
@@ -27,4 +37,11 @@
   --color-on-surface: var(--on-surface);
   --color-on-surface-muted: var(--on-surface-muted);
   --color-surface-alt: var(--surface-alt);
+}
+
+html,
+body {
+  overflow: hidden;
+  overscroll-behavior: none;
+  height: 100%;
 }
