@@ -19,17 +19,14 @@ const { title = "awln.dev" } = Astro.props;
     <script is:inline>
       (function () {
         const stored = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches;
-        if (stored === "dark" || (!stored && prefersDark)) {
+        if (stored === "dark") {
           document.documentElement.classList.add("dark");
         }
       })();
     </script>
   </head>
   <body
-    class="min-h-screen bg-surface text-on-surface antialiased transition-colors duration-300"
+    class="min-h-screen bg-surface text-on-surface antialiased"
   >
     <slot />
   </body>

@@ -4,33 +4,28 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Page (gutter) */
-  --surface: #f0f0f0;
-  --on-surface: #1a1a1a;
-  --on-surface-muted: #666666;
-  --surface-alt: #d4d4d4;
+  --primary: #511F20;
 
-  /* Carousel cards — width is the driver, height derives from aspect-ratio
-     on the panel (16:9). Three caps keep the card proportional on any screen:
-       90vw                            → scales with viewport width
-       var(--panel-max-width)          → stops growing on large displays
-       calc(80vh * 16 / 9)             → keeps the card shorter than the viewport
-                                         (important on wide/short windows) */
-  --panel-bg: #ffffff;
-  --panel-fg: #0a0a0a;
+  /* Page — Flexoki-inspired */
+  --surface: #F0EDE6;
+  --on-surface: #100F0F;
+  --on-surface-muted: #6F6E69;
+
+  /* Carousel cards */
+  --panel-bg: #FFFFFF;
+  --panel-fg: var(--primary);
   --panel-max-width: 800px;
   --panel-width: min(90vw, var(--panel-max-width), calc(80vh * 16 / 9));
   --panel-gap: 1rem;
 }
 
 .dark {
-  --surface: #000000;
-  --on-surface: #ffffff;
-  --on-surface-muted: #888888;
-  --surface-alt: #222222;
+  --surface: #100F0F;
+  --on-surface: #CECDC3;
+  --on-surface-muted: #878580;
 
-  --panel-bg: #161616;
-  --panel-fg: #fafafa;
+  --panel-bg: #1C1B1A;
+  --panel-fg: #D14D41;
 }
 
 @theme {
@@ -42,7 +37,7 @@
   --color-surface: var(--surface);
   --color-on-surface: var(--on-surface);
   --color-on-surface-muted: var(--on-surface-muted);
-  --color-surface-alt: var(--surface-alt);
+  --color-primary: var(--primary);
 }
 
 /* The carousel takes over the full viewport; lock page scrolling */

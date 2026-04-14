@@ -79,7 +79,7 @@ const { count } = Astro.props;
     left: 50%;
     transform: translateX(-50%);
     width: 12rem;
-    height: 18px;
+    height: 20px;
     z-index: 10;
   }
 
@@ -91,9 +91,8 @@ const { count } = Astro.props;
     top: 50%;
     left: calc((50% + var(--i) * 100%) / var(--count));
     width: 1px;
-    height: 13px;
+    height: 15px;
     background: var(--track-line);
-    opacity: 0.55;
     transform: translate(-50%, -50%);
   }
 
@@ -103,7 +102,6 @@ const { count } = Astro.props;
     width: calc(100% / var(--count));
     border: 1px solid var(--track-line);
     box-sizing: border-box;
-    opacity: 0.55;
     will-change: transform;
   }
 
@@ -134,8 +132,7 @@ const { count } = Astro.props;
     position: absolute;
     top: 50%;
     left: 50%;
-    color: var(--on-surface);
-    opacity: 0.55;
+    color: var(--on-surface-muted);
     z-index: 5;
     pointer-events: none;
     transform: translate(-50%, -50%);
