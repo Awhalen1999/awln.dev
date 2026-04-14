@@ -4,17 +4,23 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  /* Page (gutter) */
   --surface: #f0f0f0;
   --on-surface: #1a1a1a;
   --on-surface-muted: #666666;
   --surface-alt: #d4d4d4;
 
+  /* Carousel cards — width is the driver, height derives from aspect-ratio
+     on the panel (16:9). Three caps keep the card proportional on any screen:
+       90vw                            → scales with viewport width
+       var(--panel-max-width)          → stops growing on large displays
+       calc(80vh * 16 / 9)             → keeps the card shorter than the viewport
+                                         (important on wide/short windows) */
   --panel-bg: #ffffff;
   --panel-fg: #0a0a0a;
-
-  --panel-width: 60vw;
-  --panel-height: 65vh;
-  --panel-gap: 1.5vw;
+  --panel-max-width: 800px;
+  --panel-width: min(90vw, var(--panel-max-width), calc(80vh * 16 / 9));
+  --panel-gap: 1rem;
 }
 
 .dark {
@@ -39,9 +45,10 @@
   --color-surface-alt: var(--surface-alt);
 }
 
+/* The carousel takes over the full viewport; lock page scrolling */
 html,
 body {
+  height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  height: 100%;
 }

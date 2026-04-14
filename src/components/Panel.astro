@@ -1,4 +1,15 @@
 ---
+/**
+ * A single carousel panel.
+ *
+ * Renders:
+ *   - a small page title floating above the card (in the gutter)
+ *   - the card itself, centering whatever is passed into the slot
+ *
+ * If no slot content is provided the title is repeated as a
+ * large typographic display, matching the reference aesthetic.
+ */
+
 interface Props {
   title: string;
 }
@@ -16,12 +27,13 @@ const { title } = Astro.props;
 </div>
 
 <style>
+  /* The flex item is just the card's footprint — the title floats above in the
+     gutter via absolute positioning, so the card's vertical center stays
+     aligned with the crosshair. Height is derived from width (16:9). */
   .panel {
-    /* The flex item is just the card — the title floats above in the gutter,
-       so the card's vertical center stays aligned with the crosshair. */
     position: relative;
     flex: 0 0 var(--panel-width);
-    height: var(--panel-height);
+    aspect-ratio: 16 / 9;
   }
 
   .panel-title {
@@ -44,8 +56,8 @@ const { title } = Astro.props;
     height: 100%;
     background: var(--panel-bg);
     color: var(--panel-fg);
-    cursor: pointer;
     overflow: hidden;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -53,7 +65,7 @@ const { title } = Astro.props;
 
   .panel-display {
     font-family: var(--font-sans);
-    font-size: clamp(5rem, 15vw, 20rem);
+    font-size: clamp(3.5rem, 13vw, 18rem);
     font-weight: 500;
     letter-spacing: -0.045em;
     line-height: 0.9;

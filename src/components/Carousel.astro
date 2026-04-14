@@ -1,11 +1,28 @@
 ---
+/**
+ * A free-scroll horizontal carousel.
+ *
+ * Structure (top → bottom):
+ *   ┌─── carousel ─────────────────────────────────────────┐
+ *   │        ┌── track ──┐                                 │
+ *   │        │ | | |□| | │   ← tick per panel + cursor box │
+ *   │        └───────────┘                                 │
+ *   │   ┌─────────┐   ┌─────────┐   ┌─────────┐            │
+ *   │   │ panel 0 │   │ panel 1 │   │ panel 2 │  …         │
+ *   │   └─────────┘   └─────────┘   └─────────┘            │
+ *   │                      +         ← fixed crosshair     │
+ *   └──────────────────────────────────────────────────────┘
+ *
+ * The page doesn't scroll — we capture `wheel` + pointer drags and translate
+ * the strip horizontally. The track cursor tracks the scroll progress.
+ */
+
 interface Props {
-  /** Number of panels in the carousel. Used to pre-render the top track ticks. */
+  /** Number of panels. Used to pre-render track ticks and set CSS vars. */
   count: number;
 }
 
 const { count } = Astro.props;
-const ticks = Array.from({ length: count });
 ---
 
 <section
@@ -15,8 +32,10 @@ const ticks = Array.from({ length: count });
   style={`--count: ${count}`}
 >
   <nav class="carousel-track" aria-label="Page navigator">
-    {ticks.map((_, i) => <span class="tick" style={`--i: ${i}`} />)}
-    <div class="carousel-track-cursor" data-track-cursor aria-hidden="true"></div>
+    {Array.from({ length: count }).map((_, i) => (
+      <span class="tick" style={`--i: ${i}`} aria-hidden="true" />
+    ))}
+    <div class="carousel-cursor" data-cursor aria-hidden="true"></div>
   </nav>
 
   <div class="carousel-viewport" data-viewport>
@@ -50,7 +69,8 @@ const ticks = Array.from({ length: count });
     color: var(--on-surface);
   }
 
-  /* ── Top track ───────────────────────────────────────────────── */
+  /* ── Top track ──────────────────────────────────────────────── */
+
   .carousel-track {
     --track-line: var(--on-surface-muted);
 
@@ -63,24 +83,23 @@ const ticks = Array.from({ length: count });
     z-index: 10;
   }
 
-  /* Tick i is positioned so its center matches the cursor's center
-     when panel i is centered: left = cursor_w/2 + i * (track_w − cursor_w) / (count − 1). */
+  /* Tick i is placed so its center matches the cursor's center when
+     panel i is active: cursor_w/2 + i * (track_w − cursor_w) / (count − 1),
+     which simplifies to (50% + i·100%) / count. */
   .carousel-track .tick {
     position: absolute;
     top: 50%;
     left: calc((50% + var(--i) * 100%) / var(--count));
-    transform: translate(-50%, -50%);
     width: 1px;
     height: 13px;
     background: var(--track-line);
     opacity: 0.55;
+    transform: translate(-50%, -50%);
   }
 
-  .carousel-track-cursor {
+  .carousel-cursor {
     position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
+    inset: 0 auto 0 0;
     width: calc(100% / var(--count));
     border: 1px solid var(--track-line);
     box-sizing: border-box;
@@ -88,7 +107,8 @@ const ticks = Array.from({ length: count });
     will-change: transform;
   }
 
-  /* ── Viewport & strip ────────────────────────────────────────── */
+  /* ── Strip ──────────────────────────────────────────────────── */
+
   .carousel-viewport {
     position: absolute;
     inset: 0;
@@ -102,30 +122,53 @@ const ticks = Array.from({ length: count });
     display: flex;
     align-items: center;
     gap: var(--panel-gap);
+    /* Symmetric padding so first and last panels can be centered. */
     padding-inline: calc((100vw - var(--panel-width)) / 2);
     will-change: transform;
     user-select: none;
   }
 
-  /* ── Center crosshair ────────────────────────────────────────── */
+  /* ── Center crosshair ───────────────────────────────────────── */
+
   .carousel-crosshair {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
     color: var(--on-surface);
     opacity: 0.55;
     z-index: 5;
     pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Tighter top chrome on small viewports */
+  @media (max-width: 768px) {
+    .carousel-track {
+      top: 1.25rem;
+      width: 10rem;
+    }
   }
 </style>
 
 <script>
+  /* ---------- Free-scroll carousel driver ---------------------------- *
+   *                                                                    *
+   * One `target` value drives everything: the strip translates to      *
+   * `-target`, the track cursor moves to `progress * (track − cursor)` *
+   * where `progress = target / maxScroll`. `current` is the eased      *
+   * value we actually render — it lerps toward `target` each frame.    *
+   * ------------------------------------------------------------------ */
+
+  // Per-frame easing factor (0 = no movement, 1 = snap to target).
   const LERP = 0.14;
+  // Pointer movement, in px, before a pointerdown is treated as a drag.
   const DRAG_THRESHOLD = 3;
 
   const clamp = (v: number, min: number, max: number) =>
     Math.max(min, Math.min(max, v));
+
+  const prefersReducedMotion = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   type Refs = {
     viewport: HTMLElement;
@@ -138,11 +181,11 @@ const ticks = Array.from({ length: count });
   function init({ viewport, strip, track, cursor, count }: Refs) {
     if (count < 1) return;
 
-    // Layout measurements, refreshed on resize / load.
-    let maxScroll = 0;
-    let trackSpan = 0; // distance the cursor can travel = trackWidth - cursorWidth
+    // Layout measurements, refreshed on load + resize.
+    let maxScroll = 0; // how far the strip can scroll left
+    let trackSpan = 0; // how far the track cursor can travel
 
-    // Scroll state: `target` is intent, `current` eases toward it.
+    // Scroll state.
     let target = 0;
     let current = 0;
     let raf = 0;
@@ -150,8 +193,8 @@ const ticks = Array.from({ length: count });
 
     function measure() {
       maxScroll = Math.max(0, strip.scrollWidth - viewport.clientWidth);
-      // Derive cursor width from track width so this stays exact regardless of
-      // box-sizing / border (cursor.clientWidth excludes the 1px border).
+      // Derive cursor width from track (CSS uses `calc(100% / count)`).
+      // `cursor.clientWidth` would exclude its 1px border and drift the math.
       const cursorWidth = track.clientWidth / count;
       trackSpan = track.clientWidth - cursorWidth;
       target = clamp(target, 0, maxScroll);
@@ -165,22 +208,24 @@ const ticks = Array.from({ length: count });
       cursor.style.transform = `translateX(${progress * trackSpan}px)`;
     }
 
-    function tickFrame() {
-      if (dragging) {
+    function frame() {
+      const snap = dragging || prefersReducedMotion();
+      if (snap) {
         current = target;
       } else {
         const diff = target - current;
         current = Math.abs(diff) < 0.1 ? target : current + diff * LERP;
       }
       apply();
-      raf = dragging || current !== target ? requestAnimationFrame(tickFrame) : 0;
+      raf =
+        dragging || current !== target ? requestAnimationFrame(frame) : 0;
     }
 
     function kick() {
-      if (!raf) raf = requestAnimationFrame(tickFrame);
+      if (!raf) raf = requestAnimationFrame(frame);
     }
 
-    // ── Wheel ───────────────────────────────────────────────────
+    // ── Wheel (trackpad + mouse, either axis) ───────────────────
     function onWheel(e: WheelEvent) {
       e.preventDefault();
       const delta =
@@ -189,18 +234,18 @@ const ticks = Array.from({ length: count });
       kick();
     }
 
-    // ── Pointer drag ────────────────────────────────────────────
+    // ── Pointer drag (mouse / touch / pen) ──────────────────────
     let pointerId = -1;
-    let dragStartX = 0;
-    let dragStartTarget = 0;
-    let dragMoved = false;
+    let startX = 0;
+    let startTarget = 0;
+    let moved = false;
 
     function onPointerDown(e: PointerEvent) {
       if (e.pointerType === "mouse" && e.button !== 0) return;
       pointerId = e.pointerId;
-      dragStartX = e.clientX;
-      dragStartTarget = target;
-      dragMoved = false;
+      startX = e.clientX;
+      startTarget = target;
+      moved = false;
       dragging = true;
       viewport.setPointerCapture(pointerId);
       kick();
@@ -208,38 +253,38 @@ const ticks = Array.from({ length: count });
 
     function onPointerMove(e: PointerEvent) {
       if (!dragging || e.pointerId !== pointerId) return;
-      const dx = e.clientX - dragStartX;
-      if (Math.abs(dx) > DRAG_THRESHOLD) dragMoved = true;
-      target = clamp(dragStartTarget - dx, 0, maxScroll);
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > DRAG_THRESHOLD) moved = true;
+      target = clamp(startTarget - dx, 0, maxScroll);
     }
 
-    function onPointerUp(e: PointerEvent) {
+    function onPointerEnd(e: PointerEvent) {
       if (e.pointerId !== pointerId) return;
       dragging = false;
       try {
         viewport.releasePointerCapture(pointerId);
       } catch {
-        /* no-op */
+        /* already released */
       }
       pointerId = -1;
       kick();
     }
 
-    // Swallow the click that fires at the end of a drag so it can't
-    // trigger a panel navigation accidentally.
+    // Swallow the click that follows a drag so panel navigation
+    // (when added) doesn't fire on release-of-drag.
     function onClickCapture(e: MouseEvent) {
-      if (!dragMoved) return;
+      if (!moved) return;
       e.preventDefault();
       e.stopPropagation();
-      dragMoved = false;
+      moved = false;
     }
 
-    // ── Keyboard: arrows snap to adjacent panel ─────────────────
+    // ── Keyboard: arrow keys snap to adjacent panel ─────────────
     function onKey(e: KeyboardEvent) {
       if (count < 2) return;
       const stride = maxScroll / (count - 1);
       const index = Math.round(target / stride);
-      let next = index;
+      let next: number;
       if (e.key === "ArrowRight" || e.key === "ArrowDown") next = index + 1;
       else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = index - 1;
       else return;
@@ -248,26 +293,27 @@ const ticks = Array.from({ length: count });
       kick();
     }
 
-    // Initial measure (now + after fonts/layout settle).
+    // Initial measure (now, then again after fonts/layout settle).
     measure();
     window.addEventListener("load", measure, { once: true });
     window.addEventListener("resize", measure);
+
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("keydown", onKey);
     viewport.addEventListener("pointerdown", onPointerDown);
     viewport.addEventListener("pointermove", onPointerMove);
-    viewport.addEventListener("pointerup", onPointerUp);
-    viewport.addEventListener("pointercancel", onPointerUp);
+    viewport.addEventListener("pointerup", onPointerEnd);
+    viewport.addEventListener("pointercancel", onPointerEnd);
     viewport.addEventListener("click", onClickCapture, true);
   }
 
-  document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((root) => {
+  for (const root of document.querySelectorAll<HTMLElement>("[data-carousel]")) {
     const viewport = root.querySelector<HTMLElement>("[data-viewport]");
     const strip = root.querySelector<HTMLElement>("[data-strip]");
     const track = root.querySelector<HTMLElement>(".carousel-track");
-    const cursor = root.querySelector<HTMLElement>("[data-track-cursor]");
+    const cursor = root.querySelector<HTMLElement>("[data-cursor]");
     const count = Number(root.dataset.count ?? 0);
-    if (!viewport || !strip || !track || !cursor || !count) return;
+    if (!viewport || !strip || !track || !cursor || !count) continue;
     init({ viewport, strip, track, cursor, count });
-  });
+  }
 </script>
