@@ -31,7 +31,7 @@ const { count } = Astro.props;
   data-count={count}
   style={`--count: ${count}`}
 >
-  <nav class="carousel-track" aria-label="Page navigator">
+  <nav class="carousel-track" data-track aria-label="Page navigator">
     {Array.from({ length: count }).map((_, i) => (
       <span class="tick" style={`--i: ${i}`} aria-hidden="true" />
     ))}
@@ -163,12 +163,13 @@ const { count } = Astro.props;
   const LERP = 0.14;
   // Pointer movement, in px, before a pointerdown is treated as a drag.
   const DRAG_THRESHOLD = 3;
+  // Respect OS-level motion preference. Cached once at load.
+  const REDUCE_MOTION = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
 
   const clamp = (v: number, min: number, max: number) =>
     Math.max(min, Math.min(max, v));
-
-  const prefersReducedMotion = () =>
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   type Refs = {
     viewport: HTMLElement;
@@ -209,16 +210,14 @@ const { count } = Astro.props;
     }
 
     function frame() {
-      const snap = dragging || prefersReducedMotion();
-      if (snap) {
+      if (dragging || REDUCE_MOTION) {
         current = target;
       } else {
         const diff = target - current;
         current = Math.abs(diff) < 0.1 ? target : current + diff * LERP;
       }
       apply();
-      raf =
-        dragging || current !== target ? requestAnimationFrame(frame) : 0;
+      raf = dragging || current !== target ? requestAnimationFrame(frame) : 0;
     }
 
     function kick() {
@@ -310,7 +309,7 @@ const { count } = Astro.props;
   for (const root of document.querySelectorAll<HTMLElement>("[data-carousel]")) {
     const viewport = root.querySelector<HTMLElement>("[data-viewport]");
     const strip = root.querySelector<HTMLElement>("[data-strip]");
-    const track = root.querySelector<HTMLElement>(".carousel-track");
+    const track = root.querySelector<HTMLElement>("[data-track]");
     const cursor = root.querySelector<HTMLElement>("[data-cursor]");
     const count = Number(root.dataset.count ?? 0);
     if (!viewport || !strip || !track || !cursor || !count) continue;
