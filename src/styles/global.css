@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import "@fontsource/press-start-2p";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource-variable/jetbrains-mono";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -29,9 +30,9 @@
 }
 
 @theme {
-  --font-pixel: "Press Start 2P", monospace;
-  --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
-    monospace;
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code",
+    "Source Code Pro", Menlo, Consolas, monospace;
   --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
 
   --color-surface: var(--surface);
