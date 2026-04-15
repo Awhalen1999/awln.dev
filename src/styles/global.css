@@ -4,16 +4,20 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/**
+ * Flexoki palette — https://stephango.com/flexoki
+ *   Light: paper cards (#FFFCF0) on base-50 surface (#F2F0E5).
+ *   Dark:  base-900 cards (#282726) on base-950 surface (#1C1B1A).
+ * Accent is Flexoki red: red-600 (#AF3029) in light, red-400 (#D14D41) in dark.
+ */
 :root {
-  --primary: #511F20;
+  --primary: #AF3029;             /* red-600 */
 
-  /* Page — Flexoki-inspired */
-  --surface: #F0EDE6;
-  --on-surface: #100F0F;
-  --on-surface-muted: #6F6E69;
+  --surface: #F2F0E5;             /* base-50 */
+  --on-surface: #100F0F;          /* black */
+  --on-surface-muted: #878580;    /* base-500 */
 
-  /* Carousel cards */
-  --panel-bg: #FFFFFF;
+  --panel-bg: #FFFCF0;            /* paper */
   --panel-fg: var(--primary);
   --panel-max-width: 800px;
   --panel-width: min(90vw, var(--panel-max-width), calc(80vh * 16 / 9));
@@ -21,12 +25,13 @@
 }
 
 .dark {
-  --surface: #100F0F;
-  --on-surface: #CECDC3;
-  --on-surface-muted: #878580;
+  --primary: #D14D41;             /* red-400 */
 
-  --panel-bg: #1C1B1A;
-  --panel-fg: #D14D41;
+  --surface: #1C1B1A;             /* base-950 */
+  --on-surface: #CECDC3;          /* base-200 */
+  --on-surface-muted: #878580;    /* base-500 */
+
+  --panel-bg: #282726;             /* base-900 */
 }
 
 @theme {
