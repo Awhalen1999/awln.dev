@@ -261,15 +261,26 @@ const { count } = Astro.props;
       startTarget = target;
       moved = false;
       dragging = true;
-      viewport.setPointerCapture(pointerId);
+      // Note: we defer setPointerCapture until the drag threshold is
+      // crossed. Capturing on every pointerdown would re-target the
+      // subsequent click event to the viewport, breaking panel links.
       kick();
     }
 
     function onPointerMove(e: PointerEvent) {
       if (!dragging || e.pointerId !== pointerId) return;
       const dx = e.clientX - startX;
-      if (Math.abs(dx) > DRAG_THRESHOLD) moved = true;
-      target = clamp(startTarget - dx, 0, maxScroll);
+      if (!moved && Math.abs(dx) > DRAG_THRESHOLD) {
+        moved = true;
+        try {
+          viewport.setPointerCapture(pointerId);
+        } catch {
+          /* pointer may already be gone */
+        }
+      }
+      if (moved) {
+        target = clamp(startTarget - dx, 0, maxScroll);
+      }
     }
 
     function onPointerEnd(e: PointerEvent) {

@@ -4,19 +4,18 @@ import Carousel from "../components/Carousel.astro";
 import Panel from "../components/Panel.astro";
 
 const panels = [
-  { title: "About" },
-  { title: "Work" },
-  { title: "Craft" },
-  { title: "Writing" },
-  { title: "Photos" },
-  { title: "Contact" },
+  { title: "About", href: "/about" },
+  { title: "Projects", href: "/projects" },
+  { title: "Tools", href: "/tools" },
+  { title: "Events", href: "/events" },
+  { title: "Links", href: "/links" },
 ];
 ---
 
 <Layout>
   <main>
     <Carousel count={panels.length}>
-      {panels.map(({ title }) => <Panel title={title} />)}
+      {panels.map(({ title, href }) => <Panel title={title} href={href} />)}
     </Carousel>
   </main>
 </Layout>

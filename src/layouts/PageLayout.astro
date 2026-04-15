@@ -1,0 +1,84 @@
+---
+/**
+ * Layout for scrollable subpages (anything that isn't the homepage
+ * carousel). Provides a back link, a Fraunces display title, and a
+ * constrained body column that inherits the Flexoki surface colors.
+ */
+import Layout from "./Layout.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<Layout title={`${title} — awln.dev`}>
+  <main class="page">
+    <nav class="page-nav">
+      <a href="/" class="page-back">← awln.dev</a>
+    </nav>
+    <header class="page-header">
+      <h1 class="page-title">{title}</h1>
+    </header>
+    <section class="page-body">
+      <slot />
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .page {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 6rem;
+    color: var(--on-surface);
+  }
+
+  .page-nav {
+    margin-bottom: 3rem;
+  }
+
+  .page-back {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--on-surface-muted);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 120ms ease;
+  }
+
+  .page-back:hover {
+    color: var(--on-surface);
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 7vw, 4.5rem);
+    font-weight: 500;
+    font-variation-settings: "opsz" 144, "SOFT" 50, "wght" 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  .page-body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--on-surface);
+  }
+
+  .page-body :global(p) {
+    margin: 0 0 1rem;
+  }
+
+  .page-body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+</style>

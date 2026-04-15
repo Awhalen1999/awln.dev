@@ -8,10 +8,10 @@
  * Flexoki palette — https://stephango.com/flexoki
  *   Light: paper cards (#FFFCF0) on base-50 surface (#F2F0E5).
  *   Dark:  base-900 cards (#282726) on base-950 surface (#1C1B1A).
- * Accent is Flexoki red: red-600 (#AF3029) in light, red-400 (#D14D41) in dark.
+ * Accent: Flexoki red-700 (#942822) in light, red-400 (#D14D41) in dark.
  */
 :root {
-  --primary: #AF3029;             /* red-600 */
+  --primary: #942822;             /* Flexoki red-700 */
 
   --surface: #F2F0E5;             /* base-50 */
   --on-surface: #100F0F;          /* black */
@@ -46,10 +46,8 @@
   --color-primary: var(--primary);
 }
 
-/* The carousel takes over the full viewport; lock page scrolling */
-html,
+/* Prevent overscroll bounce globally; the homepage carousel is
+   position:fixed and covers the viewport, so subpages can scroll normally. */
 body {
-  height: 100%;
-  overflow: hidden;
   overscroll-behavior: none;
 }
