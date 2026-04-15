@@ -47,8 +47,8 @@ const { count } = Astro.props;
   <svg
     class="carousel-crosshair"
     viewBox="0 0 11 11"
-    width="11"
-    height="11"
+    width="15"
+    height="15"
     aria-hidden="true"
   >
     <path
@@ -134,7 +134,8 @@ const { count } = Astro.props;
     position: absolute;
     top: 50%;
     left: 50%;
-    color: var(--on-surface-muted);
+    color: #ffffff;
+    mix-blend-mode: difference;
     z-index: 5;
     pointer-events: none;
     transform: translate(-50%, -50%);
