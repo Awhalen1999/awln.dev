@@ -4,11 +4,11 @@
 <header class="menubar" data-menubar>
   <div class="menubar-left">
     <strong class="menubar-brand">Portfolio</strong>
-    <button type="button" class="menubar-item" tabindex="-1">File</button>
-    <button type="button" class="menubar-item" tabindex="-1">View</button>
+    <button type="button" class="menubar-item">File</button>
+    <button type="button" class="menubar-item">View</button>
   </div>
   <div class="menubar-right">
-    <div class="menubar-clock" data-clock aria-live="off">—</div>
+    <div class="menubar-clock" data-clock>—</div>
   </div>
 </header>
 
@@ -29,7 +29,8 @@
         `${pad(d.getHours())}:${pad(d.getMinutes())}`;
     };
     tick();
-    // Align subsequent ticks to the minute boundary.
+    // Align the first scheduled tick to the next minute boundary so the
+    // visible minute flips cleanly, not drifted by page-load time.
     const msToMinute = 60_000 - (Date.now() % 60_000);
     setTimeout(() => {
       tick();
@@ -48,8 +49,8 @@
     height: var(--menubar-h);
     padding: 0 0.75rem;
     background: var(--menubar-bg);
-    border-bottom: 1px solid var(--menubar-border);
-    color: var(--menubar-text);
+    border-bottom: 1px solid var(--window-border);
+    color: var(--text);
     font-size: 12px;
     backdrop-filter: saturate(160%) blur(10px);
     -webkit-backdrop-filter: saturate(160%) blur(10px);
@@ -82,7 +83,7 @@
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 500;
-    color: var(--menubar-text);
+    color: var(--text);
     padding: 0 0.25rem;
     font-variant-numeric: tabular-nums;
   }

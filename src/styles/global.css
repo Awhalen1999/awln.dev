@@ -1,52 +1,32 @@
-/* ---------------------------------------------------------------- *
- *  awln.dev — global styles
- *  Organized in 6 sections. Everything a window needs lives here
- *  (windows are cloned from a <template> and aren't in Astro's
- *  scoped-style tree).
- * ---------------------------------------------------------------- */
-
 @import "tailwindcss";
 @import "@fontsource-variable/newsreader";
 @import "@fontsource-variable/dm-sans";
 
-/* 1. Tokens --------------------------------------------------------- */
-
 :root {
-  /* Surfaces */
-  --wallpaper: #BF4F1F;
-  --wallpaper-shadow: #9E3810;
-  --window-bg: #F5E8D5;
-  --window-bg-deeper: #E9D9C0;
-  --window-border: #2B1B10;
-
-  /* Text */
-  --text: #1A1208;
-  --text-muted: #6B5A48;
-
-  /* Accents */
   --accent: #BF4F1F;
   --accent-dim: #8B3B15;
   --accent-ink: #FFFFFF;
 
-  /* Chrome */
-  --menubar-bg: rgba(255, 251, 245, 0.92);
-  --menubar-text: #1A1208;
-  --dock-bg: #8B3B15;
-  --dock-item-bg: #BF4F1F;
-  --dock-item-hover: #D96B35;
-  --icon-label: #FFFFFF;
+  --wallpaper: var(--accent);
+  --window-bg: #F5E8D5;
+  --window-bg-deeper: #E9D9C0;
+  --window-border: #2B1B10;
 
-  /* Sizing */
+  --text: #1A1208;
+  --text-muted: #6B5A48;
+
+  --menubar-bg: rgba(255, 251, 245, 0.92);
+  --dock-bg: var(--accent-dim);
+  --dock-item-bg: var(--accent);
+  --dock-item-hover: #D96B35;
+
   --menubar-h: 28px;
   --window-titlebar-h: 26px;
 
-  /* Fonts */
   --font-display: "Newsreader", Georgia, "Times New Roman", serif;
   --font-sans: "DM Sans", "DM Sans Fallback", system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, Menlo, Monaco, Consolas, monospace;
 }
-
-/* 2. Reset ---------------------------------------------------------- */
 
 *,
 *::before,
@@ -85,10 +65,13 @@ a {
   text-underline-offset: 2px;
 }
 
-/* 3. Window chrome -------------------------------------------------- */
+/* Window chrome — styles are global because windows are cloned from
+   a <template> at runtime and aren't part of Astro's scoped-style tree. */
 
 .window {
   position: absolute;
+  left: 0;
+  top: 0;
   display: flex;
   flex-direction: column;
   min-width: 260px;
@@ -160,7 +143,7 @@ a {
   user-select: text;
 }
 
-/* 4. Typography inside windows ------------------------------------- */
+/* Typography inside windows */
 
 .window-body h1 {
   font-family: var(--font-display);
@@ -190,9 +173,6 @@ a {
 }
 .window-body p.lede {
   margin-bottom: 1rem;
-}
-.window-body em {
-  font-style: italic;
 }
 
 .section-label {
@@ -289,8 +269,6 @@ a {
   background: var(--accent);
   color: var(--accent-ink);
 }
-
-/* 5. Reduced motion ------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
   *,

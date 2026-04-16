@@ -1,8 +1,4 @@
-/**
- * Portfolio "apps" — each one is a window definition.
- * The `content` HTML is injected into the window body via innerHTML.
- * Look for `EDIT ME` comments to find copy you likely want to rewrite.
- */
+// Portfolio apps. Look for `EDIT ME` markers to find placeholder copy.
 
 export type AppKind = "folder" | "file" | "app";
 
@@ -38,9 +34,9 @@ const about = `
 </p>
 <p>
   Outside of code I like
-  <a href="#" data-open-app="links">writing and photography</a>.
+  <a href="#links" data-open-app="links">writing and photography</a>.
   You can <a href="mailto:hello@awln.dev">get in touch</a> or find me
-  <a href="#" data-open-app="links">elsewhere</a>.
+  <a href="#links" data-open-app="links">elsewhere</a>.
 </p>
 
 <section class="focus-box">
@@ -237,7 +233,7 @@ const contact = `
 </section>
 
 <p class="muted">
-  More channels in the <a href="#" data-open-app="links">Links</a> window.
+  More channels in the <a href="#links" data-open-app="links">Links</a> window.
 </p>
 `.trim();
 

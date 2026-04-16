@@ -1,13 +1,11 @@
 ---
-// Host container + single window template. The client-side manager clones this
-// template per opened window. Window styles live in src/styles/global.css
-// because the cloned DOM is not in Astro's scoped-style tree.
+// Cloned DOM lives outside Astro's scoped-style tree — window styles are in global.css.
 ---
 
 <div class="window-host" data-window-host></div>
 
 <template id="window-template">
-  <article class="window" tabindex="-1">
+  <article class="window" role="dialog" aria-modal="false" tabindex="-1">
     <header class="window-titlebar" data-titlebar>
       <span class="window-title" data-title></span>
       <div class="window-buttons">

@@ -1,22 +1,3 @@
-/**
- * Window manager.
- *
- * Small, explicit state model: one `WindowState` per open window,
- * kept in a Map keyed by window id. A single app has at most one
- * window instance (opening an already-open app focuses it).
- *
- * Public side effects come through four operations:
- *   openApp(appId)        open or focus an app
- *   closeWindow(id)       close a window
- *   toggleMaximize(id)    fullscreen / restore
- *   focusWindow(id)       bring to front
- *
- * Windows are created by cloning `#window-template` and appending
- * to `[data-window-host]`. All inputs (icon clicks, dock clicks,
- * in-content `[data-open-app]` triggers, keyboard, hash changes,
- * viewport resize) are wired up via global delegation at the end.
- */
-
 import type { App } from "../data/apps";
 
 interface WindowState {
@@ -25,35 +6,54 @@ interface WindowState {
   el: HTMLElement;
   titlebar: HTMLElement;
   body: HTMLElement;
+  titleEl: HTMLElement;
   x: number;
   y: number;
   w: number;
   h: number;
   z: number;
   maximized: boolean;
-  /** Restore target — set when entering maximized state. */
   prev?: { x: number; y: number; w: number; h: number };
 }
 
-const MIN_VISIBLE = 80;        // px of title bar that must remain on-screen
-const TITLEBAR_H = 28;         // clamp floor for y
-const CASCADE = 24;            // px offset per cascaded window
-const MOBILE_BREAKPOINT = 700;
+type WindowAction = "close" | "maximize";
+
+const MIN_VISIBLE = 80;
+const TITLEBAR_H = 26;
+const CASCADE = 24;
+const MOBILE_Q = "(max-width: 699px)";
 
 export function initWindowManager(apps: App[]) {
   const host = document.querySelector<HTMLElement>("[data-window-host]");
   const template = document.querySelector<HTMLTemplateElement>("#window-template");
   if (!host || !template) return;
 
+  const probe = template.content.firstElementChild;
+  if (
+    !probe ||
+    !probe.querySelector("[data-titlebar]") ||
+    !probe.querySelector("[data-body]") ||
+    !probe.querySelector("[data-title]")
+  ) {
+    console.error("[window-manager] window template is missing required slots");
+    return;
+  }
+
   const byId = new Map(apps.map((a) => [a.id, a]));
   const windows = new Map<string, WindowState>();
   const activeByApp = new Map<string, string>();
+  const dockItems = new Map<string, HTMLElement>();
+  document.querySelectorAll<HTMLElement>("[data-dock-item]").forEach((el) => {
+    const id = el.dataset.dockItem;
+    if (id) dockItems.set(id, el);
+  });
+
+  const mobileMedia = window.matchMedia(MOBILE_Q);
   let nextZ = 10;
   let focusedId: string | null = null;
+  let resizeScheduled = false;
 
-  // ---- geometry -------------------------------------------------------
-
-  const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT;
+  const isMobile = () => mobileMedia.matches;
 
   function surfaceSize() {
     const surface = host!.parentElement;
@@ -72,36 +72,43 @@ export function initWindowManager(apps: App[]) {
     };
   }
 
-  // ---- render ---------------------------------------------------------
-
-  function commit(w: WindowState) {
-    w.el.style.left = `${w.x}px`;
-    w.el.style.top = `${w.y}px`;
+  function applyGeometry(w: WindowState) {
+    w.el.style.transform = `translate3d(${w.x}px, ${w.y}px, 0)`;
     w.el.style.width = `${w.w}px`;
     w.el.style.height = `${w.h}px`;
     w.el.style.zIndex = String(w.z);
     w.el.dataset.maximized = w.maximized ? "true" : "false";
   }
 
+  // Hot path during drag — only the transform changes; size/z stay put.
+  function applyTransform(w: WindowState) {
+    w.el.style.transform = `translate3d(${w.x}px, ${w.y}px, 0)`;
+  }
+
+  function fillSurface(w: WindowState) {
+    const s = surfaceSize();
+    w.x = 0;
+    w.y = 0;
+    w.w = s.w;
+    w.h = s.h;
+  }
+
   function updateDockBadge(appId: string) {
-    const el = document.querySelector<HTMLElement>(`[data-dock-item="${appId}"]`);
+    const el = dockItems.get(appId);
     if (!el) return;
     if (activeByApp.has(appId)) el.setAttribute("data-running", "true");
     else el.removeAttribute("data-running");
   }
 
-  // ---- operations -----------------------------------------------------
-
   function focusWindow(id: string) {
     const w = windows.get(id);
-    if (!w) return;
-    if (focusedId === id) return;
+    if (!w || focusedId === id) return;
     if (focusedId) {
       const prev = windows.get(focusedId);
       if (prev) prev.el.removeAttribute("data-focused");
     }
     w.z = ++nextZ;
-    commit(w);
+    applyGeometry(w);
     w.el.setAttribute("data-focused", "");
     w.el.focus({ preventScroll: true });
     focusedId = id;
@@ -118,13 +125,18 @@ export function initWindowManager(apps: App[]) {
     if (!app) return;
 
     const node = template!.content.firstElementChild!.cloneNode(true) as HTMLElement;
-    const titlebar = node.querySelector<HTMLElement>("[data-titlebar]");
-    const body = node.querySelector<HTMLElement>("[data-body]");
-    const titleSpan = node.querySelector<HTMLElement>("[data-title]");
-    if (!titlebar || !body || !titleSpan) return;
+    const titlebar = node.querySelector<HTMLElement>("[data-titlebar]")!;
+    const body = node.querySelector<HTMLElement>("[data-body]")!;
+    const titleEl = node.querySelector<HTMLElement>("[data-title]")!;
 
-    titleSpan.textContent = app.title;
+    const id = crypto.randomUUID();
+    const titleId = `win-title-${id}`;
+    titleEl.id = titleId;
+    titleEl.textContent = app.title;
     body.innerHTML = app.content;
+    node.id = id;
+    node.dataset.appId = appId;
+    node.setAttribute("aria-labelledby", titleId);
 
     const s = surfaceSize();
     const mobile = isMobile();
@@ -132,16 +144,13 @@ export function initWindowManager(apps: App[]) {
     const hh = mobile ? s.h : Math.min(app.defaultSize.h, s.h - 40);
     const openCount = windows.size;
 
-    const id = `${appId}-${Date.now().toString(36)}-${Math.floor(Math.random() * 1000)}`;
-    node.id = id;
-    node.dataset.appId = appId;
-
     const state: WindowState = {
       id,
       appId,
       el: node,
       titlebar,
       body,
+      titleEl,
       x: mobile ? 0 : Math.max(12, Math.round((s.w - ww) / 2) + openCount * CASCADE),
       y: mobile ? 0 : Math.max(12, Math.round((s.h - hh) / 2) - 40 + openCount * CASCADE),
       w: ww,
@@ -157,7 +166,7 @@ export function initWindowManager(apps: App[]) {
     windows.set(id, state);
     activeByApp.set(appId, id);
     host!.appendChild(node);
-    commit(state);
+    applyGeometry(state);
     bindWindow(state);
     focusWindow(id);
     updateDockBadge(appId);
@@ -184,11 +193,9 @@ export function initWindowManager(apps: App[]) {
   function toggleMaximize(id: string) {
     const w = windows.get(id);
     if (!w) return;
-    const s = surfaceSize();
     if (w.maximized) {
       if (w.prev) {
-        // Clamp restored size/position in case the viewport shrank while
-        // the window was maximized.
+        const s = surfaceSize();
         w.w = Math.min(w.prev.w, s.w);
         w.h = Math.min(w.prev.h, s.h);
         const c = clampPos(w, w.prev.x, w.prev.y);
@@ -198,16 +205,16 @@ export function initWindowManager(apps: App[]) {
       w.maximized = false;
     } else {
       w.prev = { x: w.x, y: w.y, w: w.w, h: w.h };
-      w.x = 0;
-      w.y = 0;
-      w.w = s.w;
-      w.h = s.h;
+      fillSurface(w);
       w.maximized = true;
     }
-    commit(w);
+    applyGeometry(w);
   }
 
-  // ---- per-window bindings -------------------------------------------
+  const ACTIONS: Record<WindowAction, (id: string) => void> = {
+    close: closeWindow,
+    maximize: toggleMaximize,
+  };
 
   function bindWindow(w: WindowState) {
     let dragging = false;
@@ -219,8 +226,7 @@ export function initWindowManager(apps: App[]) {
 
     w.titlebar.addEventListener("pointerdown", (e) => {
       if ((e.target as HTMLElement).closest("[data-action]")) return;
-      if (e.button !== 0) return;
-      if (w.maximized) return;
+      if (e.button !== 0 || w.maximized) return;
       dragging = true;
       pointerId = e.pointerId;
       startX = e.clientX;
@@ -231,20 +237,21 @@ export function initWindowManager(apps: App[]) {
       try {
         w.titlebar.setPointerCapture(pointerId);
       } catch {
-        /* already captured */
+        /* pointer already captured */
       }
       e.preventDefault();
     });
 
     w.titlebar.addEventListener("pointermove", (e) => {
       if (!dragging || e.pointerId !== pointerId) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      const c = clampPos(w, startWinX + dx, startWinY + dy);
+      const c = clampPos(
+        w,
+        startWinX + (e.clientX - startX),
+        startWinY + (e.clientY - startY),
+      );
       w.x = c.x;
       w.y = c.y;
-      w.el.style.left = `${w.x}px`;
-      w.el.style.top = `${w.y}px`;
+      applyTransform(w);
     });
 
     const endDrag = (e: PointerEvent) => {
@@ -253,7 +260,7 @@ export function initWindowManager(apps: App[]) {
       try {
         w.titlebar.releasePointerCapture(pointerId);
       } catch {
-        /* already released */
+        /* pointer already released */
       }
       pointerId = -1;
     };
@@ -265,55 +272,40 @@ export function initWindowManager(apps: App[]) {
       toggleMaximize(w.id);
     });
 
-    w.el
-      .querySelectorAll<HTMLElement>(".window-buttons [data-action]")
-      .forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          switch (btn.dataset.action) {
-            case "close":
-              closeWindow(w.id);
-              break;
-            case "maximize":
-              toggleMaximize(w.id);
-              break;
-          }
-        });
+    w.el.querySelectorAll<HTMLElement>(".window-buttons [data-action]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const action = btn.dataset.action as WindowAction | undefined;
+        if (action && action in ACTIONS) ACTIONS[action](w.id);
       });
+    });
 
-    // Focus on any pointer down within the window (capture phase so it
-    // runs before descendant interactive elements).
+    // Capture phase so focus flips before descendant click handlers run.
     w.el.addEventListener("pointerdown", () => focusWindow(w.id), true);
   }
-
-  // ---- global delegation ---------------------------------------------
 
   document.addEventListener("click", (e) => {
     const target = e.target as HTMLElement | null;
     if (!target) return;
 
     const inline = target.closest<HTMLElement>("[data-open-app]");
-    if (inline) {
-      const id = inline.dataset.openApp;
-      if (id) {
-        e.preventDefault();
-        openApp(id);
-      }
+    if (inline?.dataset.openApp) {
+      e.preventDefault();
+      openApp(inline.dataset.openApp);
       return;
     }
 
     const btn = target.closest<HTMLElement>("[data-app]");
-    if (btn) {
-      const id = btn.dataset.app;
-      if (id) openApp(id);
-    }
+    if (btn?.dataset.app) openApp(btn.dataset.app);
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && focusedId) closeWindow(focusedId);
+    if (e.key !== "Escape" || !focusedId) return;
+    // Don't hijack Escape from inputs, details, or editable content inside a window.
+    const t = e.target as HTMLElement | null;
+    if (t?.closest("input, textarea, select, [contenteditable='true'], details[open]")) return;
+    closeWindow(focusedId);
   });
-
-  // ---- deep link (hash) ----------------------------------------------
 
   const openFromHash = () => {
     const hash = window.location.hash.slice(1);
@@ -321,27 +313,29 @@ export function initWindowManager(apps: App[]) {
   };
   window.addEventListener("hashchange", openFromHash);
 
-  // ---- viewport resize ------------------------------------------------
-
-  window.addEventListener("resize", () => {
+  function reflow() {
     const s = surfaceSize();
     const mobile = isMobile();
     for (const w of windows.values()) {
       if (mobile || w.maximized) {
-        w.x = 0;
-        w.y = 0;
-        w.w = s.w;
-        w.h = s.h;
+        fillSurface(w);
       } else {
         const c = clampPos(w, w.x, w.y);
         w.x = c.x;
         w.y = c.y;
       }
-      commit(w);
+      applyGeometry(w);
     }
-  });
+  }
 
-  // ---- boot -----------------------------------------------------------
+  window.addEventListener("resize", () => {
+    if (resizeScheduled) return;
+    resizeScheduled = true;
+    requestAnimationFrame(() => {
+      resizeScheduled = false;
+      reflow();
+    });
+  });
 
   if (window.location.hash) openFromHash();
 }
