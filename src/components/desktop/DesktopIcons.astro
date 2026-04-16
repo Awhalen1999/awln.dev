@@ -1,0 +1,151 @@
+---
+import type { App } from "../../data/apps";
+
+interface Props {
+  apps: App[];
+}
+const { apps } = Astro.props;
+---
+
+<ul class="desktop-icons" aria-label="Desktop shortcuts">
+  {apps.map((app) => (
+    <li>
+      <button
+        type="button"
+        class="desktop-icon"
+        data-app={app.id}
+        aria-label={`Open ${app.title}`}
+      >
+        {app.kind === "folder" ? (
+          <svg
+            class="icon-glyph"
+            viewBox="0 0 32 26"
+            width="42"
+            height="34"
+            aria-hidden="true"
+          >
+            <path
+              d="M1 5 L12 5 L14 8 L31 8 L31 25 L1 25 Z"
+              fill="#9E3810"
+              stroke="#2B1B10"
+              stroke-width="1"
+              stroke-linejoin="miter"
+            />
+            <path
+              d="M1 5 L12 5 L14 8 L31 8 L31 12 L1 12 Z"
+              fill="#BF4F1F"
+              stroke="#2B1B10"
+              stroke-width="1"
+              stroke-linejoin="miter"
+            />
+          </svg>
+        ) : (
+          <svg
+            class="icon-glyph"
+            viewBox="0 0 28 34"
+            width="36"
+            height="42"
+            aria-hidden="true"
+          >
+            <path
+              d="M1 1 L20 1 L27 8 L27 33 L1 33 Z"
+              fill="#F5E8D5"
+              stroke="#2B1B10"
+              stroke-width="1.5"
+              stroke-linejoin="miter"
+            />
+            <path
+              d="M20 1 L20 8 L27 8"
+              fill="none"
+              stroke="#2B1B10"
+              stroke-width="1.5"
+              stroke-linejoin="miter"
+            />
+            <line x1="5" y1="15" x2="23" y2="15" stroke="#2B1B10" stroke-width="1" />
+            <line x1="5" y1="19" x2="23" y2="19" stroke="#2B1B10" stroke-width="1" />
+            <line x1="5" y1="23" x2="20" y2="23" stroke="#2B1B10" stroke-width="1" />
+            {app.iconExt && (
+              <text
+                x="14"
+                y="30"
+                font-size="5.5"
+                font-weight="700"
+                fill="#2B1B10"
+                text-anchor="middle"
+                style="font-family: var(--font-mono);"
+              >
+                {app.iconExt.toUpperCase()}
+              </text>
+            )}
+          </svg>
+        )}
+        <span class="icon-label">{app.iconLabel}</span>
+      </button>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .desktop-icons {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.5rem;
+    width: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  .desktop-icons > li {
+    display: block;
+  }
+  .desktop-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    width: 100%;
+    padding: 0.3rem 0.25rem 0.4rem;
+    border-radius: 4px;
+    color: var(--icon-label);
+    transition: background 80ms ease;
+  }
+  .desktop-icon:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
+  .desktop-icon:focus-visible {
+    outline: 1px dashed var(--icon-label);
+    outline-offset: 2px;
+  }
+  .icon-glyph {
+    display: block;
+    pointer-events: none;
+  }
+  .icon-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--icon-label);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+    word-break: break-word;
+    max-width: 100%;
+  }
+
+  @media (max-width: 700px) {
+    .desktop-icons {
+      flex-direction: row;
+      width: auto;
+      right: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      gap: 0.35rem;
+    }
+    .desktop-icons > li {
+      flex: 0 0 72px;
+    }
+  }
+</style>

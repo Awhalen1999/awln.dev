@@ -1,64 +1,302 @@
+/* ---------------------------------------------------------------- *
+ *  awln.dev — global styles
+ *  Organized in 6 sections. Everything a window needs lives here
+ *  (windows are cloned from a <template> and aren't in Astro's
+ *  scoped-style tree).
+ * ---------------------------------------------------------------- */
+
 @import "tailwindcss";
-@import "@fontsource-variable/fraunces";
-@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/newsreader";
+@import "@fontsource-variable/dm-sans";
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* 1. Tokens --------------------------------------------------------- */
 
-/**
- * Flexoki palette — https://stephango.com/flexoki
- *   Light: paper cards (#FFFCF0) on base-50 surface (#F2F0E5).
- *   Dark:  base-900 cards (#282726) on base-950 surface (#1C1B1A).
- * Accent: Flexoki red-700 (#942822) in light, red-400 (#D14D41) in dark.
- */
 :root {
-  --primary: #942822;             /* Flexoki red-700 */
+  /* Surfaces */
+  --wallpaper: #BF4F1F;
+  --wallpaper-shadow: #9E3810;
+  --window-bg: #F5E8D5;
+  --window-bg-deeper: #E9D9C0;
+  --window-border: #2B1B10;
 
-  --surface: #F2F0E5;             /* base-50 */
-  --on-surface: #100F0F;          /* black */
-  --on-surface-muted: #878580;    /* base-500 */
+  /* Text */
+  --text: #1A1208;
+  --text-muted: #6B5A48;
 
-  --panel-bg: #FFFCF0;            /* paper */
-  --panel-fg: var(--primary);
-  --panel-max-width: 800px;
-  --panel-width: min(90vw, var(--panel-max-width), calc(80vh * 16 / 9));
-  --panel-gap: 1rem;
+  /* Accents */
+  --accent: #BF4F1F;
+  --accent-dim: #8B3B15;
+  --accent-ink: #FFFFFF;
 
-  /* Fine grid overlay — 1px paper-colored lines on a 6px tile. Lines are the
-     next step *lighter* than the surface (paper > base-50 in light, base-900 >
-     base-950 in dark), so cells read slightly darker than the gridlines. */
-  --grid-line: var(--panel-bg);
-  --grid-size: 6px 6px;
-  --grid-bg:
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  /* Chrome */
+  --menubar-bg: rgba(255, 251, 245, 0.92);
+  --menubar-text: #1A1208;
+  --dock-bg: #8B3B15;
+  --dock-item-bg: #BF4F1F;
+  --dock-item-hover: #D96B35;
+  --icon-label: #FFFFFF;
+
+  /* Sizing */
+  --menubar-h: 28px;
+  --window-titlebar-h: 26px;
+
+  /* Fonts */
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans: "DM Sans", "DM Sans Fallback", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, Menlo, Monaco, Consolas, monospace;
 }
 
-.dark {
-  --primary: #D14D41;             /* red-400 */
+/* 2. Reset ---------------------------------------------------------- */
 
-  --surface: #1C1B1A;             /* base-950 */
-  --on-surface: #CECDC3;          /* base-200 */
-  --on-surface-muted: #878580;    /* base-500 */
-
-  --panel-bg: #282726;             /* base-900 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
-
-@theme {
-  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code",
-    "Source Code Pro", Menlo, Consolas, monospace;
-  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
-
-  --color-surface: var(--surface);
-  --color-on-surface: var(--on-surface);
-  --color-on-surface-muted: var(--on-surface-muted);
-  --color-primary: var(--primary);
-}
-
-/* Prevent overscroll bounce globally; the homepage carousel is
-   position:fixed and covers the viewport, so subpages can scroll normally. */
+html,
 body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--wallpaper);
   overscroll-behavior: none;
-  background-image: var(--grid-bg);
-  background-size: var(--grid-size);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* 3. Window chrome -------------------------------------------------- */
+
+.window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  min-height: 160px;
+  background: var(--window-bg);
+  border: 1px solid var(--window-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+  outline: none;
+  pointer-events: auto;
+  transition: box-shadow 140ms ease;
+}
+.window[data-focused] {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+.window-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  height: var(--window-titlebar-h);
+  padding: 0 4px 0 10px;
+  background: var(--window-bg-deeper);
+  border-bottom: 1px solid var(--window-border);
+  cursor: grab;
+  user-select: none;
+}
+.window-titlebar:active {
+  cursor: grabbing;
+}
+.window-title {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.window-buttons {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+.window-btn {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  background: var(--window-bg);
+  border: 1px solid var(--window-border);
+  transition: background 80ms ease, color 80ms ease;
+}
+.window-btn:hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.window-btn:active {
+  background: var(--accent-dim);
+}
+
+.window-body {
+  flex: 1;
+  min-height: 0;
+  padding: 1rem 1.1rem 1.25rem;
+  overflow: auto;
+  line-height: 1.55;
+  user-select: text;
+}
+
+/* 4. Typography inside windows ------------------------------------- */
+
+.window-body h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem;
+  font-optical-sizing: auto;
+}
+.window-body h1.display-name {
+  font-size: clamp(2.25rem, 5.5vw, 3.25rem);
+  line-height: 1.05;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.window-body h1.display-name .dash {
+  color: var(--text-muted);
+  font-weight: 300;
+}
+.window-body h1.display-page {
+  font-size: 1.9rem;
+  line-height: 1.1;
+}
+.window-body p {
+  margin: 0 0 0.75rem;
+}
+.window-body p.lede {
+  margin-bottom: 1rem;
+}
+.window-body em {
+  font-style: italic;
+}
+
+.section-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin: 1.25rem 0 0.4rem;
+}
+
+.focus-box {
+  margin: 0.5rem 0 1rem;
+  padding: 0.55rem 0.9rem 0.7rem;
+  background: var(--window-bg-deeper);
+  border: 1px solid var(--window-border);
+}
+.focus-box .section-label {
+  margin: 0 0 0.35rem;
+}
+.focus-box ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+.focus-box li {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0.2rem 0;
+}
+
+.entry-list {
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  background: var(--window-bg);
+  border: 1px solid var(--window-border);
+}
+.entry-list .entry {
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid rgba(43, 27, 16, 0.18);
+}
+.entry-list .entry:last-child {
+  border-bottom: 0;
+}
+.entry-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin: 0 0 0.15rem;
+}
+.entry-title .entry-ico {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.entry-date {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0.1rem 0;
+}
+.entry-desc {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0.15rem 0 0;
+}
+.badge {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent-ink);
+  background: var(--accent);
+  vertical-align: middle;
+}
+.muted {
+  color: var(--text-muted);
+}
+.pill-btn {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  color: var(--text);
+  background: var(--window-bg-deeper);
+  border: 1px solid var(--window-border);
+  cursor: pointer;
+  transition: background 80ms ease, color 80ms ease;
+}
+.pill-btn:hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* 5. Reduced motion ------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
 }

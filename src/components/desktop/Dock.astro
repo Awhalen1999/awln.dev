@@ -1,0 +1,126 @@
+---
+import type { App } from "../../data/apps";
+
+interface Props {
+  apps: App[];
+}
+const { apps } = Astro.props;
+---
+
+<nav class="dock" aria-label="Dock">
+  <ul class="dock-inner">
+    {apps.map((app) => (
+      <li>
+        <button
+          type="button"
+          class="dock-item"
+          data-app={app.id}
+          data-dock-item={app.id}
+          aria-label={`Open ${app.title}`}
+        >
+          <span class="dock-glyph" aria-hidden="true">{app.dockGlyph}</span>
+          <span class="dock-tooltip">{app.title}</span>
+          <span class="dock-dot" aria-hidden="true"></span>
+        </button>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .dock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 12px 14px;
+    flex-shrink: 0;
+  }
+  .dock-inner {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px;
+    margin: 0;
+    list-style: none;
+    background: var(--dock-bg);
+    border: 1px solid var(--window-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  }
+  .dock-inner > li {
+    list-style: none;
+  }
+  .dock-item {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--dock-item-bg);
+    color: var(--window-bg);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid var(--window-border);
+    transition: transform 100ms ease, background 100ms ease;
+  }
+  .dock-item:hover {
+    background: var(--dock-item-hover);
+    transform: translateY(-2px);
+  }
+  .dock-item:focus-visible {
+    outline: 2px solid var(--accent-ink);
+    outline-offset: 1px;
+  }
+  .dock-glyph {
+    line-height: 1;
+    pointer-events: none;
+  }
+  .dock-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2px 8px;
+    background: var(--window-bg);
+    color: var(--text);
+    border: 1px solid var(--window-border);
+    white-space: nowrap;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease;
+  }
+  .dock-item:hover .dock-tooltip,
+  .dock-item:focus-visible .dock-tooltip {
+    opacity: 1;
+  }
+  .dock-dot {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--window-bg);
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+  .dock-item[data-running="true"] .dock-dot {
+    opacity: 1;
+  }
+
+  @media (max-width: 700px) {
+    .dock {
+      padding: 6px 8px 10px;
+    }
+    .dock-inner {
+      overflow-x: auto;
+      max-width: 100%;
+      justify-content: flex-start;
+    }
+  }
+</style>

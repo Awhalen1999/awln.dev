@@ -1,0 +1,66 @@
+---
+// Host container + single window template. The client-side manager clones this
+// template per opened window. Window styles live in src/styles/global.css
+// because the cloned DOM is not in Astro's scoped-style tree.
+---
+
+<div class="window-host" data-window-host></div>
+
+<template id="window-template">
+  <article class="window" tabindex="-1">
+    <header class="window-titlebar" data-titlebar>
+      <span class="window-title" data-title></span>
+      <div class="window-buttons">
+        <button
+          type="button"
+          class="window-btn window-max"
+          data-action="maximize"
+          aria-label="Toggle fullscreen"
+        >
+          <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true">
+            <rect
+              x="1.5"
+              y="1.5"
+              width="7"
+              height="7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1"
+            />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="window-btn window-close"
+          data-action="close"
+          aria-label="Close"
+        >
+          <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true">
+            <path
+              d="M2 2 L8 8 M8 2 L2 8"
+              stroke="currentColor"
+              stroke-width="1.4"
+              fill="none"
+              stroke-linecap="square"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <div class="window-body" data-body></div>
+  </article>
+</template>
+
+<script>
+  import { APPS } from "../../data/apps";
+  import { initWindowManager } from "../../scripts/window-manager";
+  initWindowManager(APPS);
+</script>
+
+<style>
+  .window-host {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+</style>

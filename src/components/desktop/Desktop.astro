@@ -1,0 +1,35 @@
+---
+import MenuBar from "./MenuBar.astro";
+import DesktopIcons from "./DesktopIcons.astro";
+import Dock from "./Dock.astro";
+import WindowHost from "./WindowHost.astro";
+import { APPS } from "../../data/apps";
+
+const desktopApps = APPS.filter((a) => a.iconLabel);
+const dockApps = APPS.filter((a) => a.dockGlyph);
+---
+
+<div class="desktop" data-desktop>
+  <MenuBar />
+  <div class="desktop-surface">
+    <DesktopIcons apps={desktopApps} />
+    <WindowHost />
+  </div>
+  <Dock apps={dockApps} />
+</div>
+
+<style>
+  .desktop {
+    position: fixed;
+    inset: 0;
+    background: var(--wallpaper);
+    display: flex;
+    flex-direction: column;
+  }
+  .desktop-surface {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+</style>

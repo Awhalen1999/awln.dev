@@ -1,21 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Carousel from "../components/Carousel.astro";
-import Panel from "../components/Panel.astro";
-
-const panels = [
-  { title: "About", href: "/about" },
-  { title: "Projects", href: "/projects" },
-  { title: "Tools", href: "/tools" },
-  { title: "Events", href: "/events" },
-  { title: "Links", href: "/links" },
-];
+import Desktop from "../components/desktop/Desktop.astro";
 ---
 
-<Layout>
-  <main>
-    <Carousel count={panels.length}>
-      {panels.map(({ title, href }) => <Panel title={title} href={href} />)}
-    </Carousel>
-  </main>
+<Layout title="awln.dev" description="Alex Whalen's portfolio.">
+  <Desktop />
 </Layout>

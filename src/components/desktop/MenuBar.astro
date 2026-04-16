@@ -1,0 +1,89 @@
+---
+---
+
+<header class="menubar" data-menubar>
+  <div class="menubar-left">
+    <strong class="menubar-brand">Portfolio</strong>
+    <button type="button" class="menubar-item" tabindex="-1">File</button>
+    <button type="button" class="menubar-item" tabindex="-1">View</button>
+  </div>
+  <div class="menubar-right">
+    <div class="menubar-clock" data-clock aria-live="off">—</div>
+  </div>
+</header>
+
+<script>
+  const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
+  const MONTHS = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  ] as const;
+
+  const el = document.querySelector<HTMLElement>("[data-clock]");
+  if (el) {
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const tick = () => {
+      const d = new Date();
+      el.textContent =
+        `${WEEKDAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ` +
+        `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    };
+    tick();
+    // Align subsequent ticks to the minute boundary.
+    const msToMinute = 60_000 - (Date.now() % 60_000);
+    setTimeout(() => {
+      tick();
+      setInterval(tick, 60_000);
+    }, msToMinute);
+  }
+</script>
+
+<style>
+  .menubar {
+    position: relative;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--menubar-h);
+    padding: 0 0.75rem;
+    background: var(--menubar-bg);
+    border-bottom: 1px solid var(--menubar-border);
+    color: var(--menubar-text);
+    font-size: 12px;
+    backdrop-filter: saturate(160%) blur(10px);
+    -webkit-backdrop-filter: saturate(160%) blur(10px);
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .menubar-left,
+  .menubar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+  }
+  .menubar-brand {
+    font-weight: 600;
+    margin-right: 0.6rem;
+    padding: 0 0.25rem;
+  }
+  .menubar-item {
+    padding: 0 0.5rem;
+    height: calc(var(--menubar-h) - 4px);
+    line-height: 1;
+    color: inherit;
+    font-size: 12px;
+    border-radius: 3px;
+  }
+  .menubar-item:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+  .menubar-clock {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--menubar-text);
+    padding: 0 0.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

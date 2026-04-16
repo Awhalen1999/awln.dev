@@ -8,21 +8,18 @@ importers:
 
   .:
     dependencies:
-      '@fontsource-variable/fraunces':
-        specifier: ^5.2.7
-        version: 5.2.9
-      '@fontsource-variable/jetbrains-mono':
+      '@fontsource-variable/dm-sans':
         specifier: ^5.2.7
         version: 5.2.8
+      '@fontsource-variable/newsreader':
+        specifier: ^5.2.7
+        version: 5.2.10
       '@tailwindcss/vite':
         specifier: ^4.2.2
         version: 4.2.2(vite@7.3.2(jiti@2.6.1)(lightningcss@1.32.0))
       astro:
         specifier: ^6.1.5
         version: 6.1.5(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.1)
-      gsap:
-        specifier: ^3.14.2
-        version: 3.14.2
       tailwindcss:
         specifier: ^4.2.2
         version: 4.2.2
@@ -245,11 +242,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@fontsource-variable/fraunces@5.2.9':
-    resolution: {integrity: sha512-Y6IjunlN9Ni723np+GIgAaKzCDBrPRrqNi01TZxHs5wtHYROWFM9W6yiT+/gGwSjWIRD18oX17kD/BRWekc/Lw==}
+  '@fontsource-variable/dm-sans@5.2.8':
+    resolution: {integrity: sha512-AxkvMTvNWgfrmlyjiV05vlHYJa+nRQCf1EfvIrQAPBpFJW0O9VTz7oAFr9S3lvbWdmnFoBk7yFqQL86u64nl2g==}
 
-  '@fontsource-variable/jetbrains-mono@5.2.8':
-    resolution: {integrity: sha512-WBA9elru6Jdp5df2mES55wuOO0WIrn3kpXnI4+W2ek5u3ZgLS9XS4gmIlcQhiZOWEKl95meYdvK7xI+ETLCq/Q==}
+  '@fontsource-variable/newsreader@5.2.10':
+    resolution: {integrity: sha512-MdI2iRwrqWpMOU/2aV2BgfZ4dJNlj/XlYaY8Zb7t87mWqHskYW0XiUANkt1cyOCiEfW2VQ0bQ5vZgGPp6B2B4w==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -940,9 +937,6 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
-
-  gsap@3.14.2:
-    resolution: {integrity: sha512-P8/mMxVLU7o4+55+1TCnQrPmgjPKnwkzkXOK1asnR9Jg2lna4tEY5qBJjMmAaOBDDZWtlRjBXjLa0w53G/uBLA==}
 
   h3@1.15.11:
     resolution: {integrity: sha512-L3THSe2MPeBwgIZVSH5zLdBBU90TOxarvhK9d04IDY2AmVS8j2Jz2LIWtwsGOU3lu2I5jCN7FNvVfY2+XyF+mg==}
@@ -1890,9 +1884,9 @@ snapshots:
   '@esbuild/win32-x64@0.27.7':
     optional: true
 
-  '@fontsource-variable/fraunces@5.2.9': {}
+  '@fontsource-variable/dm-sans@5.2.8': {}
 
-  '@fontsource-variable/jetbrains-mono@5.2.8': {}
+  '@fontsource-variable/newsreader@5.2.10': {}
 
   '@img/colour@1.1.0':
     optional: true
@@ -2515,8 +2509,6 @@ snapshots:
   github-slugger@2.0.0: {}
 
   graceful-fs@4.2.11: {}
-
-  gsap@3.14.2: {}
 
   h3@1.15.11:
     dependencies:
