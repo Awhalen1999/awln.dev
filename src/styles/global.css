@@ -22,6 +22,15 @@
   --panel-max-width: 800px;
   --panel-width: min(90vw, var(--panel-max-width), calc(80vh * 16 / 9));
   --panel-gap: 1rem;
+
+  /* Fine grid overlay — 1px paper-colored lines on a 6px tile. Lines are the
+     next step *lighter* than the surface (paper > base-50 in light, base-900 >
+     base-950 in dark), so cells read slightly darker than the gridlines. */
+  --grid-line: var(--panel-bg);
+  --grid-size: 6px 6px;
+  --grid-bg:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
 }
 
 .dark {
@@ -50,4 +59,6 @@
    position:fixed and covers the viewport, so subpages can scroll normally. */
 body {
   overscroll-behavior: none;
+  background-image: var(--grid-bg);
+  background-size: var(--grid-size);
 }
