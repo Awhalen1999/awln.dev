@@ -20,20 +20,20 @@ const { apps } = Astro.props;
           <svg
             class="icon-glyph"
             viewBox="0 0 32 26"
-            width="42"
-            height="34"
+            width="44"
+            height="36"
             aria-hidden="true"
           >
             <path
               d="M1 5 L12 5 L14 8 L31 8 L31 25 L1 25 Z"
-              fill="#9E3810"
+              fill="#A84016"
               stroke="#2B1B10"
               stroke-width="1"
               stroke-linejoin="miter"
             />
             <path
               d="M1 5 L12 5 L14 8 L31 8 L31 12 L1 12 Z"
-              fill="#BF4F1F"
+              fill="#D9541D"
               stroke="#2B1B10"
               stroke-width="1"
               stroke-linejoin="miter"
@@ -43,8 +43,8 @@ const { apps } = Astro.props;
           <svg
             class="icon-glyph"
             viewBox="0 0 28 34"
-            width="36"
-            height="42"
+            width="38"
+            height="44"
             aria-hidden="true"
           >
             <path
@@ -90,28 +90,28 @@ const { apps } = Astro.props;
     position: absolute;
     top: 0.75rem;
     left: 0.5rem;
-    width: 72px;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    list-style: none;
+    width: 76px;
     margin: 0;
     padding: 0;
-    z-index: 1;
+    list-style: none;
   }
   .desktop-icons > li {
     display: block;
   }
+
   .desktop-icon {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.2rem;
+    gap: 0.25rem;
     width: 100%;
-    padding: 0.3rem 0.25rem 0.4rem;
-    border-radius: 4px;
+    padding: 0.25rem;
     color: var(--accent-ink);
-    transition: background 80ms ease;
+    transition: background var(--dur-fast) ease;
   }
   .desktop-icon:hover {
     background: rgba(255, 255, 255, 0.14);
@@ -120,32 +120,34 @@ const { apps } = Astro.props;
     outline: 1px dashed var(--accent-ink);
     outline-offset: 2px;
   }
+
   .icon-glyph {
     display: block;
     pointer-events: none;
   }
+
   .icon-label {
+    max-width: 100%;
+    color: var(--accent-ink);
     font-family: var(--font-mono);
-    font-size: 10.5px;
+    font-size: 11px;
     line-height: 1.2;
     text-align: center;
-    color: var(--accent-ink);
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
     word-break: break-word;
-    max-width: 100%;
   }
 
   @media (max-width: 700px) {
     .desktop-icons {
-      flex-direction: row;
-      width: auto;
       right: 0.5rem;
-      overflow-x: auto;
+      flex-direction: row;
+      gap: 0.5rem;
+      width: auto;
       padding-bottom: 4px;
-      gap: 0.35rem;
+      overflow-x: auto;
     }
     .desktop-icons > li {
-      flex: 0 0 72px;
+      flex: 0 0 76px;
     }
   }
 </style>

@@ -44,47 +44,50 @@
     position: relative;
     z-index: 1000;
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
     height: var(--menubar-h);
     padding: 0 0.75rem;
+    color: var(--text);
     background: var(--menubar-bg);
     border-bottom: 1px solid var(--window-border);
-    color: var(--text);
-    font-size: 12px;
+    font-size: 13px;
+    user-select: none;
     backdrop-filter: saturate(160%) blur(10px);
     -webkit-backdrop-filter: saturate(160%) blur(10px);
-    user-select: none;
-    flex-shrink: 0;
   }
+
   .menubar-left,
   .menubar-right {
     display: flex;
     align-items: center;
-    gap: 0.1rem;
   }
+
   .menubar-brand {
-    font-weight: 600;
-    margin-right: 0.6rem;
+    margin-right: 0.5rem;
     padding: 0 0.25rem;
+    font-weight: 700;
   }
+
   .menubar-item {
+    height: calc(var(--menubar-h) - 6px);
     padding: 0 0.5rem;
-    height: calc(var(--menubar-h) - 4px);
-    line-height: 1;
     color: inherit;
-    font-size: 12px;
-    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
   }
   .menubar-item:hover {
     background: rgba(0, 0, 0, 0.08);
   }
+
   .menubar-clock {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text);
     padding: 0 0.25rem;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
     font-variant-numeric: tabular-nums;
   }
 </style>
