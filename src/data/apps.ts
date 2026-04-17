@@ -1,7 +1,6 @@
 // Portfolio apps. Look for `EDIT ME` markers to find placeholder copy.
 
 export type AppKind = "folder" | "file" | "app";
-export type DesktopColumn = "left" | "right";
 
 export interface App {
   id: string;
@@ -11,8 +10,6 @@ export interface App {
   iconLabel: string;
   /** File extension badge for file icons. */
   iconExt?: string;
-  /** Which desktop column the icon lives in. */
-  desktopColumn: DesktopColumn;
   /** Default window size when opened on desktop viewports. */
   defaultSize: { w: number; h: number };
   /** HTML content rendered inside `.window-body`. */
@@ -319,18 +316,17 @@ const current = `
 `.trim();
 
 // --- Registry ------------------------------------------------------------
-// Desktop order top-to-bottom. Column placement matches PostHog-style
-// left/right rails.
+// Array order = desktop order. Icons flow top-to-bottom in column 1, then
+// wrap into subsequent columns based on viewport height.
 
 export const APPS: App[] = [
-  // Left column — who I am / what I do
+  // Who I am / what I do
   {
     id: "about",
     title: "About",
     kind: "file",
     iconLabel: "about.md",
     iconExt: "md",
-    desktopColumn: "left",
     defaultSize: { w: 460, h: 480 },
     content: about,
   },
@@ -339,7 +335,6 @@ export const APPS: App[] = [
     title: "Projects",
     kind: "folder",
     iconLabel: "projects",
-    desktopColumn: "left",
     defaultSize: { w: 560, h: 440 },
     content: projects,
   },
@@ -349,7 +344,6 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "experience.log",
     iconExt: "log",
-    desktopColumn: "left",
     defaultSize: { w: 600, h: 500 },
     content: experience,
   },
@@ -359,7 +353,6 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "tools.sh",
     iconExt: "sh",
-    desktopColumn: "left",
     defaultSize: { w: 500, h: 440 },
     content: tools,
   },
@@ -369,19 +362,17 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "current.txt",
     iconExt: "txt",
-    desktopColumn: "left",
     defaultSize: { w: 460, h: 460 },
     content: current,
   },
 
-  // Right column — reach / misc
+  // Reach / misc
   {
     id: "contact",
     title: "Contact",
     kind: "file",
     iconLabel: "contact.md",
     iconExt: "md",
-    desktopColumn: "right",
     defaultSize: { w: 420, h: 340 },
     content: contact,
   },
@@ -391,7 +382,6 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "links.url",
     iconExt: "url",
-    desktopColumn: "right",
     defaultSize: { w: 480, h: 420 },
     content: links,
   },
@@ -400,7 +390,6 @@ export const APPS: App[] = [
     title: "Events",
     kind: "folder",
     iconLabel: "events",
-    desktopColumn: "right",
     defaultSize: { w: 520, h: 440 },
     content: events,
   },
@@ -409,7 +398,6 @@ export const APPS: App[] = [
     title: "Pets",
     kind: "folder",
     iconLabel: "pets",
-    desktopColumn: "right",
     defaultSize: { w: 520, h: 440 },
     content: pets,
   },
@@ -419,7 +407,6 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "settings.ini",
     iconExt: "ini",
-    desktopColumn: "right",
     defaultSize: { w: 460, h: 440 },
     content: settings,
   },

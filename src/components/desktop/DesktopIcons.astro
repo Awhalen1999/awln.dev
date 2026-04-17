@@ -1,14 +1,13 @@
 ---
-import type { App, DesktopColumn } from "../../data/apps";
+import type { App } from "../../data/apps";
 
 interface Props {
   apps: App[];
-  side?: DesktopColumn;
 }
-const { apps, side = "left" } = Astro.props;
+const { apps } = Astro.props;
 ---
 
-<ul class="desktop-icons" data-side={side} aria-label={`Desktop shortcuts (${side})`}>
+<ul class="desktop-icons" aria-label="Desktop shortcuts">
   {apps.map((app) => (
     <li>
       <button
@@ -88,30 +87,41 @@ const { apps, side = "left" } = Astro.props;
 </ul>
 
 <style>
+  /*
+   * Height-responsive icon grid.
+   *
+   * Items flow top → bottom in column 1; when they run out of vertical
+   * room they wrap into a new column to the right. Column count adapts
+   * to viewport height automatically — no JS, no media-queried row counts.
+   *
+   * Explicit `height` (not top + bottom insets) is deliberate: Chrome's
+   * flex-wrap-column path reliably detects overflow only when the cross-
+   * axis size is set directly.
+   *
+   * The <ul> itself is click-transparent so empty whitespace below the
+   * last icon doesn't block clicks to the window beneath. Only the
+   * buttons opt back in to pointer events.
+   */
   .desktop-icons {
+    --col-w: 96px;
+    --desktop-pad: 12px;
+
     position: absolute;
-    top: 1rem;
+    top: var(--desktop-pad);
+    left: var(--desktop-pad);
+    height: calc(100% - 2 * var(--desktop-pad));
     z-index: 1;
     display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    width: 84px;
+    flex-flow: column wrap;
+    align-content: flex-start;
     margin: 0;
     padding: 0;
     list-style: none;
-  }
-  /* Explicit left:auto / right:auto resets — prevents either column from
-     anchoring at the wrong edge if stale styles leak in (HMR, etc.). */
-  .desktop-icons[data-side="left"] {
-    left: 0.75rem;
-    right: auto;
-  }
-  .desktop-icons[data-side="right"] {
-    left: auto;
-    right: 0.75rem;
+    pointer-events: none;
   }
   .desktop-icons > li {
-    display: block;
+    flex: 0 0 auto;
+    width: var(--col-w);
   }
 
   .desktop-icon {
@@ -122,10 +132,10 @@ const { apps, side = "left" } = Astro.props;
     width: 100%;
     padding: 0.5rem 0.35rem;
     color: var(--text);
+    pointer-events: auto;
     transition: transform var(--dur-fast) ease;
   }
   .desktop-icon:hover {
-    background: transparent;
     transform: translateY(-1px);
   }
   .desktop-icon:focus-visible {
@@ -133,7 +143,6 @@ const { apps, side = "left" } = Astro.props;
     outline-offset: 2px;
   }
 
-  /* 40x40 slot — identical footprint for folder and file glyphs. */
   .icon-slot {
     display: flex;
     align-items: center;
@@ -146,7 +155,6 @@ const { apps, side = "left" } = Astro.props;
     width: 40px;
     height: 40px;
     pointer-events: none;
-    filter: drop-shadow(1px 1px 0 rgba(43, 27, 16, 0.2));
   }
 
   .icon-label {
@@ -159,24 +167,17 @@ const { apps, side = "left" } = Astro.props;
     line-height: 1.25;
     text-align: center;
     overflow-wrap: anywhere;
-    transition: background var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+    transition: background var(--dur-fast) ease;
   }
   .desktop-icon:hover .icon-label,
   .desktop-icon:focus-visible .icon-label {
-    background: var(--window-bg);
-    box-shadow: 0 0 0 1px var(--window-border);
+    background: rgba(255, 255, 255, 0.55);
   }
 
   @media (max-width: 700px) {
     .desktop-icons {
-      width: 72px;
-      gap: 0.75rem;
-    }
-    .desktop-icons[data-side="left"] {
-      left: 0.35rem;
-    }
-    .desktop-icons[data-side="right"] {
-      right: 0.35rem;
+      --col-w: 84px;
+      --desktop-pad: 8px;
     }
     .icon-slot,
     .icon-glyph {

@@ -3,16 +3,12 @@ import MenuBar from "./MenuBar.astro";
 import DesktopIcons from "./DesktopIcons.astro";
 import WindowHost from "./WindowHost.astro";
 import { APPS } from "../../data/apps";
-
-const leftApps = APPS.filter((a) => a.desktopColumn === "left");
-const rightApps = APPS.filter((a) => a.desktopColumn === "right");
 ---
 
 <div class="desktop" data-desktop>
   <MenuBar />
   <div class="desktop-surface">
-    <DesktopIcons apps={leftApps} side="left" />
-    <DesktopIcons apps={rightApps} side="right" />
+    <DesktopIcons apps={APPS} />
     <WindowHost />
   </div>
 </div>
