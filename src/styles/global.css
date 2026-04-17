@@ -190,6 +190,18 @@ a {
   background: #D6412F;
 }
 
+/* Maximize button swaps between expand and restore glyphs based on the
+   window state attribute set by window-manager. */
+.window-max .icon-restore {
+  display: none;
+}
+.window[data-maximized="true"] .window-max .icon-expand {
+  display: none;
+}
+.window[data-maximized="true"] .window-max .icon-restore {
+  display: block;
+}
+
 .window-body {
   flex: 1;
   min-height: 0;
