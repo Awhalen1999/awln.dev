@@ -18,14 +18,13 @@ interface WindowState {
 
 type WindowAction = "close" | "maximize";
 
-const TITLEBAR_H = 28;
 const CASCADE = 24;
 const MOBILE_Q = "(max-width: 699px)";
 
 // Single source of truth for the "usable region" inside desktop-surface.
 // Every window — whether dragged, resized, maximized, or freshly opened —
 // stays within these insets.
-const APP_PADDING = { left: 8, right: 8, top: 10, bottom: 8 };
+const APP_PADDING = { left: 6, right: 6, top: 6, bottom: 6 };
 
 // Matches min-width/min-height on .window in global.css.
 const MIN_W = 320;

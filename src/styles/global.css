@@ -25,7 +25,7 @@
 
   /* Size */
   --menubar-h: 36px;
-  --titlebar-h: 28px;
+  --titlebar-h: 32px;
 
   /* Motion */
   --dur-fast: 100ms;
@@ -140,8 +140,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   color: var(--text);
   background: var(--window-bg);
   border: 1px solid var(--window-border);
