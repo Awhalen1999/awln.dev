@@ -16,69 +16,71 @@ const { apps } = Astro.props;
         data-app={app.id}
         aria-label={`Open ${app.title}`}
       >
-        {app.kind === "folder" ? (
-          <svg
-            class="icon-glyph"
-            viewBox="0 0 32 26"
-            width="44"
-            height="36"
-            aria-hidden="true"
-          >
-            <path
-              d="M1 5 L12 5 L14 8 L31 8 L31 25 L1 25 Z"
-              fill="#A84016"
-              stroke="#2B1B10"
-              stroke-width="1"
-              stroke-linejoin="miter"
-            />
-            <path
-              d="M1 5 L12 5 L14 8 L31 8 L31 12 L1 12 Z"
-              fill="#D9541D"
-              stroke="#2B1B10"
-              stroke-width="1"
-              stroke-linejoin="miter"
-            />
-          </svg>
-        ) : (
-          <svg
-            class="icon-glyph"
-            viewBox="0 0 28 34"
-            width="38"
-            height="44"
-            aria-hidden="true"
-          >
-            <path
-              d="M1 1 L20 1 L27 8 L27 33 L1 33 Z"
-              fill="#F5E8D5"
-              stroke="#2B1B10"
-              stroke-width="1.5"
-              stroke-linejoin="miter"
-            />
-            <path
-              d="M20 1 L20 8 L27 8"
-              fill="none"
-              stroke="#2B1B10"
-              stroke-width="1.5"
-              stroke-linejoin="miter"
-            />
-            <line x1="5" y1="15" x2="23" y2="15" stroke="#2B1B10" stroke-width="1" />
-            <line x1="5" y1="19" x2="23" y2="19" stroke="#2B1B10" stroke-width="1" />
-            <line x1="5" y1="23" x2="20" y2="23" stroke="#2B1B10" stroke-width="1" />
-            {app.iconExt && (
-              <text
-                x="14"
-                y="30"
-                font-size="5.5"
-                font-weight="700"
-                fill="#2B1B10"
-                text-anchor="middle"
-                style="font-family: var(--font-mono);"
-              >
-                {app.iconExt.toUpperCase()}
-              </text>
-            )}
-          </svg>
-        )}
+        <span class="icon-slot">
+          {app.kind === "folder" ? (
+            <svg
+              class="icon-glyph"
+              viewBox="0 0 32 26"
+              width="44"
+              height="36"
+              aria-hidden="true"
+            >
+              <path
+                d="M1 5 L12 5 L14 8 L31 8 L31 25 L1 25 Z"
+                fill="#BF4912"
+                stroke="#2B1B10"
+                stroke-width="1"
+                stroke-linejoin="miter"
+              />
+              <path
+                d="M1 5 L12 5 L14 8 L31 8 L31 12 L1 12 Z"
+                fill="#FF631A"
+                stroke="#2B1B10"
+                stroke-width="1"
+                stroke-linejoin="miter"
+              />
+            </svg>
+          ) : (
+            <svg
+              class="icon-glyph"
+              viewBox="0 0 28 34"
+              width="38"
+              height="44"
+              aria-hidden="true"
+            >
+              <path
+                d="M1 1 L20 1 L27 8 L27 33 L1 33 Z"
+                fill="#F5E8D5"
+                stroke="#2B1B10"
+                stroke-width="1.5"
+                stroke-linejoin="miter"
+              />
+              <path
+                d="M20 1 L20 8 L27 8"
+                fill="none"
+                stroke="#2B1B10"
+                stroke-width="1.5"
+                stroke-linejoin="miter"
+              />
+              <line x1="5" y1="15" x2="23" y2="15" stroke="#2B1B10" stroke-width="1" />
+              <line x1="5" y1="19" x2="23" y2="19" stroke="#2B1B10" stroke-width="1" />
+              <line x1="5" y1="23" x2="20" y2="23" stroke="#2B1B10" stroke-width="1" />
+              {app.iconExt && (
+                <text
+                  x="14"
+                  y="30"
+                  font-size="5.5"
+                  font-weight="700"
+                  fill="#2B1B10"
+                  text-anchor="middle"
+                  style="font-family: var(--font-mono);"
+                >
+                  {app.iconExt.toUpperCase()}
+                </text>
+              )}
+            </svg>
+          )}
+        </span>
         <span class="icon-label">{app.iconLabel}</span>
       </button>
     </li>
@@ -121,12 +123,26 @@ const { apps } = Astro.props;
     outline-offset: 2px;
   }
 
+  /* Fixed-size slot centers any glyph (folder 44x36 vs file 38x44). */
+  .icon-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+  }
+
   .icon-glyph {
     display: block;
     pointer-events: none;
   }
 
+  /* Always reserve 2 lines of label so short and wrapping names share height. */
   .icon-label {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    height: 2lh;
     max-width: 100%;
     color: var(--accent-ink);
     font-family: var(--font-mono);

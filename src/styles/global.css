@@ -4,9 +4,9 @@
 
 :root {
   /* Color — palette */
-  --accent: #D9541D;
-  --accent-dim: #9E3812;
-  --accent-hover: #E5702E;
+  --accent: #FF631A;
+  --accent-dim: #bf4912;
+  --accent-hover: #f96e2e;
   --accent-ink: #FFFFFF;
 
   --text: #1A1208;
@@ -18,7 +18,7 @@
 
   /* Color — surfaces */
   --wallpaper: var(--accent);
-  --menubar-bg: rgba(255, 251, 245, 0.94);
+  --menubar-bg: rgba(245, 245, 245, 0.85);
   --dock-bg: var(--accent-dim);
   --dock-item-bg: var(--accent);
   --dock-item-hover: var(--accent-hover);

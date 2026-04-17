@@ -18,8 +18,9 @@ interface WindowState {
 
 type WindowAction = "close" | "maximize";
 
-const MIN_VISIBLE = 80;
-const TITLEBAR_H = 26;
+const MIN_VISIBLE = 160;
+const TITLEBAR_H = 28;
+const TOP_GAP = 2;
 const CASCADE = 24;
 const MOBILE_Q = "(max-width: 699px)";
 
@@ -55,20 +56,31 @@ export function initWindowManager(apps: App[]) {
 
   const isMobile = () => mobileMedia.matches;
 
-  function surfaceSize() {
+  // Metrics for the window-host surface. `dragYMax` extends past the
+  // surface bottom (where the dock sits) up to the viewport bottom, so
+  // dragged windows can overlap the dock instead of being clipped.
+  function surfaceMetrics() {
     const surface = host!.parentElement;
-    if (surface) {
-      const r = surface.getBoundingClientRect();
-      return { w: r.width, h: r.height };
+    if (!surface) {
+      return {
+        w: window.innerWidth,
+        h: window.innerHeight,
+        dragYMax: window.innerHeight - TITLEBAR_H,
+      };
     }
-    return { w: window.innerWidth, h: window.innerHeight };
+    const r = surface.getBoundingClientRect();
+    return {
+      w: r.width,
+      h: r.height,
+      dragYMax: window.innerHeight - r.top - TITLEBAR_H,
+    };
   }
 
   function clampPos(w: WindowState, x: number, y: number) {
-    const s = surfaceSize();
+    const m = surfaceMetrics();
     return {
-      x: Math.max(-(w.w - MIN_VISIBLE), Math.min(s.w - MIN_VISIBLE, x)),
-      y: Math.max(0, Math.min(s.h - TITLEBAR_H, y)),
+      x: Math.max(-(w.w - MIN_VISIBLE), Math.min(m.w - MIN_VISIBLE, x)),
+      y: Math.max(TOP_GAP, Math.min(m.dragYMax, y)),
     };
   }
 
@@ -86,7 +98,7 @@ export function initWindowManager(apps: App[]) {
   }
 
   function fillSurface(w: WindowState) {
-    const s = surfaceSize();
+    const s = surfaceMetrics();
     w.x = 0;
     w.y = 0;
     w.w = s.w;
@@ -138,7 +150,7 @@ export function initWindowManager(apps: App[]) {
     node.dataset.appId = appId;
     node.setAttribute("aria-labelledby", titleId);
 
-    const s = surfaceSize();
+    const s = surfaceMetrics();
     const mobile = isMobile();
     const ww = mobile ? s.w : Math.min(app.defaultSize.w, s.w - 40);
     const hh = mobile ? s.h : Math.min(app.defaultSize.h, s.h - 40);
@@ -195,7 +207,7 @@ export function initWindowManager(apps: App[]) {
     if (!w) return;
     if (w.maximized) {
       if (w.prev) {
-        const s = surfaceSize();
+        const s = surfaceMetrics();
         w.w = Math.min(w.prev.w, s.w);
         w.h = Math.min(w.prev.h, s.h);
         const c = clampPos(w, w.prev.x, w.prev.y);
@@ -314,7 +326,7 @@ export function initWindowManager(apps: App[]) {
   window.addEventListener("hashchange", openFromHash);
 
   function reflow() {
-    const s = surfaceSize();
+    const s = surfaceMetrics();
     const mobile = isMobile();
     for (const w of windows.values()) {
       if (mobile || w.maximized) {
