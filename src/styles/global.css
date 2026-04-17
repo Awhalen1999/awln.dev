@@ -24,7 +24,7 @@
   --dock-item-hover: var(--accent-hover);
 
   /* Size */
-  --menubar-h: 32px;
+  --menubar-h: 36px;
   --titlebar-h: 28px;
 
   /* Motion */
@@ -36,8 +36,8 @@
   --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.22);
 
   /* Typography */
-  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
-  --font-sans: "DM Sans", "DM Sans Fallback", system-ui, -apple-system, sans-serif;
+  --font-display: "Newsreader Variable", Georgia, "Times New Roman", serif;
+  --font-sans: "DM Sans Variable", system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, Menlo, Monaco, Consolas, monospace;
 }
 
@@ -92,8 +92,8 @@ a {
   left: 0;
   display: flex;
   flex-direction: column;
-  min-width: 260px;
-  min-height: 160px;
+  min-width: 320px;
+  min-height: 220px;
   background: var(--window-bg);
   border: 1px solid var(--window-border);
   outline: none;
@@ -162,6 +162,27 @@ a {
   padding: 1rem 1.25rem 1.25rem;
   line-height: 1.55;
   user-select: text;
+}
+
+.window-resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  cursor: nwse-resize;
+}
+.window-resize svg {
+  display: block;
+  pointer-events: none;
+}
+.window[data-maximized="true"] .window-resize {
+  display: none;
 }
 
 /* Window-body typography */

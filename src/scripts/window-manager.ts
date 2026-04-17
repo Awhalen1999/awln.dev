@@ -18,11 +18,18 @@ interface WindowState {
 
 type WindowAction = "close" | "maximize";
 
-const MIN_VISIBLE = 160;
 const TITLEBAR_H = 28;
-const TOP_GAP = 2;
 const CASCADE = 24;
 const MOBILE_Q = "(max-width: 699px)";
+
+// Single source of truth for the "usable region" inside desktop-surface.
+// Every window — whether dragged, resized, maximized, or freshly opened —
+// stays within these insets.
+const APP_PADDING = { left: 8, right: 8, top: 10, bottom: 8 };
+
+// Matches min-width/min-height on .window in global.css.
+const MIN_W = 320;
+const MIN_H = 220;
 
 export function initWindowManager(apps: App[]) {
   const host = document.querySelector<HTMLElement>("[data-window-host]");
@@ -56,31 +63,30 @@ export function initWindowManager(apps: App[]) {
 
   const isMobile = () => mobileMedia.matches;
 
-  // Metrics for the window-host surface. `dragYMax` extends past the
-  // surface bottom (where the dock sits) up to the viewport bottom, so
-  // dragged windows can overlap the dock instead of being clipped.
   function surfaceMetrics() {
     const surface = host!.parentElement;
-    if (!surface) {
-      return {
-        w: window.innerWidth,
-        h: window.innerHeight,
-        dragYMax: window.innerHeight - TITLEBAR_H,
-      };
-    }
+    if (!surface) return { w: window.innerWidth, h: window.innerHeight };
     const r = surface.getBoundingClientRect();
-    return {
-      w: r.width,
-      h: r.height,
-      dragYMax: window.innerHeight - r.top - TITLEBAR_H,
-    };
+    return { w: r.width, h: r.height };
   }
 
   function clampPos(w: WindowState, x: number, y: number) {
     const m = surfaceMetrics();
+    const xMax = Math.max(APP_PADDING.left, m.w - APP_PADDING.right - w.w);
+    const yMax = Math.max(APP_PADDING.top, m.h - APP_PADDING.bottom - w.h);
     return {
-      x: Math.max(-(w.w - MIN_VISIBLE), Math.min(m.w - MIN_VISIBLE, x)),
-      y: Math.max(TOP_GAP, Math.min(m.dragYMax, y)),
+      x: Math.max(APP_PADDING.left, Math.min(xMax, x)),
+      y: Math.max(APP_PADDING.top, Math.min(yMax, y)),
+    };
+  }
+
+  function clampSize(w: WindowState, newW: number, newH: number) {
+    const m = surfaceMetrics();
+    const wMax = m.w - APP_PADDING.right - w.x;
+    const hMax = m.h - APP_PADDING.bottom - w.y;
+    return {
+      w: Math.max(MIN_W, Math.min(wMax, newW)),
+      h: Math.max(MIN_H, Math.min(hMax, newH)),
     };
   }
 
@@ -99,10 +105,10 @@ export function initWindowManager(apps: App[]) {
 
   function fillSurface(w: WindowState) {
     const s = surfaceMetrics();
-    w.x = 0;
-    w.y = 0;
-    w.w = s.w;
-    w.h = s.h;
+    w.x = APP_PADDING.left;
+    w.y = APP_PADDING.top;
+    w.w = s.w - APP_PADDING.left - APP_PADDING.right;
+    w.h = s.h - APP_PADDING.top - APP_PADDING.bottom;
   }
 
   function updateDockBadge(appId: string) {
@@ -152,8 +158,10 @@ export function initWindowManager(apps: App[]) {
 
     const s = surfaceMetrics();
     const mobile = isMobile();
-    const ww = mobile ? s.w : Math.min(app.defaultSize.w, s.w - 40);
-    const hh = mobile ? s.h : Math.min(app.defaultSize.h, s.h - 40);
+    const usableW = s.w - APP_PADDING.left - APP_PADDING.right;
+    const usableH = s.h - APP_PADDING.top - APP_PADDING.bottom;
+    const ww = Math.max(MIN_W, Math.min(app.defaultSize.w, usableW));
+    const hh = Math.max(MIN_H, Math.min(app.defaultSize.h, usableH));
     const openCount = windows.size;
 
     const state: WindowState = {
@@ -163,8 +171,12 @@ export function initWindowManager(apps: App[]) {
       titlebar,
       body,
       titleEl,
-      x: mobile ? 0 : Math.max(12, Math.round((s.w - ww) / 2) + openCount * CASCADE),
-      y: mobile ? 0 : Math.max(12, Math.round((s.h - hh) / 2) - 40 + openCount * CASCADE),
+      x: mobile
+        ? APP_PADDING.left
+        : Math.round((s.w - ww) / 2) + openCount * CASCADE,
+      y: mobile
+        ? APP_PADDING.top
+        : Math.round((s.h - hh) / 2) - 40 + openCount * CASCADE,
       w: ww,
       h: hh,
       z: ++nextZ,
@@ -208,8 +220,10 @@ export function initWindowManager(apps: App[]) {
     if (w.maximized) {
       if (w.prev) {
         const s = surfaceMetrics();
-        w.w = Math.min(w.prev.w, s.w);
-        w.h = Math.min(w.prev.h, s.h);
+        const usableW = s.w - APP_PADDING.left - APP_PADDING.right;
+        const usableH = s.h - APP_PADDING.top - APP_PADDING.bottom;
+        w.w = Math.max(MIN_W, Math.min(w.prev.w, usableW));
+        w.h = Math.max(MIN_H, Math.min(w.prev.h, usableH));
         const c = clampPos(w, w.prev.x, w.prev.y);
         w.x = c.x;
         w.y = c.y;
@@ -292,6 +306,60 @@ export function initWindowManager(apps: App[]) {
       });
     });
 
+    const resizeHandle = w.el.querySelector<HTMLElement>("[data-resize]");
+    if (resizeHandle) {
+      let resizing = false;
+      let rStartX = 0;
+      let rStartY = 0;
+      let rStartW = 0;
+      let rStartH = 0;
+      let rPointerId = -1;
+
+      resizeHandle.addEventListener("pointerdown", (e) => {
+        if (e.button !== 0 || w.maximized) return;
+        resizing = true;
+        rPointerId = e.pointerId;
+        rStartX = e.clientX;
+        rStartY = e.clientY;
+        rStartW = w.w;
+        rStartH = w.h;
+        focusWindow(w.id);
+        try {
+          resizeHandle.setPointerCapture(rPointerId);
+        } catch {
+          /* pointer already captured */
+        }
+        e.preventDefault();
+        e.stopPropagation();
+      });
+
+      resizeHandle.addEventListener("pointermove", (e) => {
+        if (!resizing || e.pointerId !== rPointerId) return;
+        const size = clampSize(
+          w,
+          rStartW + (e.clientX - rStartX),
+          rStartH + (e.clientY - rStartY),
+        );
+        w.w = size.w;
+        w.h = size.h;
+        w.el.style.width = `${w.w}px`;
+        w.el.style.height = `${w.h}px`;
+      });
+
+      const endResize = (e: PointerEvent) => {
+        if (!resizing || e.pointerId !== rPointerId) return;
+        resizing = false;
+        try {
+          resizeHandle.releasePointerCapture(rPointerId);
+        } catch {
+          /* pointer already released */
+        }
+        rPointerId = -1;
+      };
+      resizeHandle.addEventListener("pointerup", endResize);
+      resizeHandle.addEventListener("pointercancel", endResize);
+    }
+
     // Capture phase so focus flips before descendant click handlers run.
     w.el.addEventListener("pointerdown", () => focusWindow(w.id), true);
   }
@@ -326,12 +394,15 @@ export function initWindowManager(apps: App[]) {
   window.addEventListener("hashchange", openFromHash);
 
   function reflow() {
-    const s = surfaceMetrics();
     const mobile = isMobile();
     for (const w of windows.values()) {
       if (mobile || w.maximized) {
         fillSurface(w);
       } else {
+        // Size first so the subsequent position clamp uses the new size.
+        const size = clampSize(w, w.w, w.h);
+        w.w = size.w;
+        w.h = size.h;
         const c = clampPos(w, w.x, w.y);
         w.x = c.x;
         w.y = c.y;
