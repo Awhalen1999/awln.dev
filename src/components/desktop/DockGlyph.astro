@@ -1,0 +1,20 @@
+---
+import { Icon } from "astro-icon/components";
+import type { DockIcon } from "../../data/apps";
+
+interface Props {
+  icon: DockIcon;
+}
+const { icon } = Astro.props;
+
+const ICON_MAP: Record<DockIcon, string> = {
+  info: "lucide:info",
+  folder: "lucide:folder",
+  tools: "lucide:wrench",
+  briefcase: "lucide:briefcase",
+  gear: "lucide:settings",
+  chain: "lucide:link",
+};
+---
+
+<Icon name={ICON_MAP[icon]} width="18" height="18" />

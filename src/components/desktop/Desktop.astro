@@ -6,7 +6,7 @@ import WindowHost from "./WindowHost.astro";
 import { APPS } from "../../data/apps";
 
 const desktopApps = APPS.filter((a) => a.iconLabel);
-const dockApps = APPS.filter((a) => a.dockGlyph);
+const dockApps = APPS.filter((a) => a.dockIcon);
 ---
 
 <div class="desktop" data-desktop>
