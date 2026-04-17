@@ -18,23 +18,7 @@ const { apps } = Astro.props;
       >
         <span class="icon-slot">
           {app.kind === "folder" ? (
-            <svg class="icon-glyph" viewBox="0 0 32 32" aria-hidden="true">
-              <path
-                d="M2 8 L11 8 L14 12 L30 12 L30 28 L2 28 Z"
-                fill="#BF4912"
-                stroke="#2B1B10"
-                stroke-width="1.25"
-                stroke-linejoin="miter"
-              />
-              <path
-                d="M2 8 L11 8 L14 12 L30 12 L30 17 L2 17 Z"
-                fill="#FF631A"
-                stroke="#2B1B10"
-                stroke-width="1.25"
-                stroke-linejoin="miter"
-              />
-              <line x1="5" y1="22" x2="11" y2="22" stroke="#2B1B10" stroke-width="0.6" opacity="0.4" />
-            </svg>
+            <img class="icon-glyph" src="/icons/folder.svg" alt="" aria-hidden="true" />
           ) : (
             <svg class="icon-glyph" viewBox="0 0 32 32" aria-hidden="true">
               <path
