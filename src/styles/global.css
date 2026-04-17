@@ -5,40 +5,46 @@
 :root {
   /* Color — palette */
   --accent: #FF631A;
-  --accent-dim: #bf4912;
-  --accent-hover: #f96e2e;
+  --accent-dim: #BF4912;
+  --accent-hover: #F97A3A;
   --accent-ink: #FFFFFF;
 
   --text: #1A1208;
   --text-muted: #6B5A48;
 
-  --window-bg: #F5E8D5;
-  --window-bg-alt: #E9D9C0;
+  /* Surfaces — warm, paper-like */
+  --window-bg: #FDF8EB;
+  --window-bg-alt: #EDE0C6;
   --window-border: #2B1B10;
 
-  /* Color — surfaces */
-  --wallpaper: var(--accent);
-  --menubar-bg: rgba(245, 245, 245, 0.85);
-  --dock-bg: var(--accent-dim);
-  --dock-item-bg: var(--accent);
-  --dock-item-hover: var(--accent-hover);
+  /* Desktop */
+  --wallpaper: #E6D3AD;
+  --wallpaper-shade: #D8C193;
+
+  /* Menu bar + retro titlebar */
+  --menubar-bg: #F5EBD5;
+  --titlebar-stripe: #2B1B10;
+  --titlebar-stripe-gap: #EDE0C6;
 
   /* Size */
-  --menubar-h: 36px;
-  --titlebar-h: 36px;
+  --menubar-h: 32px;
+  --titlebar-h: 24px;
 
   /* Motion */
   --dur-fast: 100ms;
   --dur-base: 140ms;
 
-  /* Elevation */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.14);
-  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.22);
+  /* Elevation — hard-edged classic-OS shadow */
+  --shadow-sm: 2px 2px 0 0 rgba(43, 27, 16, 0.22), 0 1px 3px rgba(43, 27, 16, 0.14);
+  --shadow-md: 3px 3px 0 0 rgba(43, 27, 16, 0.32), 0 2px 8px rgba(43, 27, 16, 0.2);
 
   /* Typography */
   --font-display: "Newsreader Variable", Georgia, "Times New Roman", serif;
   --font-sans: "DM Sans Variable", system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, Menlo, Monaco, Consolas, monospace;
+
+  /* Subtle paper grain — reusable layer */
+  --paper-noise: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.17 0 0 0 0 0.1 0 0 0 0 0.06 0 0 0 0.3 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Reset */
@@ -95,7 +101,7 @@ a {
   min-width: 320px;
   min-height: 220px;
   background: var(--window-bg);
-  border: 1px solid var(--window-border);
+  border: 1.5px solid var(--window-border);
   outline: none;
   box-shadow: var(--shadow-sm);
   pointer-events: auto;
@@ -105,31 +111,60 @@ a {
   box-shadow: var(--shadow-md);
 }
 
+/* Classic System-7-style striped titlebar. When the window is not focused,
+   the stripes dim to a plain band for clear focus hierarchy. */
 .window-titlebar {
+  position: relative;
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   height: var(--titlebar-h);
-  padding: 0 4px 0 10px;
-  background: var(--window-bg-alt);
-  border-bottom: 1px solid var(--window-border);
+  padding: 0 4px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--titlebar-stripe) 0,
+    var(--titlebar-stripe) 1px,
+    var(--titlebar-stripe-gap) 1px,
+    var(--titlebar-stripe-gap) 3px
+  );
+  border-bottom: 1.5px solid var(--window-border);
   cursor: grab;
   user-select: none;
 }
 .window-titlebar:active {
   cursor: grabbing;
 }
+.window:not([data-focused]) .window-titlebar {
+  background-image: none;
+  background: var(--window-bg-alt);
+}
 .window[data-maximized="true"] .window-titlebar,
 .window[data-maximized="true"] .window-titlebar:active {
   cursor: default;
 }
 
+.window-titlebar-spacer {
+  flex-shrink: 0;
+  width: 48px;
+  height: 100%;
+}
+
 .window-title {
-  overflow: hidden;
-  font-size: 12px;
+  display: inline-block;
+  max-width: calc(100% - 120px);
+  padding: 1px 10px;
+  color: var(--text);
+  background: var(--window-bg);
+  border: 1px solid var(--window-border);
+  font-family: var(--font-mono);
+  font-size: 11px;
   font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 16px;
+  text-align: center;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -138,14 +173,16 @@ a {
   flex-shrink: 0;
   align-items: center;
   gap: 3px;
+  width: 48px;
+  justify-content: flex-end;
 }
 
 .window-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   color: var(--text);
   background: var(--window-bg);
   border: 1px solid var(--window-border);
@@ -157,6 +194,9 @@ a {
 }
 .window-btn:active {
   background: var(--accent-dim);
+}
+.window-close:hover {
+  background: #D6412F;
 }
 
 .window-body {

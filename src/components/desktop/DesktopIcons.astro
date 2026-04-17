@@ -1,13 +1,14 @@
 ---
-import type { App } from "../../data/apps";
+import type { App, DesktopColumn } from "../../data/apps";
 
 interface Props {
   apps: App[];
+  side?: DesktopColumn;
 }
-const { apps } = Astro.props;
+const { apps, side = "left" } = Astro.props;
 ---
 
-<ul class="desktop-icons" aria-label="Desktop shortcuts">
+<ul class="desktop-icons" data-side={side} aria-label={`Desktop shortcuts (${side})`}>
   {apps.map((app) => (
     <li>
       <button
@@ -18,61 +19,64 @@ const { apps } = Astro.props;
       >
         <span class="icon-slot">
           {app.kind === "folder" ? (
-            <svg
-              class="icon-glyph"
-              viewBox="0 0 32 32"
-              aria-hidden="true"
-            >
+            <svg class="icon-glyph" viewBox="0 0 32 32" aria-hidden="true">
               <path
                 d="M2 8 L11 8 L14 12 L30 12 L30 28 L2 28 Z"
                 fill="#BF4912"
                 stroke="#2B1B10"
-                stroke-width="1"
+                stroke-width="1.25"
                 stroke-linejoin="miter"
               />
               <path
                 d="M2 8 L11 8 L14 12 L30 12 L30 17 L2 17 Z"
                 fill="#FF631A"
                 stroke="#2B1B10"
-                stroke-width="1"
+                stroke-width="1.25"
                 stroke-linejoin="miter"
               />
+              <line x1="5" y1="22" x2="11" y2="22" stroke="#2B1B10" stroke-width="0.6" opacity="0.4" />
             </svg>
           ) : (
-            <svg
-              class="icon-glyph"
-              viewBox="0 0 32 32"
-              aria-hidden="true"
-            >
+            <svg class="icon-glyph" viewBox="0 0 32 32" aria-hidden="true">
               <path
                 d="M4 3 L22 3 L29 10 L29 29 L4 29 Z"
-                fill="#F5E8D5"
+                fill="#FDF8EB"
                 stroke="#2B1B10"
                 stroke-width="1.5"
                 stroke-linejoin="miter"
               />
               <path
-                d="M22 3 L22 10 L29 10"
-                fill="none"
+                d="M22 3 L22 10 L29 10 L22 3 Z"
+                fill="#EDE0C6"
                 stroke="#2B1B10"
                 stroke-width="1.5"
                 stroke-linejoin="miter"
               />
-              <line x1="8" y1="14" x2="25" y2="14" stroke="#2B1B10" stroke-width="1" />
-              <line x1="8" y1="18" x2="25" y2="18" stroke="#2B1B10" stroke-width="1" />
-              <line x1="8" y1="22" x2="22" y2="22" stroke="#2B1B10" stroke-width="1" />
+              <line x1="8" y1="14" x2="25" y2="14" stroke="#2B1B10" stroke-width="1" opacity="0.6" />
+              <line x1="8" y1="17" x2="22" y2="17" stroke="#2B1B10" stroke-width="1" opacity="0.6" />
               {app.iconExt && (
-                <text
-                  x="16.5"
-                  y="27"
-                  font-size="5"
-                  font-weight="700"
-                  fill="#2B1B10"
-                  text-anchor="middle"
-                  style="font-family: var(--font-mono);"
-                >
-                  {app.iconExt.toUpperCase()}
-                </text>
+                <g>
+                  <rect
+                    x="5"
+                    y="21.5"
+                    width="19"
+                    height="5.5"
+                    fill="#FF631A"
+                    stroke="#2B1B10"
+                    stroke-width="1"
+                  />
+                  <text
+                    x="14.5"
+                    y="25.5"
+                    font-size="4"
+                    font-weight="700"
+                    fill="#FFFFFF"
+                    text-anchor="middle"
+                    style="font-family: var(--font-mono); letter-spacing: 0.12em;"
+                  >
+                    {app.iconExt.toUpperCase()}
+                  </text>
+                </g>
               )}
             </svg>
           )}
@@ -87,15 +91,24 @@ const { apps } = Astro.props;
   .desktop-icons {
     position: absolute;
     top: 1rem;
-    left: 0.75rem;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    width: 96px;
+    gap: 1.25rem;
+    width: 84px;
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+  /* Explicit left:auto / right:auto resets — prevents either column from
+     anchoring at the wrong edge if stale styles leak in (HMR, etc.). */
+  .desktop-icons[data-side="left"] {
+    left: 0.75rem;
+    right: auto;
+  }
+  .desktop-icons[data-side="right"] {
+    left: auto;
+    right: 0.75rem;
   }
   .desktop-icons > li {
     display: block;
@@ -105,57 +118,73 @@ const { apps } = Astro.props;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.5rem;
     width: 100%;
-    padding: 0.25rem;
-    color: var(--accent-ink);
-    transition: background var(--dur-fast) ease;
+    padding: 0.5rem 0.35rem;
+    color: var(--text);
+    transition: transform var(--dur-fast) ease;
   }
   .desktop-icon:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: transparent;
+    transform: translateY(-1px);
   }
   .desktop-icon:focus-visible {
-    outline: 1px dashed var(--accent-ink);
+    outline: 1px dashed var(--window-border);
     outline-offset: 2px;
   }
 
-  /* Square 48x48 slot — identical footprint for folder and file glyphs. */
+  /* 40x40 slot — identical footprint for folder and file glyphs. */
   .icon-slot {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
   }
   .icon-glyph {
     display: block;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     pointer-events: none;
+    filter: drop-shadow(1px 1px 0 rgba(43, 27, 16, 0.2));
   }
 
   .icon-label {
     max-width: 100%;
-    color: var(--accent-ink);
+    padding: 1px 5px;
+    color: var(--text);
+    background: transparent;
     font-family: var(--font-mono);
     font-size: 11px;
-    line-height: 1.2;
+    line-height: 1.25;
     text-align: center;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-    word-break: break-word;
+    overflow-wrap: anywhere;
+    transition: background var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+  }
+  .desktop-icon:hover .icon-label,
+  .desktop-icon:focus-visible .icon-label {
+    background: var(--window-bg);
+    box-shadow: 0 0 0 1px var(--window-border);
   }
 
   @media (max-width: 700px) {
     .desktop-icons {
-      right: 0.5rem;
-      flex-direction: row;
-      gap: 0.5rem;
-      width: auto;
-      padding-bottom: 4px;
-      overflow-x: auto;
+      width: 72px;
+      gap: 0.75rem;
     }
-    .desktop-icons > li {
-      flex: 0 0 96px;
+    .desktop-icons[data-side="left"] {
+      left: 0.35rem;
+    }
+    .desktop-icons[data-side="right"] {
+      right: 0.35rem;
+    }
+    .icon-slot,
+    .icon-glyph {
+      width: 36px;
+      height: 36px;
+    }
+    .icon-label {
+      font-size: 10px;
     }
   }
 </style>

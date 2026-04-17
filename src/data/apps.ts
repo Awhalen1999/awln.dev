@@ -1,24 +1,18 @@
 // Portfolio apps. Look for `EDIT ME` markers to find placeholder copy.
 
 export type AppKind = "folder" | "file" | "app";
-export type DockIcon =
-  | "info"
-  | "folder"
-  | "tools"
-  | "briefcase"
-  | "gear"
-  | "chain";
+export type DesktopColumn = "left" | "right";
 
 export interface App {
   id: string;
   title: string;
   kind: AppKind;
-  /** Desktop icon label. Omit to hide from desktop. */
-  iconLabel?: string;
+  /** Desktop icon label (with extension for files). */
+  iconLabel: string;
   /** File extension badge for file icons. */
   iconExt?: string;
-  /** Pixel-art icon for the dock. Omit to hide from dock. */
-  dockIcon?: DockIcon;
+  /** Which desktop column the icon lives in. */
+  desktopColumn: DesktopColumn;
   /** Default window size when opened on desktop viewports. */
   defaultSize: { w: number; h: number };
   /** HTML content rendered inside `.window-body`. */
@@ -325,63 +319,88 @@ const current = `
 `.trim();
 
 // --- Registry ------------------------------------------------------------
+// Desktop order top-to-bottom. Column placement matches PostHog-style
+// left/right rails.
 
 export const APPS: App[] = [
-  // Dock
+  // Left column — who I am / what I do
   {
     id: "about",
     title: "About",
-    kind: "app",
-    dockIcon: "info",
+    kind: "file",
+    iconLabel: "about.md",
+    iconExt: "md",
+    desktopColumn: "left",
     defaultSize: { w: 460, h: 480 },
     content: about,
   },
   {
     id: "projects",
     title: "Projects",
-    kind: "app",
-    dockIcon: "folder",
+    kind: "folder",
+    iconLabel: "projects",
+    desktopColumn: "left",
     defaultSize: { w: 560, h: 440 },
     content: projects,
   },
   {
-    id: "tools",
-    title: "Tools",
-    kind: "app",
-    dockIcon: "tools",
-    defaultSize: { w: 500, h: 440 },
-    content: tools,
-  },
-  {
     id: "experience",
     title: "Experience",
-    kind: "app",
-    dockIcon: "briefcase",
+    kind: "file",
+    iconLabel: "experience.log",
+    iconExt: "log",
+    desktopColumn: "left",
     defaultSize: { w: 600, h: 500 },
     content: experience,
   },
   {
-    id: "settings",
-    title: "Settings",
-    kind: "app",
-    dockIcon: "gear",
-    defaultSize: { w: 460, h: 440 },
-    content: settings,
+    id: "tools",
+    title: "Tools",
+    kind: "file",
+    iconLabel: "tools.sh",
+    iconExt: "sh",
+    desktopColumn: "left",
+    defaultSize: { w: 500, h: 440 },
+    content: tools,
+  },
+  {
+    id: "current",
+    title: "Current",
+    kind: "file",
+    iconLabel: "current.txt",
+    iconExt: "txt",
+    desktopColumn: "left",
+    defaultSize: { w: 460, h: 460 },
+    content: current,
+  },
+
+  // Right column — reach / misc
+  {
+    id: "contact",
+    title: "Contact",
+    kind: "file",
+    iconLabel: "contact.md",
+    iconExt: "md",
+    desktopColumn: "right",
+    defaultSize: { w: 420, h: 340 },
+    content: contact,
   },
   {
     id: "links",
     title: "Links",
-    kind: "app",
-    dockIcon: "chain",
+    kind: "file",
+    iconLabel: "links.url",
+    iconExt: "url",
+    desktopColumn: "right",
     defaultSize: { w: 480, h: 420 },
     content: links,
   },
-  // Desktop
   {
     id: "events",
     title: "Events",
     kind: "folder",
     iconLabel: "events",
+    desktopColumn: "right",
     defaultSize: { w: 520, h: 440 },
     content: events,
   },
@@ -390,25 +409,18 @@ export const APPS: App[] = [
     title: "Pets",
     kind: "folder",
     iconLabel: "pets",
+    desktopColumn: "right",
     defaultSize: { w: 520, h: 440 },
     content: pets,
   },
   {
-    id: "contact",
-    title: "Contact",
+    id: "settings",
+    title: "Settings",
     kind: "file",
-    iconLabel: "contact.md",
-    iconExt: "md",
-    defaultSize: { w: 420, h: 340 },
-    content: contact,
-  },
-  {
-    id: "current",
-    title: "Current",
-    kind: "file",
-    iconLabel: "current.txt",
-    iconExt: "txt",
-    defaultSize: { w: 460, h: 460 },
-    content: current,
+    iconLabel: "settings.ini",
+    iconExt: "ini",
+    desktopColumn: "right",
+    defaultSize: { w: 460, h: 440 },
+    content: settings,
   },
 ];

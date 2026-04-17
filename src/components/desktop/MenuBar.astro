@@ -1,40 +1,68 @@
 ---
+const menus = ["File", "View", "Window", "Help"];
 ---
 
 <header class="menubar" data-menubar>
   <div class="menubar-left">
-    <span class="menubar-brand">awln.dev</span>
+    <span class="menubar-brand">
+      <span class="menubar-brand-name">awln.dev</span>
+      <span class="menubar-brand-cursor" aria-hidden="true">_</span>
+    </span>
+    <nav class="menubar-menus" aria-label="Menus">
+      {menus.map((m) => (
+        <button type="button" class="menubar-menu" tabindex="-1">{m}</button>
+      ))}
+    </nav>
   </div>
   <div class="menubar-right">
+    <span class="menubar-status" data-status aria-live="polite">—</span>
     <div class="menubar-clock" data-clock>—</div>
   </div>
 </header>
 
 <script>
-  const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
-  const MONTHS = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-  ] as const;
+  const clockEl = document.querySelector<HTMLElement>("[data-clock]");
+  const statusEl = document.querySelector<HTMLElement>("[data-status]");
 
-  const el = document.querySelector<HTMLElement>("[data-clock]");
-  if (el) {
-    const pad = (n: number) => String(n).padStart(2, "0");
-    const tick = () => {
-      const d = new Date();
-      el.textContent =
-        `${WEEKDAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ` +
-        `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-    };
+  // Always show Newfoundland time — Intl picks up NDT/NST automatically based
+  // on the current date, so the trailing abbreviation flips with DST.
+  const nfFmt = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/St_Johns",
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZoneName: "short",
+  });
+
+  const tick = () => {
+    const parts = nfFmt.formatToParts(new Date());
+    const p: Record<string, string> = {};
+    for (const { type, value } of parts) p[type] = value;
+
+    if (clockEl) {
+      clockEl.textContent =
+        `${p.weekday} ${p.day} ${p.month} ${p.hour}:${p.minute} ${p.timeZoneName}`;
+    }
+    if (statusEl) {
+      // "24" at midnight in some locales — normalize to 0 via modulo.
+      const hour = parseInt(p.hour, 10) % 24;
+      const online = hour >= 9 && hour < 22;
+      statusEl.dataset.online = online ? "true" : "false";
+      statusEl.textContent = online ? "● online" : "● offline";
+    }
+  };
+
+  tick();
+  // Align the first scheduled tick to the next minute boundary so the
+  // visible minute flips cleanly, not drifted by page-load time.
+  const msToMinute = 60_000 - (Date.now() % 60_000);
+  setTimeout(() => {
     tick();
-    // Align the first scheduled tick to the next minute boundary so the
-    // visible minute flips cleanly, not drifted by page-load time.
-    const msToMinute = 60_000 - (Date.now() % 60_000);
-    setTimeout(() => {
-      tick();
-      setInterval(tick, 60_000);
-    }, msToMinute);
-  }
+    setInterval(tick, 60_000);
+  }, msToMinute);
 </script>
 
 <style>
@@ -43,35 +71,99 @@
     z-index: 1000;
     display: flex;
     flex-shrink: 0;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
     height: var(--menubar-h);
-    padding: 0 0.75rem;
+    padding: 0 0.5rem 0 0.65rem;
     color: var(--text);
     background: var(--menubar-bg);
-    border-bottom: 1px solid var(--window-border);
-    font-size: 13px;
+    background-image: var(--paper-noise);
+    background-size: 200px 200px;
+    background-repeat: repeat;
+    border-bottom: 1.5px solid var(--window-border);
+    font-size: 12px;
     user-select: none;
-    backdrop-filter: saturate(160%) blur(10px);
-    -webkit-backdrop-filter: saturate(160%) blur(10px);
   }
 
   .menubar-left,
   .menubar-right {
     display: flex;
     align-items: center;
+    gap: 0.5rem;
   }
 
   .menubar-brand {
-    padding: 0 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 0.45rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .menubar-brand-cursor {
+    display: inline-block;
+    width: 7px;
+    margin-left: -1px;
+    color: var(--accent);
+    font-weight: 700;
+    animation: menubar-blink 1.1s steps(2, start) infinite;
+  }
+  @keyframes menubar-blink {
+    to { opacity: 0; }
+  }
+
+  .menubar-menus {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-left: 0.35rem;
+  }
+  /* Menu items are slightly shorter than the menubar so the hover background
+     leaves the 1.5px bottom border visible as a thin line. */
+  .menubar-menu {
+    display: inline-flex;
+    align-items: center;
+    height: calc(var(--menubar-h) - 1.5px);
+    padding: 0 0.55rem;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    cursor: default;
+    transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+  }
+  .menubar-menu:hover {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .menubar-status {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .menubar-status[data-online="true"]::first-letter {
+    color: #2E8540;
+  }
+  .menubar-status[data-online="false"]::first-letter {
+    color: #B04A3A;
   }
 
   .menubar-clock {
-    padding: 0 0.25rem;
+    padding: 0 0.35rem;
     color: var(--text);
     font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 700px) {
+    .menubar-menus,
+    .menubar-status {
+      display: none;
+    }
   }
 </style>
