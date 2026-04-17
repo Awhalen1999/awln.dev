@@ -92,7 +92,7 @@ const { apps } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    width: 92px;
+    width: 96px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -119,28 +119,22 @@ const { apps } = Astro.props;
     outline-offset: 2px;
   }
 
-  /* Square 64x64 slot — identical footprint for folder and file glyphs. */
+  /* Square 48x48 slot — identical footprint for folder and file glyphs. */
   .icon-slot {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
   }
   .icon-glyph {
     display: block;
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
     pointer-events: none;
   }
 
-  /* Reserve exactly 2 lines so short and wrapping labels share height. */
   .icon-label {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    height: 2lh;
     max-width: 100%;
     color: var(--accent-ink);
     font-family: var(--font-mono);
@@ -161,7 +155,7 @@ const { apps } = Astro.props;
       overflow-x: auto;
     }
     .desktop-icons > li {
-      flex: 0 0 92px;
+      flex: 0 0 96px;
     }
   }
 </style>
