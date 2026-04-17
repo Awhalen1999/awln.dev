@@ -80,7 +80,7 @@ const { apps } = Astro.props;
             </svg>
           )}
         </span>
-        <span class="icon-label">{app.iconLabel}</span>
+        <span class="icon-label"><span class="icon-label-text">{app.iconLabel}</span></span>
       </button>
     </li>
   ))}
@@ -124,14 +124,15 @@ const { apps } = Astro.props;
     width: var(--col-w);
   }
 
+  /* Block layout (not flex) so the label can be `display: inline` and use
+     `box-decoration-break: clone` — this is what gives each wrapped line
+     its own tight pill on hover instead of one wide banner. */
   .desktop-icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    display: block;
     width: 100%;
     padding: 0.5rem 0.35rem;
     color: var(--text);
+    text-align: center;
     pointer-events: auto;
     transition: transform var(--dur-fast) ease;
   }
@@ -144,11 +145,10 @@ const { apps } = Astro.props;
   }
 
   .icon-slot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     width: 40px;
     height: 40px;
+    margin: 0 auto 0.5rem;
   }
   .icon-glyph {
     display: block;
@@ -157,21 +157,26 @@ const { apps } = Astro.props;
     pointer-events: none;
   }
 
+  /* Outer label = block layout + typography. Inner text span is the
+     actual chip — inline so it wraps, with `box-decoration-break: clone`
+     painting a separate pill behind each wrapped line on hover. */
   .icon-label {
-    max-width: 100%;
-    padding: 1px 5px;
+    display: block;
     color: var(--text);
-    background: transparent;
     font-family: var(--font-mono);
     font-size: 11px;
-    line-height: 1.25;
-    text-align: center;
+    line-height: 1.35;
     overflow-wrap: anywhere;
+  }
+  .icon-label-text {
+    padding: 0 4px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
     transition: background var(--dur-fast) ease;
   }
-  .desktop-icon:hover .icon-label,
-  .desktop-icon:focus-visible .icon-label {
-    background: rgba(255, 255, 255, 0.55);
+  .desktop-icon:hover .icon-label-text,
+  .desktop-icon:focus-visible .icon-label-text {
+    background: rgba(253, 248, 235, 0.8);
   }
 
   @media (max-width: 700px) {
