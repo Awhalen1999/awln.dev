@@ -17,7 +17,9 @@ const { apps } = Astro.props;
         aria-label={`Open ${app.title}`}
       >
         <span class="icon-slot">
-          {app.kind === "folder" ? (
+          {app.icon ? (
+            <img class="icon-glyph" src={app.icon} alt="" aria-hidden="true" />
+          ) : app.kind === "folder" ? (
             <img class="icon-glyph" src="/icons/folder.svg" alt="" aria-hidden="true" />
           ) : (
             <svg class="icon-glyph" viewBox="0 0 32 32" aria-hidden="true">

@@ -10,6 +10,8 @@ export interface App {
   iconLabel: string;
   /** File extension badge for file icons. */
   iconExt?: string;
+  /** Custom icon image path (e.g. "/icons/mail.svg"). */
+  icon?: string;
   /** Default window size when opened on desktop viewports. */
   defaultSize: { w: number; h: number };
   /** HTML content rendered inside `.window-body`. */
@@ -353,6 +355,7 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "tools.sh",
     iconExt: "sh",
+    icon: "/icons/tools.svg",
     defaultSize: { w: 500, h: 440 },
     content: tools,
   },
@@ -373,6 +376,7 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "contact.md",
     iconExt: "md",
+    icon: "/icons/mail.svg",
     defaultSize: { w: 420, h: 340 },
     content: contact,
   },
@@ -390,6 +394,7 @@ export const APPS: App[] = [
     title: "Events",
     kind: "folder",
     iconLabel: "events",
+    icon: "/icons/camera.svg",
     defaultSize: { w: 520, h: 440 },
     content: events,
   },
@@ -398,6 +403,7 @@ export const APPS: App[] = [
     title: "Pets",
     kind: "folder",
     iconLabel: "pets",
+    icon: "/icons/cat.svg",
     defaultSize: { w: 520, h: 440 },
     content: pets,
   },
