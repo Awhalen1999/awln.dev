@@ -28,7 +28,7 @@
 
   /* Size */
   --menubar-h: 32px;
-  --titlebar-h: 32px;
+  --titlebar-h: 38px;
 
   /* Motion */
   --dur-fast: 100ms;
@@ -102,8 +102,8 @@ a {
   pointer-events: auto;
 }
 
-/* Classic System-7-style striped titlebar. When the window is not focused,
-   the stripes dim to a plain band for clear focus hierarchy. */
+/* Flat titlebar. When the window is not focused,
+   the background dims for clear focus hierarchy. */
 .window-titlebar {
   position: relative;
   display: flex;
@@ -111,14 +111,8 @@ a {
   align-items: center;
   justify-content: space-between;
   height: var(--titlebar-h);
-  padding: 0 4px;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--titlebar-stripe) 0,
-    var(--titlebar-stripe) 1px,
-    var(--titlebar-stripe-gap) 1px,
-    var(--titlebar-stripe-gap) 3px
-  );
+  padding: 0 10px;
+  background: var(--window-bg-alt);
   border-bottom: 1.5px solid var(--window-border);
   cursor: grab;
   user-select: none;
@@ -127,33 +121,28 @@ a {
   cursor: grabbing;
 }
 .window:not([data-focused]) .window-titlebar {
-  background-image: none;
-  background: var(--window-bg-alt);
+  color: var(--text-muted);
+}
+.window:not([data-focused]) .window-title {
+  color: var(--text-muted);
+}
+.window:not([data-focused]) .window-btn {
+  opacity: 0.45;
 }
 .window[data-maximized="true"] .window-titlebar,
 .window[data-maximized="true"] .window-titlebar:active {
   cursor: default;
 }
 
-.window-titlebar-spacer {
-  flex-shrink: 0;
-  width: 60px;
-  height: 100%;
-}
-
 .window-title {
   display: inline-block;
-  max-width: calc(100% - 140px);
-  padding: 2px 12px;
+  max-width: calc(100% - 100px);
   color: var(--text);
-  background: var(--window-bg);
-  border: 1px solid var(--window-border);
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.02em;
-  line-height: 18px;
-  text-align: center;
+  line-height: var(--titlebar-h);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -164,16 +153,14 @@ a {
   flex-shrink: 0;
   align-items: center;
   gap: 4px;
-  width: 60px;
-  justify-content: flex-end;
 }
 
 .window-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   color: var(--text);
   background: var(--window-bg);
   border: 1px solid var(--window-border);
