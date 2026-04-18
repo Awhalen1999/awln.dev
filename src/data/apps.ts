@@ -168,9 +168,9 @@ const experience = `
 </ul>
 `.trim();
 
-const settings = `
-<h1 class="display-page">Settings</h1>
-<p class="lede">Site preferences and info about how this was built.</p>
+const help = `
+<h1 class="display-page">Help</h1>
+<p class="lede">Info about how this site was built and how to navigate it.</p>
 
 <div class="section-label">About this site</div>
 <p>
@@ -286,36 +286,6 @@ const contact = `
 </p>
 `.trim();
 
-const current = `
-<h1 class="display-page">Current</h1>
-<p class="lede">What I'm focused on right now.</p>
-
-<section class="focus-box">
-  <div class="section-label">This Week</div>
-  <ul>
-    <!-- EDIT ME -->
-    <li>Polishing this site and writing its first post.</li>
-    <li>Reading on typography and systems design.</li>
-    <li>Shipping a small tool I've been tinkering with.</li>
-  </ul>
-</section>
-
-<div class="section-label">This Quarter</div>
-<ul class="entry-list">
-  <!-- EDIT ME -->
-  <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>Goal One</div>
-    <p class="entry-desc">One-line description of what success looks like.</p>
-  </li>
-  <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>Goal Two</div>
-    <p class="entry-desc">One-line description.</p>
-  </li>
-</ul>
-
-<div class="section-label">Later</div>
-<p class="muted">Longer-horizon things live in <a href="#experience" data-open-app="experience">Experience</a>.</p>
-`.trim();
 
 // --- Registry ------------------------------------------------------------
 // Array order = desktop order. Icons flow top-to-bottom in column 1, then
@@ -329,6 +299,7 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "about.md",
     iconExt: "md",
+    icon: "/icons/man.svg",
     defaultSize: { w: 460, h: 480 },
     content: about,
   },
@@ -346,6 +317,7 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "experience.log",
     iconExt: "log",
+    icon: "/icons/man2.svg",
     defaultSize: { w: 600, h: 500 },
     content: experience,
   },
@@ -358,15 +330,6 @@ export const APPS: App[] = [
     icon: "/icons/tools.svg",
     defaultSize: { w: 500, h: 440 },
     content: tools,
-  },
-  {
-    id: "current",
-    title: "Current",
-    kind: "file",
-    iconLabel: "current.txt",
-    iconExt: "txt",
-    defaultSize: { w: 460, h: 460 },
-    content: current,
   },
 
   // Reach / misc
@@ -385,6 +348,7 @@ export const APPS: App[] = [
     title: "Links",
     kind: "file",
     iconLabel: "links.url",
+    icon: "/icons/links.svg",
     iconExt: "url",
     defaultSize: { w: 480, h: 420 },
     content: links,
@@ -408,12 +372,13 @@ export const APPS: App[] = [
     content: pets,
   },
   {
-    id: "settings",
-    title: "Settings",
+    id: "help",
+    title: "Help",
     kind: "file",
-    iconLabel: "settings.ini",
-    iconExt: "ini",
+    iconLabel: "help.md",
+    iconExt: "md",
+    icon: "/icons/help.svg",
     defaultSize: { w: 460, h: 440 },
-    content: settings,
+    content: help,
   },
 ];
