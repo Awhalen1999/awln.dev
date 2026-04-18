@@ -26,7 +26,31 @@
           </button>
         </div>
       </div>
-      <button type="button" class="menubar-menu" tabindex="-1" data-open-app="site-settings">Site Settings</button>
+      <div class="menubar-dropdown-wrapper">
+        <button type="button" class="menubar-menu" tabindex="-1" data-menu-trigger="theme">Theme</button>
+        <div class="menubar-dropdown theme-dropdown" data-menu-dropdown="theme">
+          <div class="theme-dropdown-section">
+            <span class="theme-dropdown-label">Display mode</span>
+            <div class="theme-toggle-row">
+              <span class="theme-toggle-text">Switch to dark mode</span>
+              <button type="button" class="theme-toggle-btn" data-theme-toggle>OFF</button>
+            </div>
+          </div>
+          <div class="theme-dropdown-section">
+            <span class="theme-dropdown-label">Accent color</span>
+            <div class="accent-swatch-row">
+              <button type="button" class="accent-swatch accent-swatch--orange" data-accent-swatch="orange" data-active title="Orange"></button>
+              <button type="button" class="accent-swatch accent-swatch--green" data-accent-swatch="green" title="Green"></button>
+              <button type="button" class="accent-swatch accent-swatch--blue" data-accent-swatch="blue" title="Blue"></button>
+              <button type="button" class="accent-swatch accent-swatch--purple" data-accent-swatch="purple" title="Purple"></button>
+            </div>
+          </div>
+          <hr class="menubar-dropdown-sep" />
+          <button type="button" class="menubar-dropdown-item" data-open-app="site-settings">
+            <span>Open site settings…</span>
+          </button>
+        </div>
+      </div>
       <button type="button" class="menubar-menu" tabindex="-1" data-open-app="help">Help</button>
     </nav>
   </div>
@@ -82,6 +106,56 @@
 
   import { initMenuDropdowns } from "../../scripts/menu-dropdown";
   initMenuDropdowns();
+
+  // Dark mode toggle
+  const toggleBtn = document.querySelector<HTMLElement>("[data-theme-toggle]");
+  const root = document.documentElement;
+
+  function applyTheme(dark: boolean) {
+    root.setAttribute("data-theme", dark ? "dark" : "light");
+    localStorage.setItem("theme", dark ? "dark" : "light");
+    if (toggleBtn) {
+      toggleBtn.textContent = dark ? "ON" : "OFF";
+      if (dark) toggleBtn.setAttribute("data-active", "");
+      else toggleBtn.removeAttribute("data-active");
+    }
+  }
+
+  // Accent color
+  const swatches = document.querySelectorAll<HTMLElement>("[data-accent-swatch]");
+
+  function applyAccent(color: string) {
+    if (color && color !== "orange") {
+      root.setAttribute("data-accent", color);
+    } else {
+      root.removeAttribute("data-accent");
+      color = "orange";
+    }
+    localStorage.setItem("accent-color", color);
+    swatches.forEach((s) => {
+      if (s.dataset.accentSwatch === color) s.setAttribute("data-active", "");
+      else s.removeAttribute("data-active");
+    });
+  }
+
+  // Init from saved preferences
+  const saved = localStorage.getItem("theme");
+  const prefersDark = saved === "dark";
+  applyTheme(prefersDark);
+  applyAccent(localStorage.getItem("accent-color") ?? "orange");
+
+  toggleBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isDark = root.getAttribute("data-theme") === "dark";
+    applyTheme(!isDark);
+  });
+
+  swatches.forEach((swatch) => {
+    swatch.addEventListener("click", (e) => {
+      e.stopPropagation();
+      applyAccent(swatch.dataset.accentSwatch ?? "orange");
+    });
+  });
 </script>
 
 <style>
@@ -182,10 +256,9 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 6px 6px;
+    padding: 6px 10px;
     white-space: nowrap;
     color: var(--text);
-    font-family: var(--font-mono);
     font-size: 10px;
     cursor: default;
     transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
@@ -209,6 +282,65 @@
     border-top: 1px solid var(--window-border);
     margin: 0;
   }
+
+  /* Theme dropdown */
+  .theme-dropdown {
+    min-width: 240px;
+  }
+  .theme-dropdown-section {
+    padding: 6px 10px;
+  }
+  .theme-dropdown-label {
+    display: block;
+    padding: 0 0 4px;
+    color: var(--text-muted);
+    font-size: 10px;
+  }
+  .theme-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .theme-toggle-text {
+    font-size: 10px;
+    color: var(--text);
+  }
+  .theme-toggle-btn {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.4;
+    color: var(--text-muted);
+    background: var(--window-bg-alt);
+    border: 1px solid var(--window-border);
+    cursor: pointer;
+    transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+  }
+  .theme-toggle-btn[data-active] {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .accent-swatch-row {
+    display: flex;
+    gap: 6px;
+  }
+  .accent-swatch {
+    flex: 1;
+    height: 24px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color var(--dur-fast) ease;
+  }
+  .accent-swatch[data-active] {
+    border-color: var(--window-border);
+  }
+  .accent-swatch--orange { background: #FF631A; }
+  .accent-swatch--green  { background: #2E9E5A; }
+  .accent-swatch--blue   { background: #2E7DD6; }
+  .accent-swatch--purple { background: #7B4FBF; }
 
   .menubar-status {
     color: var(--text-muted);

@@ -21,6 +21,14 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <title>{title}</title>
+    <script is:inline>
+      (function() {
+        var t = localStorage.getItem("theme");
+        var a = localStorage.getItem("accent-color");
+        if (t === "dark") document.documentElement.setAttribute("data-theme", "dark");
+        if (a && a !== "orange") document.documentElement.setAttribute("data-accent", a);
+      })();
+    </script>
   </head>
   <body>
     <slot />

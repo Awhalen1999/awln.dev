@@ -43,6 +43,33 @@
   --paper-noise: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.17 0 0 0 0 0.1 0 0 0 0 0.06 0 0 0 0.3 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+[data-theme="dark"] {
+  --accent: #FF7A3D;
+  --accent-dim: #CC5520;
+  --accent-hover: #FF9560;
+  --accent-ink: #FFFFFF;
+
+  --text: #E8E2D8;
+  --text-muted: #9A9088;
+
+  --window-bg: #1E1C1A;
+  --window-bg-alt: #2A2826;
+  --window-border: #4A443E;
+
+  --wallpaper: #141210;
+  --wallpaper-shade: #0E0D0B;
+
+  --menubar-bg: #2A2826;
+}
+
+/* --- Accent color palettes --- */
+[data-accent="green"]                       { --accent: #2E9E5A; --accent-dim: #1F7A42; --accent-hover: #3CB76E; }
+[data-accent="green"][data-theme="dark"]    { --accent: #3CB76E; --accent-dim: #2E9E5A; --accent-hover: #5CCC88; }
+[data-accent="blue"]                        { --accent: #2E7DD6; --accent-dim: #1E5FA8; --accent-hover: #4A94E6; }
+[data-accent="blue"][data-theme="dark"]     { --accent: #4A94E6; --accent-dim: #2E7DD6; --accent-hover: #6BABF2; }
+[data-accent="purple"]                      { --accent: #7B4FBF; --accent-dim: #5E3A96; --accent-hover: #9468D6; }
+[data-accent="purple"][data-theme="dark"]   { --accent: #9468D6; --accent-dim: #7B4FBF; --accent-hover: #AB82E6; }
+
 /* Reset */
 
 *,
