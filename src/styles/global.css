@@ -147,14 +147,17 @@ a {
 .window-titlebar:active {
   cursor: grabbing;
 }
-.window:not([data-focused]) .window-titlebar {
-  color: var(--text-muted);
-}
 .window:not([data-focused]) .window-title {
   color: var(--text-muted);
 }
-.window:not([data-focused]) .window-btn {
-  opacity: 0.45;
+.window[data-focused] .window-buttons::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: 4px;
+  align-self: center;
 }
 .window[data-maximized="true"] .window-titlebar,
 .window[data-maximized="true"] .window-titlebar:active {
