@@ -14,7 +14,7 @@
 
   /* Surfaces — warm, paper-like */
   --window-bg: #FDF8EB;
-  --window-bg-alt: #EDE0C6;
+  --window-bg-alt: #E8E5E1;
   --window-border: #2B1B10;
 
   /* Desktop */
@@ -22,7 +22,7 @@
   --wallpaper-shade: #D8C193;
 
   /* Menu bar + retro titlebar */
-  --menubar-bg: #F5EBD5;
+  --menubar-bg: #E8E5E1;
   --titlebar-stripe: #2B1B10;
   --titlebar-stripe-gap: #EDE0C6;
 
@@ -97,7 +97,7 @@ a {
   min-width: 320px;
   min-height: 220px;
   background: var(--window-bg);
-  border: 1.5px solid var(--window-border);
+  border: 1px solid var(--window-border);
   outline: none;
   pointer-events: auto;
 }
@@ -113,7 +113,7 @@ a {
   height: var(--titlebar-h);
   padding: 0 10px;
   background: var(--window-bg-alt);
-  border-bottom: 1.5px solid var(--window-border);
+  border-bottom: 1px solid var(--window-border);
   cursor: grab;
   user-select: none;
 }
