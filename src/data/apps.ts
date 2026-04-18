@@ -272,6 +272,58 @@ const pets = `
 </ul>
 `.trim();
 
+const siteSettings = `
+<h1 class="display-page">Settings</h1>
+
+<section class="settings-section">
+  <p class="settings-desc">Appearance</p>
+
+  <div class="settings-field">
+    <span class="settings-label">Theme mode</span>
+    <div class="settings-toggle-group" data-setting="theme">
+      <button type="button" class="settings-toggle" data-value="light">Light</button>
+      <button type="button" class="settings-toggle" data-value="dark">Dark</button>
+    </div>
+  </div>
+
+  <div class="settings-field">
+    <span class="settings-label">Theme color</span>
+    <div class="settings-toggle-group" data-setting="accent">
+      <button type="button" class="settings-toggle" data-value="orange">
+        <span class="settings-color-dot" style="background:#FF631A"></span>Orange
+      </button>
+      <button type="button" class="settings-toggle" data-value="green">
+        <span class="settings-color-dot" style="background:#2E9E5A"></span>Green
+      </button>
+      <button type="button" class="settings-toggle" data-value="blue">
+        <span class="settings-color-dot" style="background:#2E7DD6"></span>Blue
+      </button>
+      <button type="button" class="settings-toggle" data-value="purple">
+        <span class="settings-color-dot" style="background:#7B4FBF"></span>Purple
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="settings-section">
+  <p class="settings-desc">Wallpaper</p>
+  <p class="muted" style="font-size:0.8125rem">Choose a desktop background. Coming soon.</p>
+</section>
+
+<section class="settings-section">
+  <p class="settings-desc">Links</p>
+  <p class="muted" style="font-size:0.8125rem">Change how links appear across the site.</p>
+
+  <div class="settings-field">
+    <span class="settings-label">Underline style</span>
+    <div class="settings-toggle-group" data-setting="link-style">
+      <button type="button" class="settings-toggle" data-value="solid"><span style="text-decoration:underline;text-underline-offset:2px">Solid</span></button>
+      <button type="button" class="settings-toggle" data-value="dotted"><span style="text-decoration:underline dotted;text-decoration-thickness:1.5px;text-underline-offset:2px">Dotted</span></button>
+    </div>
+  </div>
+</section>
+`.trim();
+
 const contact = `
 <h1 class="display-page">Contact</h1>
 <p class="lede">The fastest way to reach me.</p>
@@ -285,7 +337,6 @@ const contact = `
   More channels in the <a href="#links" data-open-app="links">Links</a> window.
 </p>
 `.trim();
-
 
 // --- Registry ------------------------------------------------------------
 // Array order = desktop order. Icons flow top-to-bottom in column 1, then
@@ -377,8 +428,8 @@ export const APPS: App[] = [
     kind: "file",
     iconLabel: "site settings",
     icon: "/icons/settings.svg",
-    defaultSize: { w: 460, h: 440 },
-    content: "",
+    defaultSize: { w: 650, h: 500 },
+    content: siteSettings,
   },
   {
     id: "help",
