@@ -236,6 +236,16 @@ export function initWindowManager(apps: App[]) {
     applyGeometry(w);
   }
 
+  function centerWindow(id: string) {
+    const w = windows.get(id);
+    if (!w || w.maximized) return;
+    const s = surfaceMetrics();
+    const c = clampPos(w, Math.round((s.w - w.w) / 2), Math.round((s.h - w.h) / 2));
+    w.x = c.x;
+    w.y = c.y;
+    applyGeometry(w);
+  }
+
   const ACTIONS: Record<WindowAction, (id: string) => void> = {
     close: closeWindow,
     maximize: toggleMaximize,
@@ -379,11 +389,40 @@ export function initWindowManager(apps: App[]) {
   });
 
   document.addEventListener("keydown", (e) => {
+    // Cmd+Opt shortcuts for focused window
+    if (e.metaKey && e.altKey && focusedId) {
+      switch (e.key.toLowerCase()) {
+        case "f":
+          e.preventDefault();
+          toggleMaximize(focusedId);
+          return;
+        case "c":
+          e.preventDefault();
+          centerWindow(focusedId);
+          return;
+        case "w":
+          e.preventDefault();
+          closeWindow(focusedId);
+          return;
+      }
+    }
+
     if (e.key !== "Escape" || !focusedId) return;
     // Don't hijack Escape from inputs, details, or editable content inside a window.
     const t = e.target as HTMLElement | null;
     if (t?.closest("input, textarea, select, [contenteditable='true'], details[open]")) return;
     closeWindow(focusedId);
+  });
+
+  // Expose actions for menu bar
+  document.addEventListener("wm:maximize-focused", () => {
+    if (focusedId) toggleMaximize(focusedId);
+  });
+  document.addEventListener("wm:center-focused", () => {
+    if (focusedId) centerWindow(focusedId);
+  });
+  document.addEventListener("wm:close-focused", () => {
+    if (focusedId) closeWindow(focusedId);
   });
 
   const openFromHash = () => {

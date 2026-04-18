@@ -1,5 +1,4 @@
 ---
-const menus = ["File", "View", "Window", "Help"];
 ---
 
 <header class="menubar" data-menubar>
@@ -9,9 +8,26 @@ const menus = ["File", "View", "Window", "Help"];
       <span class="menubar-brand-cursor" aria-hidden="true">_</span>
     </span>
     <nav class="menubar-menus" aria-label="Menus">
-      {menus.map((m) => (
-        <button type="button" class="menubar-menu" tabindex="-1">{m}</button>
-      ))}
+      <div class="menubar-dropdown-wrapper">
+        <button type="button" class="menubar-menu" tabindex="-1" data-menu-trigger="window">Window</button>
+        <div class="menubar-dropdown" data-menu-dropdown="window">
+          <button type="button" class="menubar-dropdown-item" data-action="wm:maximize-focused">
+            <span data-menu-label="maximize">Maximize</span>
+            <span class="menubar-shortcut">Cmd+Opt+F</span>
+          </button>
+          <button type="button" class="menubar-dropdown-item" data-action="wm:center-focused">
+            <span>Center Window</span>
+            <span class="menubar-shortcut">Cmd+Opt+C</span>
+          </button>
+          <hr class="menubar-dropdown-sep" />
+          <button type="button" class="menubar-dropdown-item" data-action="wm:close-focused">
+            <span>Close</span>
+            <span class="menubar-shortcut">Cmd+Opt+W</span>
+          </button>
+        </div>
+      </div>
+      <button type="button" class="menubar-menu" tabindex="-1" data-open-app="site-settings">Site Settings</button>
+      <button type="button" class="menubar-menu" tabindex="-1" data-open-app="help">Help</button>
     </nav>
   </div>
   <div class="menubar-right">
@@ -63,6 +79,9 @@ const menus = ["File", "View", "Window", "Help"];
     tick();
     setInterval(tick, 60_000);
   }, msToMinute);
+
+  import { initMenuDropdowns } from "../../scripts/menu-dropdown";
+  initMenuDropdowns();
 </script>
 
 <style>
@@ -74,7 +93,7 @@ const menus = ["File", "View", "Window", "Help"];
     align-items: stretch;
     justify-content: space-between;
     height: var(--menubar-h);
-    padding: 0 0.5rem 0 0.65rem;
+    padding: 0 1rem;
     color: var(--text);
     background: var(--menubar-bg);
     background-image: var(--paper-noise);
@@ -133,9 +152,64 @@ const menus = ["File", "View", "Window", "Help"];
     cursor: default;
     transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
   }
-  .menubar-menu:hover {
+  .menubar-menu:hover,
+  .menubar-menu[data-active] {
     background: var(--accent);
     color: var(--accent-ink);
+  }
+
+  /* Dropdown wrapper — positions the dropdown relative to its trigger */
+  .menubar-dropdown-wrapper {
+    position: relative;
+  }
+
+  .menubar-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: auto;
+    padding: 0;
+    background: var(--window-bg);
+    border: 1.5px solid var(--window-border);
+
+    z-index: 1001;
+  }
+  .menubar-dropdown[data-open] {
+    display: block;
+  }
+
+  .menubar-dropdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 6px 6px;
+    white-space: nowrap;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    cursor: default;
+    transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+  }
+  .menubar-dropdown-item:hover:not([disabled]) {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .menubar-dropdown-item[disabled] {
+    opacity: 0.4;
+  }
+
+  .menubar-shortcut {
+    margin-left: 2rem;
+    opacity: 0.45;
+    font-size: 11px;
+  }
+
+  .menubar-dropdown-sep {
+    border: none;
+    border-top: 1px solid var(--window-border);
+    margin: 0;
   }
 
   .menubar-status {
