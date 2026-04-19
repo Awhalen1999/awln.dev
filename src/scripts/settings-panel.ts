@@ -22,7 +22,7 @@ function currentLinkStyle(): string {
 /* ── Sync toggle UI to state ────────────────────────────────── */
 
 function syncGroup(group: HTMLElement, value: string) {
-  for (const btn of group.querySelectorAll<HTMLElement>(".settings-toggle")) {
+  for (const btn of group.querySelectorAll<HTMLElement>(".btn[data-value]")) {
     if (btn.dataset.value === value) btn.setAttribute("data-active", "");
     else btn.removeAttribute("data-active");
   }
@@ -30,7 +30,7 @@ function syncGroup(group: HTMLElement, value: string) {
 
 function syncAll(container: HTMLElement) {
   for (const group of container.querySelectorAll<HTMLElement>(
-    ".settings-toggle-group",
+    ".btn-group[data-setting]",
   )) {
     const setting = group.dataset.setting;
     if (setting === "theme") syncGroup(group, currentTheme());
@@ -87,11 +87,11 @@ function setLinkStyle(value: string) {
 
 document.addEventListener("click", (e) => {
   const toggle = (e.target as HTMLElement).closest<HTMLElement>(
-    ".settings-toggle",
+    ".btn[data-value]",
   );
   if (!toggle) return;
 
-  const group = toggle.closest<HTMLElement>(".settings-toggle-group");
+  const group = toggle.closest<HTMLElement>(".btn-group[data-setting]");
   if (!group) return;
 
   const setting = group.dataset.setting;

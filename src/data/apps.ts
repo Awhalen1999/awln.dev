@@ -48,7 +48,7 @@ const about = `
 <p class="muted">
   See the complete experience timeline in a dedicated window with full role context.
 </p>
-<button type="button" class="pill-btn" data-open-app="experience">Open Experience</button>
+<button type="button" class="btn" data-open-app="experience">Open Experience</button>
 `.trim();
 
 const projects = `
@@ -276,25 +276,25 @@ const siteSettings = `
 
   <div class="settings-field">
     <span class="settings-label">Theme mode</span>
-    <div class="settings-toggle-group" data-setting="theme">
-      <button type="button" class="settings-toggle" data-value="light">Light</button>
-      <button type="button" class="settings-toggle" data-value="dark">Dark</button>
+    <div class="btn-group" data-setting="theme">
+      <button type="button" class="btn" data-value="light">Light</button>
+      <button type="button" class="btn" data-value="dark">Dark</button>
     </div>
   </div>
 
   <div class="settings-field">
     <span class="settings-label">Theme color</span>
-    <div class="settings-toggle-group" data-setting="accent">
-      <button type="button" class="settings-toggle" data-value="orange">
+    <div class="btn-group" data-setting="accent">
+      <button type="button" class="btn" data-value="orange">
         <span class="settings-color-dot" style="background:#FF631A"></span>Orange
       </button>
-      <button type="button" class="settings-toggle" data-value="green">
+      <button type="button" class="btn" data-value="green">
         <span class="settings-color-dot" style="background:#2E9E5A"></span>Green
       </button>
-      <button type="button" class="settings-toggle" data-value="blue">
+      <button type="button" class="btn" data-value="blue">
         <span class="settings-color-dot" style="background:#2E7DD6"></span>Blue
       </button>
-      <button type="button" class="settings-toggle" data-value="purple">
+      <button type="button" class="btn" data-value="purple">
         <span class="settings-color-dot" style="background:#7B4FBF"></span>Purple
       </button>
     </div>
@@ -312,9 +312,9 @@ const siteSettings = `
 
   <div class="settings-field">
     <span class="settings-label">Underline style</span>
-    <div class="settings-toggle-group" data-setting="link-style">
-      <button type="button" class="settings-toggle" data-value="solid"><span style="text-decoration:underline;text-underline-offset:2px">Solid</span></button>
-      <button type="button" class="settings-toggle" data-value="dotted"><span style="text-decoration:underline dotted;text-decoration-thickness:1.5px;text-underline-offset:2px">Dotted</span></button>
+    <div class="btn-group" data-setting="link-style">
+      <button type="button" class="btn" data-value="solid"><span style="text-decoration:underline;text-underline-offset:2px">Solid</span></button>
+      <button type="button" class="btn" data-value="dotted"><span style="text-decoration:underline dotted;text-decoration-thickness:1.5px;text-underline-offset:2px">Dotted</span></button>
     </div>
   </div>
 </section>

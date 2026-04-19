@@ -356,18 +356,45 @@ a {
   color: var(--text-muted);
 }
 
-.pill-btn {
-  display: inline-block;
-  padding: 0.375rem 0.875rem;
+/* ── Buttons ───────────────────────────────────────────────
+   .btn          — bordered action / toggle button
+   .btn-group    — segmented toggle container (children = .btn)
+   ───────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3rem 0.75rem;
   color: var(--text);
-  background: var(--window-bg-alt);
+  background: var(--window-bg);
   border: 1px solid var(--window-border);
   cursor: pointer;
   transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
 }
-.pill-btn:hover {
+.btn:hover {
   background: var(--accent);
   color: var(--accent-ink);
+}
+.btn[data-active] {
+  background: var(--window-bg-alt);
+  color: var(--text);
+}
+
+.btn-group {
+  display: inline-flex;
+  border: 1px solid var(--window-border);
+}
+.btn-group .btn {
+  border: 0;
+  border-right: 1px solid var(--window-border);
+}
+.btn-group .btn:last-child {
+  border-right: 0;
+}
+.btn-group .btn:hover {
+  background: var(--window-bg-alt);
+  color: var(--text);
 }
 
 /* ── Settings panel ──────────────────────────────────────── */
@@ -397,32 +424,6 @@ a {
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.04em;
-}
-
-.settings-toggle-group {
-  display: inline-flex;
-  border: 1px solid var(--window-border);
-}
-
-.settings-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.3rem 0.7rem;
-  color: var(--text);
-  background: var(--window-bg);
-  border-right: 1px solid var(--window-border);
-  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
-}
-.settings-toggle:last-child {
-  border-right: 0;
-}
-.settings-toggle:hover {
-  background: var(--window-bg-alt);
-}
-.settings-toggle[data-active] {
-  background: var(--window-bg-alt);
-  color: var(--text);
 }
 
 .settings-color-dot {
