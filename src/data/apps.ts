@@ -114,7 +114,7 @@ const projects = `
 
 const tools = `
 <h1>Tools</h1>
-<p class="lede">Hardware, software, and small things I reach for daily.</p>
+<p class="lede">Hardware, software, and small extensions and apps I reach for daily. Mostly here so I don't forget when people ask.</p>
 
 <div class="section-label">Software</div>
 <ul class="entry-list">
@@ -391,7 +391,7 @@ export const APPS: App[] = [
     iconLabel: "tools",
 
     icon: "/icons/tools.svg",
-    defaultSize: { w: 500, h: 440 },
+    defaultSize: { w: 450, h: 600 },
     content: tools,
   },
 
