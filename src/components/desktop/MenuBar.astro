@@ -29,11 +29,11 @@
       <div class="menubar-dropdown-wrapper">
         <button type="button" class="menubar-menu" tabindex="-1" data-menu-trigger="theme">Theme</button>
         <div class="menubar-dropdown theme-dropdown" data-menu-dropdown="theme">
-          <div class="theme-dropdown-section">
-            <span class="theme-dropdown-label">Display mode</span>
-            <div class="theme-toggle-row">
-              <span class="theme-toggle-text">Switch to dark mode</span>
-              <button type="button" class="theme-toggle-btn" data-theme-toggle>OFF</button>
+          <div class="theme-dropdown-section theme-mode-row">
+            <span class="theme-dropdown-label">Color mode</span>
+            <div class="btn-group btn-group--sm" data-theme-toggle-group>
+              <button type="button" class="btn" data-theme-value="light">Light</button>
+              <button type="button" class="btn" data-theme-value="dark">Dark</button>
             </div>
           </div>
           <div class="theme-dropdown-section">
@@ -108,17 +108,17 @@
   initMenuDropdowns();
 
   // Dark mode toggle
-  const toggleBtn = document.querySelector<HTMLElement>("[data-theme-toggle]");
+  const themeBtns = document.querySelectorAll<HTMLElement>("[data-theme-value]");
   const root = document.documentElement;
 
   function applyTheme(dark: boolean) {
-    root.setAttribute("data-theme", dark ? "dark" : "light");
-    localStorage.setItem("theme", dark ? "dark" : "light");
-    if (toggleBtn) {
-      toggleBtn.textContent = dark ? "ON" : "OFF";
-      if (dark) toggleBtn.setAttribute("data-active", "");
-      else toggleBtn.removeAttribute("data-active");
-    }
+    const value = dark ? "dark" : "light";
+    root.setAttribute("data-theme", value);
+    localStorage.setItem("theme", value);
+    themeBtns.forEach((btn) => {
+      if (btn.dataset.themeValue === value) btn.setAttribute("data-active", "");
+      else btn.removeAttribute("data-active");
+    });
   }
 
   // Accent color
@@ -144,10 +144,11 @@
   applyTheme(prefersDark);
   applyAccent(localStorage.getItem("accent-color") ?? "orange");
 
-  toggleBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const isDark = root.getAttribute("data-theme") === "dark";
-    applyTheme(!isDark);
+  themeBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      applyTheme(btn.dataset.themeValue === "dark");
+    });
   });
 
   swatches.forEach((swatch) => {
@@ -296,33 +297,13 @@
     color: var(--text-muted);
     font-size: 12px;
   }
-  .theme-toggle-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+  .theme-mode-row .theme-dropdown-label {
+    padding: 0 0 4px;
   }
-  .theme-toggle-text {
-    font-size: 12px;
-    color: var(--text);
-  }
-  .theme-toggle-btn {
-    flex-shrink: 0;
+  .btn-group--sm .btn {
     padding: 2px 8px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    line-height: 1.4;
-    color: var(--text-muted);
-    background: var(--window-bg-alt);
-    border: 1px solid var(--window-border);
-    cursor: pointer;
-    transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+    font-size: 11px;
   }
-  .theme-toggle-btn[data-active] {
-    background: var(--accent);
-    color: var(--accent-ink);
-  }
-
   .accent-swatch-row {
     display: flex;
     gap: 6px;

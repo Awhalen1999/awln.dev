@@ -46,11 +46,9 @@ function setTheme(value: string) {
   root.setAttribute("data-theme", dark ? "dark" : "light");
   localStorage.setItem("theme", dark ? "dark" : "light");
 
-  // Keep menubar toggle in sync
-  const btn = document.querySelector<HTMLElement>("[data-theme-toggle]");
-  if (btn) {
-    btn.textContent = dark ? "ON" : "OFF";
-    if (dark) btn.setAttribute("data-active", "");
+  // Keep menubar toggle group in sync
+  for (const btn of document.querySelectorAll<HTMLElement>("[data-theme-value]")) {
+    if (btn.dataset.themeValue === value) btn.setAttribute("data-active", "");
     else btn.removeAttribute("data-active");
   }
 }
