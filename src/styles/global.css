@@ -139,8 +139,8 @@ a[target="_blank"]::after {
   letter-spacing: 0;
   text-decoration: none;
   display: inline;
-  font-weight: 800;
-  opacity: 0.45;
+  font-weight: 500;
+  opacity: 1;
 }
 
 /* Window chrome — defined globally because windows are cloned from a
