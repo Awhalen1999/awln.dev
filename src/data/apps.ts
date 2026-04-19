@@ -364,7 +364,7 @@ export const APPS: App[] = [
     iconLabel: "about",
 
     icon: "/icons/man.svg",
-    defaultSize: { w: 550, h: 550 },
+    defaultSize: { w: 550, h: 500 },
     content: about,
   },
   {
