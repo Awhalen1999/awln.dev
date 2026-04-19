@@ -61,7 +61,7 @@ const about = `
 const projects = `
 <h1>Projects</h1>
 <p class="lede">
-  Some are finished, some are works in progress. My <a href="https://github.com/awhalen1999" target="_blank" rel="noopener">GitHub</a> is probably more up to date with dinky little projects as well.
+  Some are finished, some are works in progress. My <a href="https://github.com/awhalen1999" target="_blank" rel="noopener">GitHub</a> is probably more up to date with older and dinky little projects as well.
 </p>
 
 <ul class="entry-list">
@@ -80,7 +80,7 @@ const projects = `
       <span>blob.you</span>
       <span class="badge">Live</span>
     </div>
-    <p class="entry-date">2025 · <a href="https://blob.you" target="_blank" rel="noopener">blob.you</a></p>
+    <p class="entry-date">2026 · <a href="https://blob.you" target="_blank" rel="noopener">blob.you</a></p>
     <p class="entry-desc">Draw shapes and watch them fight with physics. Multiplayer via websockets, with a Discord coin currency wagering system.</p>
   </li>
   <li class="entry">
@@ -141,48 +141,26 @@ const tools = `
 const experience = `
 <h1>Experience</h1>
 <p class="lede">
-  A detailed timeline of my experience, current focus, and professional growth.
+  Where I've been, what I've done, and proof I don't just make side projects all day.
 </p>
 
-<section class="focus-box">
-  <div class="section-label">Current Focus</div>
-  <ul>
-    <li>Shipping small, focused tools that do one thing well.</li>
-    <li>Writing notes on what I learn along the way.</li>
-    <li>Continuing to sharpen the craft.</li>
-  </ul>
-</section>
-
-<div class="section-label">Career Timeline</div>
 <ul class="entry-list">
-  <!-- EDIT ME: add your roles -->
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <span>Role Title</span>
-      <span class="muted">· Company · Full-time</span>
+      <span>Full-Stack Software Developer</span>
       <span class="badge">Current</span>
     </div>
-    <p class="entry-date">Jan 2024 — Present</p>
-    <p class="entry-desc">What you're doing here — responsibilities, impact, interesting challenges.</p>
+    <p class="entry-date">St. John's, NL · <a href="https://enaimco.com" target="_blank" rel="noopener">Enaimco</a></p>
+    <p class="entry-desc">Part of the core product team modernizing subsea energy operations. Building frontend features and optimizing backend performance, maintainability, and tooling.</p>
   </li>
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <span>Previous Role</span>
-      <span class="muted">· Company · Contract</span>
+      <span>Enterprise Software Team Lead</span>
     </div>
-    <p class="entry-date">Jun 2022 — Dec 2023 · 1 yr 7 mos</p>
-    <p class="entry-desc">Highlights from this role.</p>
-  </li>
-  <li class="entry">
-    <div class="entry-title">
-      <span class="entry-ico">▸</span>
-      <span>Earlier Role</span>
-      <span class="muted">· Company</span>
-    </div>
-    <p class="entry-date">2020 — 2022 · 2 yrs</p>
-    <p class="entry-desc">Highlights from this role.</p>
+    <p class="entry-date">St. John's, NL · Nutraforge Technologies</p>
+    <p class="entry-desc">Led development of an enterprise application for nutrition professionals. Worked on mobile applications, Stripe billing, RBAC, and backend optimizations that cut latency by > 50%.</p>
   </li>
 </ul>
 `.trim();
@@ -403,7 +381,7 @@ export const APPS: App[] = [
     iconLabel: "experience",
 
     icon: "/icons/man2.svg",
-    defaultSize: { w: 600, h: 500 },
+    defaultSize: { w: 450, h: 500 },
     content: experience,
   },
   {
