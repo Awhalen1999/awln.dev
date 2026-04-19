@@ -23,8 +23,8 @@ export interface App {
 const about = `
 <h1>Alex Whalen</h1>
 <p>
-  Hey, I'm Alex. This is my website. I hope you like the place — I tried to
-  bring some of the old web vibes I miss so much.
+  Hey, I'm Alex. This is my website. I miss the old web, so I built something
+  that feels like it. I hope you like the place.
 </p>
 <p>
   I'm a serial SaaS developer with way too many <em>amazing and revolutionary</em>
@@ -39,14 +39,18 @@ const about = `
   I try to attend as many <a href="#events" data-open-app="events">hackathons and events</a> as I can.
 </p>
 <p>
-  Outside of coding, I enjoy exploring new places, sports, anime and movies.
+  Outside of coding, I enjoy exploring new places, sports,
+  <a href="https://letterboxd.com/Awln/" target="_blank" rel="noopener">anime and movies</a>.
   <em>Oh and trying way too hard to be good at running...</em>
 </p>
 <p>
-  I'm currently based in St. John's NL, if you are around,
+  I'm currently based in 📍 St. John's NL, if you are around,
   <a href="#links" data-open-app="links">reach out</a> and let's have some ☕ or
   work together.
 </p>
+
+<button type="button" class="btn" data-open-app="experience">Open Experience</button>
+<button type="button" class="btn" data-open-app="contact">Contact</button>
 `.trim();
 
 const projects = `
