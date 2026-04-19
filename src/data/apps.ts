@@ -114,27 +114,53 @@ const projects = `
 
 const tools = `
 <h1>Tools</h1>
-<p class="lede">Hardware, software, and small extensions and apps I reach for daily. Mostly here so I don't forget when people ask.</p>
+<p class="lede">Hardware, software, apps, and extensions I reach for daily. Mostly here so I don't forget when people ask.</p>
 
-<div class="section-label">Software</div>
-<ul class="entry-list">
-  <!-- EDIT ME -->
-  <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>Tool Name</div>
-    <p class="entry-desc">Why you use it.</p>
-  </li>
-  <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>Tool Name</div>
-    <p class="entry-desc">Why you use it.</p>
-  </li>
+<div class="tool-section-label">Hardware</div>
+<ul class="tool-list">
+  <li><strong>Laptop</strong> <span class="muted">Macbook Pro 13 M1</span></li>
+  <li><strong>Mouse</strong> <span class="muted">Logitech MX Master 3</span></li>
+  <li><strong>Keyboard</strong> <span class="muted">ProtoArc Ergonomic</span></li>
+  <li><strong>Monitor</strong> <span class="muted">LG 32GS95UE-B 32"</span></li>
+  <li><strong>Chair</strong> <span class="muted">Steelcase Amia 2013</span></li>
+  <li><strong>Headphones</strong> <span class="muted">Apple AirPods Pro</span></li>
+  <li><strong>Lighting</strong> <span class="muted">Quntis Monitor Lamp</span></li>
 </ul>
 
-<div class="section-label">Hardware</div>
-<ul class="entry-list">
-  <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>Item</div>
-    <p class="entry-desc">One-line note.</p>
-  </li>
+<div class="tool-section-label">Development</div>
+<ul class="tool-list">
+  <li><strong>Cursor</strong> <span class="muted">My primary code editor</span></li>
+  <li><strong>Fonts</strong> <span class="muted">JetBrains Mono / Fira Code</span></li>
+  <li><strong>Theme</strong> <span class="muted">xpcode dark / Vitesse light</span></li>
+  <li><strong>Icon Theme</strong> <span class="muted">Catppuccin icons</span></li>
+  <li><strong>Product Icons</strong> <span class="muted">Carbon icons</span></li>
+  <li><strong>Formatting</strong> <span class="muted">Prettier & ESLint</span></li>
+  <li><strong>Terminal</strong> <span class="muted">Ghostty + cmux</span></li>
+  <li><strong>Package Manager</strong> <span class="muted">pnpm</span></li>
+</ul>
+
+<div class="tool-section-label">Browser</div>
+<ul class="tool-list">
+  <li><strong>Firefox</strong> <span class="muted">My preferred web browser</span></li>
+  <li class="tool-nested"><strong>uBlock Origin</strong> <span class="muted">Ad blocker</span></li>
+  <li class="tool-nested"><strong>Privacy Badger</strong> <span class="muted">Privacy protection</span></li>
+  <li class="tool-nested"><strong>Refined GitHub</strong> <span class="muted">GitHub improvements</span></li>
+  <li class="tool-nested"><strong>File Icons for GitHub</strong> <span class="muted">Why is this not a default feature?</span></li>
+  <li class="tool-nested"><strong>Refined YouTube</strong> <span class="muted">YouTube improvements</span></li>
+  <li class="tool-nested"><strong>React Developer Tools</strong> <span class="muted">Debugging web apps</span></li>
+  <li class="tool-nested"><strong>WhatFont</strong> <span class="muted">Identify fonts on web pages</span></li>
+  <li class="tool-nested"><strong>ColorZilla</strong> <span class="muted">Color picker and eyedropper</span></li>
+</ul>
+
+<div class="tool-section-label">Productivity</div>
+<ul class="tool-list">
+  <li><strong>Kap</strong> <span class="muted">Screen recorder</span></li>
+  <li><strong>Obsidian</strong> <span class="muted">Notes</span></li>
+  <li><strong>GitHub Desktop</strong> <span class="muted">Better GitHub experience</span></li>
+  <li><strong>Claude</strong> <span class="muted">My preferred AI agent</span></li>
+  <li><strong>Figma</strong> <span class="muted">Design software</span></li>
+  <li><strong>Mobbin</strong> <span class="muted">Design inspiration</span></li>
+  <li><strong>Eagle</strong> <span class="muted">Design file organization</span></li>
 </ul>
 `.trim();
 

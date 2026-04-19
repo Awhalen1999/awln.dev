@@ -407,6 +407,40 @@ a[target="_blank"]::after {
   color: var(--text-muted);
 }
 
+/* ── Tool list (freeform) ─────────────────────────────── */
+
+.tool-section-label {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(43, 27, 16, 0.18);
+  display: inline-block;
+  margin: 0;
+}
+
+.tool-list {
+  margin: 0;
+  padding: 0 0 0 0.25rem;
+  list-style: none;
+}
+
+.tool-list li {
+  padding: 0.25rem 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.tool-list li strong {
+  font-weight: 600;
+  margin-right: 0.3rem;
+}
+
+.tool-list .tool-nested {
+  padding-left: 0.75rem;
+}
+
 /* ── Buttons ───────────────────────────────────────────────
    .btn          — bordered action / toggle button
    .btn-group    — segmented toggle container (children = .btn)
