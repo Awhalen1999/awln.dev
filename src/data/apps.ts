@@ -56,37 +56,53 @@ const about = `
 const projects = `
 <h1>Projects</h1>
 <p class="lede">
-  Selected work, side projects, and experiments. Each one is a small piece of
-  craft I'm proud of — click through to learn more.
+  Some are finished, some are works in progress. My <a href="https://github.com/awhalen1999" target="_blank" rel="noopener">GitHub</a> is probably more up to date with dinky little projects as well.
 </p>
 
-<div class="section-label">Project List</div>
 <ul class="entry-list">
-  <!-- EDIT ME: add your projects here -->
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <span>Project Title One</span>
+      <span>RallyMail</span>
+      <span class="badge">Current Focus</span>
+    </div>
+    <p class="entry-date">2026</p>
+    <p class="entry-desc">A custom email client for fitness coaches. Pulls client threads into one place alongside their profiles and context, with built-in AI.</p>
+  </li>
+  <li class="entry">
+    <div class="entry-title">
+      <span class="entry-ico">▸</span>
+      <span>blob.you</span>
       <span class="badge">Live</span>
     </div>
-    <p class="entry-date">2025 · 4 mos · <a href="#" target="_blank" rel="noopener">link</a></p>
-    <p class="entry-desc">What it does, what was interesting about it, the outcome or current state.</p>
+    <p class="entry-date">2025 · <a href="https://blob.you" target="_blank" rel="noopener">blob.you</a></p>
+    <p class="entry-desc">Draw shapes and watch them fight with physics. Multiplayer via websockets, with a Discord coin currency wagering system.</p>
   </li>
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <span>Project Title Two</span>
+      <span>cooked.photo</span>
+      <span class="badge">Live</span>
     </div>
-    <p class="entry-date">2024 · 2 mos</p>
-    <p class="entry-desc">What it does, what was interesting about it, the outcome or current state.</p>
+    <p class="entry-date">2026 · <a href="https://cooked.photo" target="_blank" rel="noopener">cooked.photo</a></p>
+    <p class="entry-desc">A web app with a bunch of filters for twisting and breaking photos in interesting ways.</p>
   </li>
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <span>Project Title Three</span>
+      <span>Kaboodle</span>
+      <span class="badge">Live</span>
     </div>
-    <p class="entry-date">2023 · 6 mos</p>
-    <p class="entry-desc">What it does, what was interesting about it, the outcome or current state.</p>
+    <p class="entry-date">2025 · <a href="https://kaboodle.now" target="_blank" rel="noopener">kaboodle.now</a></p>
+    <p class="entry-desc">A mobile app for creating and sharing packing lists for your adventures.</p>
+  </li>
+  <li class="entry">
+    <div class="entry-title">
+      <span class="entry-ico">▸</span>
+      <span>Pluck</span>
+    </div>
+    <p class="entry-date">2025 · <a href="https://github.com/Awhalen1999/pluck" target="_blank" rel="noopener">GitHub</a></p>
+    <p class="entry-desc">A macOS design tool that keeps your design inspiration visible in a side notch while you work.</p>
   </li>
 </ul>
 `.trim();
