@@ -22,11 +22,7 @@ export interface App {
 
 const about = `
 <!-- EDIT ME: bio, current focus, anything else you want up top -->
-<h1 class="display-name">
-  <span>Alex</span>
-  <span class="dash">—</span>
-  <span>Whalen</span>
-</h1>
+<h1>Alex — Whalen</h1>
 <p class="lede">
   I'm a software engineer who enjoys building thoughtful, high-quality digital
   products. I like translating complex ideas into interfaces that feel clear,
@@ -56,7 +52,7 @@ const about = `
 `.trim();
 
 const projects = `
-<h1 class="display-page">Projects</h1>
+<h1>Projects</h1>
 <p class="lede">
   Selected work, side projects, and experiments. Each one is a small piece of
   craft I'm proud of — click through to learn more.
@@ -94,7 +90,7 @@ const projects = `
 `.trim();
 
 const tools = `
-<h1 class="display-page">Tools</h1>
+<h1>Tools</h1>
 <p class="lede">Hardware, software, and small things I reach for daily.</p>
 
 <div class="section-label">Software</div>
@@ -120,7 +116,7 @@ const tools = `
 `.trim();
 
 const experience = `
-<h1 class="display-page">Experience</h1>
+<h1>Experience</h1>
 <p class="lede">
   A detailed timeline of my experience, current focus, and professional growth.
 </p>
@@ -169,7 +165,7 @@ const experience = `
 `.trim();
 
 const help = `
-<h1 class="display-page">Help</h1>
+<h1>Help</h1>
 <p class="lede">Info about how this site was built and how to navigate it.</p>
 
 <div class="section-label">About this site</div>
@@ -196,7 +192,7 @@ const help = `
 `.trim();
 
 const links = `
-<h1 class="display-page">Links</h1>
+<h1>Links</h1>
 <p class="lede">Where to find me around the internet.</p>
 
 <ul class="entry-list">
@@ -233,7 +229,7 @@ const links = `
 `.trim();
 
 const events = `
-<h1 class="display-page">Events</h1>
+<h1>Events</h1>
 <p class="lede">Photos and notes from events I've been to or hosted.</p>
 
 <div class="section-label">Archive</div>
@@ -253,7 +249,7 @@ const events = `
 `.trim();
 
 const pets = `
-<h1 class="display-page">Pets</h1>
+<h1>Pets</h1>
 <p class="lede">Photos and info about the animals in my life.</p>
 
 <div class="section-label">Roster</div>
@@ -273,7 +269,7 @@ const pets = `
 `.trim();
 
 const siteSettings = `
-<h1 class="display-page">Settings</h1>
+<h1>Settings</h1>
 
 <section class="settings-section">
   <p class="settings-desc">Appearance</p>
@@ -307,12 +303,12 @@ const siteSettings = `
 
 <section class="settings-section">
   <p class="settings-desc">Wallpaper</p>
-  <p class="muted" style="font-size:0.8125rem">Choose a desktop background. Coming soon.</p>
+  <p class="muted">Choose a desktop background. Coming soon.</p>
 </section>
 
 <section class="settings-section">
   <p class="settings-desc">Links</p>
-  <p class="muted" style="font-size:0.8125rem">Change how links appear across the site.</p>
+  <p class="muted">Change how links appear across the site.</p>
 
   <div class="settings-field">
     <span class="settings-label">Underline style</span>
@@ -325,7 +321,7 @@ const siteSettings = `
 `.trim();
 
 const contact = `
-<h1 class="display-page">Contact</h1>
+<h1>Contact</h1>
 <p class="lede">The fastest way to reach me.</p>
 
 <section class="focus-box">

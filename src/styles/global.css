@@ -249,30 +249,22 @@ a {
   display: none;
 }
 
-/* Window-body typography */
+/* Window-body typography
+   ─────────────────────────────────────────────────────
+   Header:     Newsreader · 2rem · wt 400 · headings
+   Body:       DM Sans   · 14px · wt 400  · content
+   Body-sm:    DM Sans   · 12px · wt 400  · meta, labels
+   Body-mono:  Mono      · 12px · wt 500  · chrome, nav
+   ───────────────────────────────────────────────────── */
 
 .window-body h1 {
   margin: 0 0 0.5rem;
   font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  font-optical-sizing: auto;
-}
-.window-body h1.display-name {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.5rem;
-  font-size: clamp(2.25rem, 5.5vw, 3.25rem);
-  line-height: 1.05;
-}
-.window-body h1.display-name .dash {
-  color: var(--text-muted);
-  font-weight: 300;
-}
-.window-body h1.display-page {
+  font-weight: 400;
   font-size: 2rem;
   line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-optical-sizing: auto;
 }
 .window-body p {
   margin: 0 0 0.75rem;
@@ -284,10 +276,9 @@ a {
 .section-label {
   margin: 1.25rem 0 0.5rem;
   color: var(--text-muted);
-  font-family: var(--font-sans);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -337,12 +328,12 @@ a {
 .entry-title .entry-ico {
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
 }
 .entry-date {
   margin: 0.25rem 0;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 12px;
 }
 .entry-desc {
   margin: 0.25rem 0 0;
@@ -356,8 +347,8 @@ a {
   vertical-align: middle;
   color: var(--accent-ink);
   background: var(--accent);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.04em;
 }
 
@@ -371,7 +362,6 @@ a {
   color: var(--text);
   background: var(--window-bg-alt);
   border: 1px solid var(--window-border);
-  font-size: 0.8125rem;
   cursor: pointer;
   transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
 }
@@ -391,7 +381,6 @@ a {
 .settings-desc {
   margin: 0 0 0.5rem;
   color: var(--text-muted);
-  font-size: 0.8125rem;
 }
 
 .settings-field {
@@ -405,8 +394,8 @@ a {
   display: block;
   margin: 0 0 0.375rem;
   color: var(--text-muted);
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.04em;
 }
 
@@ -420,7 +409,6 @@ a {
   align-items: center;
   gap: 0.375rem;
   padding: 0.3rem 0.7rem;
-  font-size: 0.8125rem;
   color: var(--text);
   background: var(--window-bg);
   border-right: 1px solid var(--window-border);
