@@ -372,7 +372,7 @@ export const APPS: App[] = [
     title: "Projects",
     kind: "folder",
     iconLabel: "projects",
-    defaultSize: { w: 560, h: 440 },
+    defaultSize: { w: 600, h: 550 },
     content: projects,
   },
   {
