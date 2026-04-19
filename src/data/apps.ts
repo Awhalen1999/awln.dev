@@ -49,8 +49,13 @@ const about = `
   work together.
 </p>
 
-<button type="button" class="btn" data-open-app="experience">Open Experience</button>
-<button type="button" class="btn" data-open-app="contact">Contact</button>
+<img src="/transparent-sig-black.gif" alt="AW signature" class="signature signature-light" />
+<img src="/transparent-sig-white.gif" alt="AW signature" class="signature signature-dark" />
+
+<div class="btn-row">
+  <button type="button" class="btn" data-open-app="experience">Open Experience</button>
+  <button type="button" class="btn" data-open-app="contact">Contact</button>
+</div>
 `.trim();
 
 const projects = `
@@ -380,7 +385,7 @@ export const APPS: App[] = [
     iconLabel: "about",
 
     icon: "/icons/man.svg",
-    defaultSize: { w: 550, h: 500 },
+    defaultSize: { w: 550, h: 550 },
     content: about,
   },
   {
