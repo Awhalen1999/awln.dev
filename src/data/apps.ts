@@ -347,6 +347,14 @@ const siteSettings = `
       <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper4.png)"></span>
       <span class="wallpaper-name">Bliss (Windows XP)</span>
     </button>
+    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper5">
+      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper5.png)"></span>
+      <span class="wallpaper-name">Hello Light (macOS)</span>
+    </button>
+    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper6">
+      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper6.png)"></span>
+      <span class="wallpaper-name">Hello Dark (macOS)</span>
+    </button>
   </div>
 </section>
 
@@ -364,11 +372,11 @@ const siteSettings = `
 
 const contact = `
 <h1>Contact</h1>
-<p class="lede">The fastest way to reach me.</p>
+<p class="lede">The best way to reach me.</p>
 
-<section class="focus-box">
-  <div class="section-label">Email</div>
-  <p><a href="mailto:hello@awln.dev">hello@awln.dev</a></p>
+<section class="focus-box email-box">
+  <p><a href="mailto:awhalendev@gmail.com">awhalendev@gmail.com</a></p>
+  <button type="button" class="btn btn-copy" data-copy="awhalendev@gmail.com">Copy</button>
 </section>
 
 <p class="muted">

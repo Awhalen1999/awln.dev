@@ -64,6 +64,7 @@
   import { initMenuDropdowns } from "../../scripts/menu-dropdown";
   import { initClock } from "../../scripts/clock";
   import { setTheme, setAccent, currentTheme, currentAccent } from "../../scripts/settings";
+  import { showToast } from "../../scripts/toast";
 
   initMenuDropdowns();
   initClock();
@@ -76,7 +77,9 @@
   for (const btn of document.querySelectorAll<HTMLElement>("[data-theme-value]")) {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      setTheme(btn.dataset.themeValue === "dark" ? "dark" : "light");
+      const value = btn.dataset.themeValue === "dark" ? "dark" : "light";
+      setTheme(value);
+      showToast(`Theme: ${value}`, "success");
     });
   }
 
@@ -84,7 +87,9 @@
   for (const swatch of document.querySelectorAll<HTMLElement>("[data-accent-swatch]")) {
     swatch.addEventListener("click", (e) => {
       e.stopPropagation();
-      setAccent(swatch.dataset.accentSwatch ?? "orange");
+      const value = swatch.dataset.accentSwatch ?? "orange";
+      setAccent(value);
+      showToast(`Accent: ${value}`, "success");
     });
   }
 </script>

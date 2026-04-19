@@ -4,6 +4,8 @@
  * across both the menu bar and the settings window.
  */
 
+import { showToast } from "./toast";
+
 const root = document.documentElement;
 
 /* ── Read ──────────────────────────────────────────────── */
@@ -128,7 +130,10 @@ document.addEventListener("click", (e) => {
     ".wallpaper-thumb[data-wallpaper]",
   );
   if (thumb) {
-    setWallpaper(thumb.dataset.wallpaper ?? "default");
+    const wp = thumb.dataset.wallpaper ?? "default";
+    setWallpaper(wp);
+    const label = thumb.querySelector<HTMLElement>(".wallpaper-name")?.textContent ?? wp;
+    showToast(`Wallpaper: ${label}`, "success");
     return;
   }
 
@@ -143,9 +148,16 @@ document.addEventListener("click", (e) => {
   const setting = group.dataset.setting;
   const value = toggle.dataset.value ?? "";
 
-  if (setting === "theme") setTheme(value);
-  else if (setting === "accent") setAccent(value);
-  else if (setting === "link-style") setLinkStyle(value);
+  if (setting === "theme") {
+    setTheme(value);
+    showToast(`Theme: ${value}`, "success");
+  } else if (setting === "accent") {
+    setAccent(value);
+    showToast(`Accent: ${value}`, "success");
+  } else if (setting === "link-style") {
+    setLinkStyle(value);
+    showToast(`Links: ${value}`, "success");
+  }
 });
 
 /* ── Sync settings window when it first appears ──────────── */

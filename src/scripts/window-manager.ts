@@ -1,4 +1,5 @@
 import type { App } from "../data/apps";
+import { showToast } from "./toast";
 
 interface WindowState {
   id: string;
@@ -376,6 +377,13 @@ export function initWindowManager(apps: App[]) {
   document.addEventListener("click", (e) => {
     const target = e.target as HTMLElement | null;
     if (!target) return;
+
+    const copyBtn = target.closest<HTMLButtonElement>("[data-copy]");
+    if (copyBtn?.dataset.copy) {
+      navigator.clipboard.writeText(copyBtn.dataset.copy);
+      showToast("Email copied to clipboard", "success");
+      return;
+    }
 
     const inline = target.closest<HTMLElement>("[data-open-app]");
     if (inline?.dataset.openApp) {
