@@ -156,14 +156,14 @@ const { apps } = Astro.props;
   }
   .icon-label-text {
     padding: 0 4px;
-    background: rgba(253, 248, 235, 0.55);
+    background: var(--icon-label-bg);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
     transition: background var(--dur-fast) ease;
   }
   .desktop-icon:hover .icon-label-text,
   .desktop-icon:focus-visible .icon-label-text {
-    background: rgba(253, 248, 235, 0.85);
+    background: var(--icon-label-bg-hover);
   }
 
   @media (max-width: 700px) {

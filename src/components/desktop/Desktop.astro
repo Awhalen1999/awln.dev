@@ -13,17 +13,6 @@ import { APPS } from "../../data/apps";
   </div>
 </div>
 
-<script>
-  const wp = localStorage.getItem("wallpaper");
-  if (wp && wp !== "default") {
-    const desktop = document.querySelector<HTMLElement>("[data-desktop]");
-    if (desktop) {
-      desktop.style.backgroundImage = `url(/wallpapers/${wp}.png)`;
-      desktop.setAttribute("data-wallpaper", wp);
-    }
-  }
-</script>
-
 <style>
   .desktop {
     position: fixed;

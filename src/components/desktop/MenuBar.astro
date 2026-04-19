@@ -61,102 +61,32 @@
 </header>
 
 <script>
-  const clockEl = document.querySelector<HTMLElement>("[data-clock]");
-  const statusEl = document.querySelector<HTMLElement>("[data-status]");
-
-  // Always show Newfoundland time — Intl picks up NDT/NST automatically based
-  // on the current date, so the trailing abbreviation flips with DST.
-  const nfFmt = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "America/St_Johns",
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZoneName: "short",
-  });
-
-  const tick = () => {
-    const parts = nfFmt.formatToParts(new Date());
-    const p: Record<string, string> = {};
-    for (const { type, value } of parts) p[type] = value;
-
-    if (clockEl) {
-      clockEl.textContent =
-        `${p.weekday} ${p.day} ${p.month} ${p.hour}:${p.minute} ${p.timeZoneName}`;
-    }
-    if (statusEl) {
-      // "24" at midnight in some locales — normalize to 0 via modulo.
-      const hour = parseInt(p.hour, 10) % 24;
-      const online = hour >= 9 && hour < 22;
-      statusEl.dataset.online = online ? "true" : "false";
-      statusEl.textContent = online ? "● online" : "● offline";
-    }
-  };
-
-  tick();
-  // Align the first scheduled tick to the next minute boundary so the
-  // visible minute flips cleanly, not drifted by page-load time.
-  const msToMinute = 60_000 - (Date.now() % 60_000);
-  setTimeout(() => {
-    tick();
-    setInterval(tick, 60_000);
-  }, msToMinute);
-
   import { initMenuDropdowns } from "../../scripts/menu-dropdown";
+  import { initClock } from "../../scripts/clock";
+  import { setTheme, setAccent, currentTheme, currentAccent } from "../../scripts/settings";
+
   initMenuDropdowns();
+  initClock();
 
-  // Dark mode toggle
-  const themeBtns = document.querySelectorAll<HTMLElement>("[data-theme-value]");
-  const root = document.documentElement;
+  // Sync menu bar UI to saved preferences
+  setTheme(currentTheme());
+  setAccent(currentAccent());
 
-  function applyTheme(dark: boolean) {
-    const value = dark ? "dark" : "light";
-    root.setAttribute("data-theme", value);
-    localStorage.setItem("theme", value);
-    themeBtns.forEach((btn) => {
-      if (btn.dataset.themeValue === value) btn.setAttribute("data-active", "");
-      else btn.removeAttribute("data-active");
-    });
-  }
-
-  // Accent color
-  const swatches = document.querySelectorAll<HTMLElement>("[data-accent-swatch]");
-
-  function applyAccent(color: string) {
-    if (color && color !== "orange") {
-      root.setAttribute("data-accent", color);
-    } else {
-      root.removeAttribute("data-accent");
-      color = "orange";
-    }
-    localStorage.setItem("accent-color", color);
-    swatches.forEach((s) => {
-      if (s.dataset.accentSwatch === color) s.setAttribute("data-active", "");
-      else s.removeAttribute("data-active");
-    });
-  }
-
-  // Init from saved preferences
-  const saved = localStorage.getItem("theme");
-  const prefersDark = saved === "dark";
-  applyTheme(prefersDark);
-  applyAccent(localStorage.getItem("accent-color") ?? "orange");
-
-  themeBtns.forEach((btn) => {
+  // Menu bar theme toggle
+  for (const btn of document.querySelectorAll<HTMLElement>("[data-theme-value]")) {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      applyTheme(btn.dataset.themeValue === "dark");
+      setTheme(btn.dataset.themeValue === "dark" ? "dark" : "light");
     });
-  });
+  }
 
-  swatches.forEach((swatch) => {
+  // Menu bar accent swatches
+  for (const swatch of document.querySelectorAll<HTMLElement>("[data-accent-swatch]")) {
     swatch.addEventListener("click", (e) => {
       e.stopPropagation();
-      applyAccent(swatch.dataset.accentSwatch ?? "orange");
+      setAccent(swatch.dataset.accentSwatch ?? "orange");
     });
-  });
+  }
 </script>
 
 <style>
@@ -297,9 +227,6 @@
     color: var(--text-muted);
     font-size: 12px;
   }
-  .theme-mode-row .theme-dropdown-label {
-    padding: 0 0 4px;
-  }
   .btn-group--sm .btn {
     padding: 2px 8px;
     font-size: 11px;
@@ -318,10 +245,10 @@
   .accent-swatch[data-active] {
     border-color: var(--window-border);
   }
-  .accent-swatch--orange { background: #FF631A; }
-  .accent-swatch--green  { background: #2E9E5A; }
-  .accent-swatch--blue   { background: #2E7DD6; }
-  .accent-swatch--purple { background: #7B4FBF; }
+  .accent-swatch--orange { background: var(--color-orange); }
+  .accent-swatch--green  { background: var(--color-green); }
+  .accent-swatch--blue   { background: var(--color-blue); }
+  .accent-swatch--purple { background: var(--color-purple); }
 
   .menubar-status {
     color: var(--text-muted);
@@ -330,10 +257,10 @@
     letter-spacing: 0.04em;
   }
   .menubar-status[data-online="true"]::first-letter {
-    color: #2E8540;
+    color: var(--color-online);
   }
   .menubar-status[data-online="false"]::first-letter {
-    color: #B04A3A;
+    color: var(--color-offline);
   }
 
   .menubar-clock {

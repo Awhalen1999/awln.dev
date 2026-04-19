@@ -288,16 +288,16 @@ const siteSettings = `
     <span class="settings-label">Theme color</span>
     <div class="btn-group" data-setting="accent">
       <button type="button" class="btn" data-value="orange">
-        <span class="settings-color-dot" style="background:#FF631A"></span>Orange
+        <span class="settings-color-dot" style="background:var(--color-orange)"></span>Orange
       </button>
       <button type="button" class="btn" data-value="green">
-        <span class="settings-color-dot" style="background:#2E9E5A"></span>Green
+        <span class="settings-color-dot" style="background:var(--color-green)"></span>Green
       </button>
       <button type="button" class="btn" data-value="blue">
-        <span class="settings-color-dot" style="background:#2E7DD6"></span>Blue
+        <span class="settings-color-dot" style="background:var(--color-blue)"></span>Blue
       </button>
       <button type="button" class="btn" data-value="purple">
-        <span class="settings-color-dot" style="background:#7B4FBF"></span>Purple
+        <span class="settings-color-dot" style="background:var(--color-purple)"></span>Purple
       </button>
     </div>
   </div>

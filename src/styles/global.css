@@ -9,8 +9,18 @@
   --accent-hover: #F97A3A;
   --accent-ink: #FFFFFF;
 
+  /* Fixed accent identity colors (swatches / dots) */
+  --color-orange: #FF631A;
+  --color-green: #2E9E5A;
+  --color-blue: #2E7DD6;
+  --color-purple: #7B4FBF;
+
   --text: #1A1208;
   --text-muted: #6B5A48;
+
+  /* Status */
+  --color-online: #2E8540;
+  --color-offline: #B04A3A;
 
   /* Surfaces — warm, paper-like */
   --window-bg: #FDF8EB;
@@ -20,6 +30,10 @@
   /* Desktop */
   --wallpaper: #E6D3AD;
   --wallpaper-shade: #D8C193;
+
+  /* Desktop icon labels */
+  --icon-label-bg: rgba(253, 248, 235, 0.55);
+  --icon-label-bg-hover: rgba(253, 248, 235, 0.85);
 
   /* Menu bar + retro titlebar */
   --menubar-bg: #E8E5E1;
@@ -60,6 +74,9 @@
   --wallpaper-shade: #0E0D0B;
 
   --menubar-bg: #333130;
+
+  --icon-label-bg: rgba(30, 28, 26, 0.55);
+  --icon-label-bg-hover: rgba(30, 28, 26, 0.85);
 }
 
 /* --- Accent color palettes --- */
