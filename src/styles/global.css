@@ -133,6 +133,15 @@ a {
 a:hover {
   text-underline-offset: 3px;
 }
+a[target="_blank"]::after {
+  content: "\00a0\2197";
+  font-size: 0.85em;
+  letter-spacing: 0;
+  text-decoration: none;
+  display: inline;
+  font-weight: 800;
+  opacity: 0.45;
+}
 
 /* Window chrome — defined globally because windows are cloned from a
    <template> at runtime and aren't part of Astro's scoped-style tree. */
