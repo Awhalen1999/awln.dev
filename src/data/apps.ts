@@ -21,34 +21,32 @@ export interface App {
 // --- Content -------------------------------------------------------------
 
 const about = `
-<!-- EDIT ME: bio, current focus, anything else you want up top -->
-<h1>Alex — Whalen</h1>
-<p class="lede">
-  I'm a software engineer who enjoys building thoughtful, high-quality digital
-  products. I like translating complex ideas into interfaces that feel clear,
-  reliable, and fast.
+<h1>Alex Whalen</h1>
+<p>
+  Hey, I'm Alex. This is my website. I hope you like the place — I tried to
+  bring some of the old web vibes I miss so much.
 </p>
 <p>
-  Outside of code I like
-  <a href="#links" data-open-app="links">writing and photography</a>.
-  You can <a href="mailto:hello@awln.dev">get in touch</a> or find me
-  <a href="#links" data-open-app="links">elsewhere</a>.
+  I'm a serial SaaS developer with way too many <em>amazing and revolutionary</em>
+  ideas. I'm also a bit of a nerd and love turning said ideas into real tools that
+  people <em>(me)</em> actually use. Here are some of the
+  <a href="#tools" data-open-app="tools">tools</a> I use everyday if you're interested.
 </p>
-
-<section class="focus-box">
-  <div class="section-label">Current Focus</div>
-  <ul>
-    <li>Shipping small, focused tools that do one thing well.</li>
-    <li>Writing notes on what I learn along the way.</li>
-    <li>Continuing to sharpen the craft — design, typography, systems.</li>
-  </ul>
-</section>
-
-<div class="section-label">Full Timeline</div>
-<p class="muted">
-  See the complete experience timeline in a dedicated window with full role context.
+<p>
+  Right now, I'm working at <a href="https://enaimco.com" target="_blank" rel="noopener">Enaimco</a>
+  as a software developer. I'm also working on various <em>(too many)</em>
+  <a href="#projects" data-open-app="projects">projects</a>. When I find the time,
+  I try to attend as many <a href="#events" data-open-app="events">hackathons and events</a> as I can.
 </p>
-<button type="button" class="btn" data-open-app="experience">Open Experience</button>
+<p>
+  Outside of coding, I enjoy exploring new places, sports, anime and movies.
+  <em>Oh and trying way too hard to be good at running...</em>
+</p>
+<p>
+  I'm currently based in St. John's NL, if you are around,
+  <a href="#links" data-open-app="links">reach out</a> and let's have some ☕ or
+  work together.
+</p>
 `.trim();
 
 const projects = `
@@ -362,7 +360,7 @@ export const APPS: App[] = [
     iconLabel: "about",
 
     icon: "/icons/man.svg",
-    defaultSize: { w: 650, h: 550 },
+    defaultSize: { w: 550, h: 550 },
     content: about,
   },
   {

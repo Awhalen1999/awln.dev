@@ -24,7 +24,7 @@ const MOBILE_Q = "(max-width: 699px)";
 // Single source of truth for the "usable region" inside desktop-surface.
 // Every window — whether dragged, resized, maximized, or freshly opened —
 // stays within these insets.
-const APP_PADDING = { left: 12, right: 12, top: 12, bottom: 12 };
+const APP_PADDING = { left: 8, right: 8, top: 8, bottom: 8 };
 
 // Matches min-width/min-height on .window in global.css.
 const MIN_W = 320;
