@@ -13,6 +13,17 @@ import { APPS } from "../../data/apps";
   </div>
 </div>
 
+<script>
+  const wp = localStorage.getItem("wallpaper");
+  if (wp && wp !== "default") {
+    const desktop = document.querySelector<HTMLElement>("[data-desktop]");
+    if (desktop) {
+      desktop.style.backgroundImage = `url(/wallpapers/${wp}.png)`;
+      desktop.setAttribute("data-wallpaper", wp);
+    }
+  }
+</script>
+
 <style>
   .desktop {
     position: fixed;
@@ -23,6 +34,11 @@ import { APPS } from "../../data/apps";
     background-image: var(--paper-noise);
     background-repeat: repeat;
     background-size: 200px 200px;
+  }
+  .desktop[data-wallpaper] {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   .desktop-surface {
     position: relative;

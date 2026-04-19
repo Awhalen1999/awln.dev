@@ -19,12 +19,27 @@ function currentLinkStyle(): string {
   return localStorage.getItem("link-style") ?? "solid";
 }
 
+function currentWallpaper(): string {
+  return localStorage.getItem("wallpaper") ?? "default";
+}
+
 /* ── Sync toggle UI to state ────────────────────────────────── */
 
 function syncGroup(group: HTMLElement, value: string) {
   for (const btn of group.querySelectorAll<HTMLElement>(".btn[data-value]")) {
     if (btn.dataset.value === value) btn.setAttribute("data-active", "");
     else btn.removeAttribute("data-active");
+  }
+}
+
+function syncWallpaperGrid(container: HTMLElement) {
+  const current = currentWallpaper();
+  for (const thumb of container.querySelectorAll<HTMLElement>(
+    "[data-wallpaper]",
+  )) {
+    if (thumb.dataset.wallpaper === current)
+      thumb.setAttribute("data-active", "");
+    else thumb.removeAttribute("data-active");
   }
 }
 
@@ -37,6 +52,7 @@ function syncAll(container: HTMLElement) {
     else if (setting === "accent") syncGroup(group, currentAccent());
     else if (setting === "link-style") syncGroup(group, currentLinkStyle());
   }
+  syncWallpaperGrid(container);
 }
 
 /* ── Apply state changes ────────────────────────────────────── */
@@ -81,9 +97,35 @@ function setLinkStyle(value: string) {
   localStorage.setItem("link-style", value);
 }
 
+function setWallpaper(value: string) {
+  const desktop = document.querySelector<HTMLElement>("[data-desktop]");
+  if (!desktop) return;
+  if (value && value !== "default") {
+    desktop.style.backgroundImage = `url(/wallpapers/${value}.png)`;
+    desktop.setAttribute("data-wallpaper", value);
+  } else {
+    desktop.style.backgroundImage = "";
+    desktop.removeAttribute("data-wallpaper");
+    value = "default";
+  }
+  localStorage.setItem("wallpaper", value);
+}
+
 /* ── Event delegation for toggle clicks ─────────────────────── */
 
 document.addEventListener("click", (e) => {
+  // Wallpaper thumb clicks
+  const thumb = (e.target as HTMLElement).closest<HTMLElement>(
+    ".wallpaper-thumb[data-wallpaper]",
+  );
+  if (thumb) {
+    const value = thumb.dataset.wallpaper ?? "default";
+    setWallpaper(value);
+    const grid = thumb.closest<HTMLElement>(".wallpaper-grid");
+    if (grid) syncWallpaperGrid(grid);
+    return;
+  }
+
   const toggle = (e.target as HTMLElement).closest<HTMLElement>(
     ".btn[data-value]",
   );

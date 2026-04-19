@@ -303,7 +303,24 @@ const siteSettings = `
 
 <section class="settings-section">
   <p class="settings-desc">Wallpaper</p>
-  <p class="muted">Choose a desktop background. Coming soon.</p>
+  <div class="wallpaper-grid">
+    <button type="button" class="wallpaper-thumb" data-wallpaper="default">
+      <span class="wallpaper-preview" style="background-color:var(--wallpaper)"></span>
+      <span class="wallpaper-name">Default</span>
+    </button>
+    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper2">
+      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper2.png)"></span>
+      <span class="wallpaper-name">Photo</span>
+    </button>
+    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper3">
+      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper3.png)"></span>
+      <span class="wallpaper-name">Photo</span>
+    </button>
+    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper4">
+      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper4.png)"></span>
+      <span class="wallpaper-name">Photo</span>
+    </button>
+  </div>
 </section>
 
 <section class="settings-section">
