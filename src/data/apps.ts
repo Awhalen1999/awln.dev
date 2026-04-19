@@ -308,8 +308,6 @@ const siteSettings = `
 
 <section class="settings-section">
   <p class="settings-desc">Links</p>
-  <p class="muted">Change how links appear across the site.</p>
-
   <div class="settings-field">
     <span class="settings-label">Underline style</span>
     <div class="btn-group" data-setting="link-style">
