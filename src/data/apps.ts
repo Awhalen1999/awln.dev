@@ -310,15 +310,15 @@ const siteSettings = `
     </button>
     <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper2">
       <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper2.png)"></span>
-      <span class="wallpaper-name">Photo</span>
+      <span class="wallpaper-name">Flying Kitty (macOS)</span>
     </button>
     <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper3">
       <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper3.png)"></span>
-      <span class="wallpaper-name">Photo</span>
+      <span class="wallpaper-name">Circuit Board (macOS)</span>
     </button>
     <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper4">
       <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper4.png)"></span>
-      <span class="wallpaper-name">Photo</span>
+      <span class="wallpaper-name">Bliss (Windows XP)</span>
     </button>
   </div>
 </section>
