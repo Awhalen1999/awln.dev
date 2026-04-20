@@ -17,54 +17,12 @@ const { apps } = Astro.props;
         aria-label={`Open ${app.title}`}
       >
         <span class="icon-slot">
-          {app.icon ? (
-            <img class="icon-glyph" src={app.icon} alt="" aria-hidden="true" />
-          ) : app.kind === "folder" ? (
-            <img class="icon-glyph" src="/icons/folder.svg" alt="" aria-hidden="true" />
-          ) : (
-            <svg class="icon-glyph" viewBox="0 0 32 32" aria-hidden="true">
-              <path
-                d="M4 3 L22 3 L29 10 L29 29 L4 29 Z"
-                fill="#FDF8EB"
-                stroke="#2B1B10"
-                stroke-width="1.5"
-                stroke-linejoin="miter"
-              />
-              <path
-                d="M22 3 L22 10 L29 10 L22 3 Z"
-                fill="#EDE0C6"
-                stroke="#2B1B10"
-                stroke-width="1.5"
-                stroke-linejoin="miter"
-              />
-              <line x1="8" y1="14" x2="25" y2="14" stroke="#2B1B10" stroke-width="1" opacity="0.6" />
-              <line x1="8" y1="17" x2="22" y2="17" stroke="#2B1B10" stroke-width="1" opacity="0.6" />
-              {app.iconExt && (
-                <g>
-                  <rect
-                    x="5"
-                    y="21.5"
-                    width="19"
-                    height="5.5"
-                    fill="#FF631A"
-                    stroke="#2B1B10"
-                    stroke-width="1"
-                  />
-                  <text
-                    x="14.5"
-                    y="25.5"
-                    font-size="4"
-                    font-weight="700"
-                    fill="#FFFFFF"
-                    text-anchor="middle"
-                    style="font-family: var(--font-mono); letter-spacing: 0.12em;"
-                  >
-                    {app.iconExt.toUpperCase()}
-                  </text>
-                </g>
-              )}
-            </svg>
-          )}
+          <img
+            class="icon-glyph"
+            src={app.icon ?? "/icons/folder.svg"}
+            alt=""
+            aria-hidden="true"
+          />
         </span>
         <span class="icon-label"><span class="icon-label-text">{app.iconLabel}</span></span>
       </button>

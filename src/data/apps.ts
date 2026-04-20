@@ -8,9 +8,7 @@ export interface App {
   kind: AppKind;
   /** Desktop icon label (with extension for files). */
   iconLabel: string;
-  /** File extension badge for file icons. */
-  iconExt?: string;
-  /** Custom icon image path (e.g. "/icons/mail.svg"). */
+  /** Custom icon image path (e.g. "/icons/mail.svg"). Falls back to the folder icon. */
   icon?: string;
   /** Default window size when opened on desktop viewports. */
   defaultSize: { w: number; h: number };
@@ -306,7 +304,7 @@ const pets = `
 <h1>Pets</h1>
 <p class="lede">Photos and info about the animals in my life.</p>
 
-<div class="section-label">Roster</div>
+<div class="subhead">Roster</div>
 <ul class="entry-list">
   <!-- EDIT ME: swap in your pets and their photos -->
   <li class="entry">

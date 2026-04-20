@@ -21,6 +21,7 @@
   /* Status */
   --color-online: #2E8540;
   --color-offline: #B04A3A;
+  --color-error: #D6412F;
 
   /* Surfaces — warm, paper-like */
   --window-bg: #FDF8EB;
@@ -38,7 +39,6 @@
   /* Menu bar + retro titlebar */
   --menubar-bg: #E8E5E1;
   --titlebar-stripe: #2B1B10;
-  --titlebar-stripe-gap: #EDE0C6;
 
   /* Size */
   --menubar-h: 32px;
@@ -77,6 +77,10 @@
 
   --icon-label-bg: rgba(30, 28, 26, 0.55);
   --icon-label-bg-hover: rgba(30, 28, 26, 0.85);
+
+  --color-online: #4FB373;
+  --color-offline: #D06853;
+  --color-error: #E85A47;
 }
 
 /* --- Accent color palettes --- */
@@ -252,7 +256,7 @@ a[target="_blank"]::after {
   background: var(--accent-dim);
 }
 .window-close:hover {
-  background: #D6412F;
+  background: var(--color-error);
 }
 
 /* Maximize button swaps between expand and restore glyphs based on the
@@ -326,23 +330,11 @@ a[target="_blank"]::after {
   margin: 0;
 }
 
-.section-label {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .focus-box {
   margin: 0;
   padding: 0.5rem 1rem 0.75rem;
   background: var(--window-bg-alt);
   border: 1px solid var(--window-border);
-}
-.focus-box .section-label {
-  margin: 0 0 0.25rem;
 }
 .focus-box ul {
   margin: 0;
@@ -393,7 +385,7 @@ a[target="_blank"]::after {
   background: var(--accent);
 }
 .toast[data-type="error"] .toast-bar {
-  background: #D6412F;
+  background: var(--color-error);
 }
 
 .toast-msg {
