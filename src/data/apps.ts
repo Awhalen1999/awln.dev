@@ -116,7 +116,7 @@ const tools = `
 <h1>Tools</h1>
 <p class="lede">Hardware, software, apps, and extensions I reach for daily. Mostly here so I don't forget when people ask.</p>
 
-<div class="tool-section-label">Hardware</div>
+<div class="subhead">Hardware</div>
 <ul class="tool-list">
   <li><strong>Laptop</strong> <span class="muted">Macbook Pro 13 M1</span></li>
   <li><strong>Mouse</strong> <span class="muted">Logitech MX Master 3</span></li>
@@ -127,7 +127,7 @@ const tools = `
   <li><strong>Lighting</strong> <span class="muted">Quntis Monitor Lamp</span></li>
 </ul>
 
-<div class="tool-section-label">Development</div>
+<div class="subhead">Development</div>
 <ul class="tool-list">
   <li><strong>Cursor</strong> <span class="muted">My primary code editor</span></li>
   <li><strong>Fonts</strong> <span class="muted">JetBrains Mono / Fira Code</span></li>
@@ -139,7 +139,7 @@ const tools = `
   <li><strong>Package Manager</strong> <span class="muted">pnpm</span></li>
 </ul>
 
-<div class="tool-section-label">Browser</div>
+<div class="subhead">Browser</div>
 <ul class="tool-list">
   <li><strong>Firefox</strong> <span class="muted">My preferred web browser</span></li>
   <li class="tool-nested"><strong>uBlock Origin</strong> <span class="muted">Ad blocker</span></li>
@@ -152,7 +152,7 @@ const tools = `
   <li class="tool-nested"><strong>ColorZilla</strong> <span class="muted">Color picker and eyedropper</span></li>
 </ul>
 
-<div class="tool-section-label">Productivity</div>
+<div class="subhead">Productivity</div>
 <ul class="tool-list">
   <li><strong>Kap</strong> <span class="muted">Screen recorder</span></li>
   <li><strong>Obsidian</strong> <span class="muted">Notes</span></li>
@@ -193,19 +193,12 @@ const experience = `
 
 const help = `
 <h1>Help</h1>
-<p class="lede">Info about how this site was built and how to navigate it.</p>
+<p class="lede">Quick reference for finding your way around.</p>
 
-<div class="section-label">About this site</div>
-<p>
-  Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>.
-  Type is set in Newsreader and DM Sans.
-  Source on <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>.
-</p>
+<div class="subhead">About</div>
+<p>Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> and TypeScript. Source code lives on <a href="https://github.com/Awhalen1999" target="_blank" rel="noopener">GitHub</a>.</p>
 
-<div class="section-label">Theme</div>
-<p class="muted">Light mode only for now — a dark variant is on the roadmap.</p>
-
-<div class="section-label">Keyboard</div>
+<div class="subhead">Keyboard</div>
 <ul class="entry-list">
   <li class="entry">
     <div class="entry-title"><span class="entry-ico">▸</span>Escape</div>
@@ -215,7 +208,26 @@ const help = `
     <div class="entry-title"><span class="entry-ico">▸</span>Double-click title bar</div>
     <p class="entry-desc">Toggle fullscreen for the focused window.</p>
   </li>
+  <li class="entry">
+    <div class="entry-title"><span class="entry-ico">▸</span>⌘ ⌥ F</div>
+    <p class="entry-desc">Fullscreen the focused window.</p>
+  </li>
+  <li class="entry">
+    <div class="entry-title"><span class="entry-ico">▸</span>⌘ ⌥ C</div>
+    <p class="entry-desc">Re-center the focused window.</p>
+  </li>
+  <li class="entry">
+    <div class="entry-title"><span class="entry-ico">▸</span>⌘ ⌥ W</div>
+    <p class="entry-desc">Close the focused window.</p>
+  </li>
 </ul>
+
+<div class="subhead">Actions</div>
+<div class="btn-row">
+  <button type="button" class="btn" data-util="refresh">Refresh</button>
+  <button type="button" class="btn" data-util="clear-cache">Clear cache</button>
+  <button type="button" class="btn" data-util="close-all">Close all windows</button>
+</div>
 `.trim();
 
 const links = `
@@ -499,7 +511,7 @@ export const APPS: App[] = [
     iconLabel: "help",
 
     icon: "/icons/help.svg",
-    defaultSize: { w: 460, h: 440 },
+    defaultSize: { w: 450, h: 500 },
     content: help,
   },
 ];

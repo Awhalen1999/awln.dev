@@ -276,6 +276,28 @@ export function initWindowManager(apps: App[]) {
     });
   }
 
+  function handleUtil(action: string) {
+    switch (action) {
+      case "refresh":
+        window.location.reload();
+        break;
+      case "clear-cache":
+        if (
+          window.confirm(
+            "Clear saved site data (theme, wallpaper, link style) and reload?",
+          )
+        ) {
+          localStorage.clear();
+          sessionStorage.clear();
+          window.location.reload();
+        }
+        break;
+      case "close-all":
+        for (const id of [...windows.keys()]) closeWindow(id);
+        break;
+    }
+  }
+
   function closeWindow(id: string) {
     const w = windows.get(id);
     if (!w) return;
@@ -478,6 +500,12 @@ export function initWindowManager(apps: App[]) {
         imageBtn.dataset.openImage,
         imageBtn.dataset.imageTitle ?? "Photo",
       );
+      return;
+    }
+
+    const util = target.closest<HTMLElement>("[data-util]");
+    if (util?.dataset.util) {
+      handleUtil(util.dataset.util);
       return;
     }
 
