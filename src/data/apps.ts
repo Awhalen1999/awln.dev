@@ -229,7 +229,7 @@ const links = `
       <a href="https://github.com/Awhalen1999" target="_blank" rel="noopener">GitHub</a>
       <button type="button" class="btn btn-copy" data-copy="https://github.com/Awhalen1999">Copy</button>
     </div>
-    <p class="entry-desc">Code I share publicly.</p>
+    <p class="entry-desc">Code I share publicly</p>
   </li>
   <li class="entry">
     <div class="entry-title">
@@ -237,7 +237,7 @@ const links = `
       <a href="https://www.linkedin.com/in/alex-whalen-0496b227b" target="_blank" rel="noopener">LinkedIn</a>
       <button type="button" class="btn btn-copy" data-copy="https://www.linkedin.com/in/alex-whalen-0496b227b">Copy</button>
     </div>
-    <p class="entry-desc">Career history and professional network.</p>
+    <p class="entry-desc">Career history and network</p>
   </li>
   <li class="entry">
     <div class="entry-title">
@@ -253,7 +253,7 @@ const links = `
       <a href="/alex_whalen_resume.pdf" download>Resume</a>
       <a href="/alex_whalen_resume.pdf" download class="btn btn-copy">Download Resume</a>
     </div>
-    <p class="entry-desc">PDF · latest version.</p>
+    <p class="entry-desc">PDF · latest version</p>
   </li>
 </ul>
 `.trim();
