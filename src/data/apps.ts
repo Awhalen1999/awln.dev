@@ -223,34 +223,37 @@ const links = `
 <p class="lede">Where to find me around the internet.</p>
 
 <ul class="entry-list">
-  <!-- EDIT ME: update these URLs -->
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/Awhalen1999" target="_blank" rel="noopener">GitHub</a>
+      <button type="button" class="btn btn-copy" data-copy="https://github.com/Awhalen1999">Copy</button>
     </div>
     <p class="entry-desc">Code I share publicly.</p>
   </li>
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <a href="https://linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/alex-whalen-0496b227b" target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="btn btn-copy" data-copy="https://www.linkedin.com/in/alex-whalen-0496b227b">Copy</button>
     </div>
     <p class="entry-desc">Career history and professional network.</p>
   </li>
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <a href="https://x.com/" target="_blank" rel="noopener">X / Twitter</a>
+      <a href="mailto:awhalendev@gmail.com">Email</a>
+      <button type="button" class="btn btn-copy" data-copy="awhalendev@gmail.com">Copy</button>
     </div>
-    <p class="entry-desc">Occasional thoughts, mostly about building.</p>
+    <p class="entry-desc">awhalendev@gmail.com</p>
   </li>
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <a href="mailto:hello@awln.dev">Email</a>
+      <a href="/alex_whalen_resume.pdf" download>Resume</a>
+      <a href="/alex_whalen_resume.pdf" download class="btn btn-copy">Download Resume</a>
     </div>
-    <p class="entry-desc">Best for longer conversations.</p>
+    <p class="entry-desc">PDF · latest version.</p>
   </li>
 </ul>
 `.trim();

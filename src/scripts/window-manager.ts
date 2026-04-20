@@ -381,7 +381,7 @@ export function initWindowManager(apps: App[]) {
     const copyBtn = target.closest<HTMLButtonElement>("[data-copy]");
     if (copyBtn?.dataset.copy) {
       navigator.clipboard.writeText(copyBtn.dataset.copy);
-      showToast("Email copied to clipboard", "success");
+      showToast("Copied to clipboard", "success");
       return;
     }
 

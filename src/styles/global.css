@@ -364,6 +364,9 @@ a[target="_blank"]::after {
   font-size: 0.75rem;
   padding: 0.2rem 0.5rem;
 }
+.entry-title .btn-copy {
+  margin-left: auto;
+}
 
 /* ── Toast notifications ──────────────────────────────── */
 
@@ -521,6 +524,7 @@ a[target="_blank"]::after {
   background: var(--window-bg);
   border: 1px solid var(--window-border);
   cursor: pointer;
+  text-decoration: none;
   transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
 }
 .btn:hover {
