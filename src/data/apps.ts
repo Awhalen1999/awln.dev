@@ -260,20 +260,32 @@ const links = `
 
 const events = `
 <h1>Events</h1>
-<p class="lede">Photos and notes from events I've been to or hosted.</p>
+<p class="lede">Photos from events I've been to or hosted.</p>
 
-<div class="section-label">Archive</div>
-<ul class="entry-list">
-  <!-- EDIT ME: swap these entries for real events / photo galleries -->
-  <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>Event name</div>
-    <p class="entry-date">Date · City</p>
-    <p class="entry-desc">A line or two about what it was.</p>
+<ul class="photo-grid">
+  <li class="photo-item">
+    <button type="button" class="photo-thumb" data-open-image="/events/spellbook-demo.avif" data-image-title="Spellbook Demo Night">
+      <img src="/events/spellbook-demo.avif" alt="Spellbook Demo Night" loading="lazy" />
+    </button>
+    <span class="photo-label">Spellbook Demo Night</span>
   </li>
-  <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>Another event</div>
-    <p class="entry-date">Date · City</p>
-    <p class="entry-desc">A line or two about what it was.</p>
+  <li class="photo-item">
+    <button type="button" class="photo-thumb" data-open-image="/events/cts-meetups.avif" data-image-title="Weekly CTS Meetups">
+      <img src="/events/cts-meetups.avif" alt="Weekly CTS Meetups" loading="lazy" />
+    </button>
+    <span class="photo-label">Weekly CTS Meetups</span>
+  </li>
+  <li class="photo-item">
+    <button type="button" class="photo-thumb" data-open-image="/events/get-building-hackathon.avif" data-image-title="Get Building Hackathon">
+      <img src="/events/get-building-hackathon.avif" alt="Get Building Hackathon" loading="lazy" />
+    </button>
+    <span class="photo-label">Get Building Hackathon</span>
+  </li>
+  <li class="photo-item">
+    <button type="button" class="photo-thumb" data-open-image="/events/get-building-demo.avif" data-image-title="Get Building Demo Night">
+      <img src="/events/get-building-demo.avif" alt="Get Building Demo Night" loading="lazy" />
+    </button>
+    <span class="photo-label">Get Building Demo Night</span>
   </li>
 </ul>
 `.trim();
@@ -459,7 +471,7 @@ export const APPS: App[] = [
     kind: "folder",
     iconLabel: "events",
     icon: "/icons/camera.svg",
-    defaultSize: { w: 520, h: 440 },
+    defaultSize: { w: 850, h: 550 },
     content: events,
   },
   {

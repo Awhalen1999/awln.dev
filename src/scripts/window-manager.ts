@@ -14,6 +14,7 @@ interface WindowState {
   h: number;
   z: number;
   maximized: boolean;
+  resizable: boolean;
   prev?: { x: number; y: number; w: number; h: number };
 }
 
@@ -132,15 +133,21 @@ export function initWindowManager(apps: App[]) {
     focusedId = id;
   }
 
-  function openApp(appId: string) {
-    const existing = activeByApp.get(appId);
+  interface OpenOptions {
+    appId: string;
+    title: string;
+    defaultSize: { w: number; h: number };
+    resizable?: boolean;
+    populate: (body: HTMLElement) => void;
+    onReady?: (state: WindowState) => void;
+  }
+
+  function openWindow(options: OpenOptions) {
+    const existing = activeByApp.get(options.appId);
     if (existing && windows.has(existing)) {
       focusWindow(existing);
       return;
     }
-
-    const app = byId.get(appId);
-    if (!app) return;
 
     const node = template!.content.firstElementChild!.cloneNode(true) as HTMLElement;
     const titlebar = node.querySelector<HTMLElement>("[data-titlebar]")!;
@@ -150,23 +157,25 @@ export function initWindowManager(apps: App[]) {
     const id = crypto.randomUUID();
     const titleId = `win-title-${id}`;
     titleEl.id = titleId;
-    titleEl.textContent = app.title;
-    body.innerHTML = app.content;
+    titleEl.textContent = options.title;
+    options.populate(body);
     node.id = id;
-    node.dataset.appId = appId;
+    node.dataset.appId = options.appId;
     node.setAttribute("aria-labelledby", titleId);
+    const resizable = options.resizable !== false;
+    if (!resizable) node.dataset.noresize = "true";
 
     const s = surfaceMetrics();
     const mobile = isMobile();
     const usableW = s.w - APP_PADDING.left - APP_PADDING.right;
     const usableH = s.h - APP_PADDING.top - APP_PADDING.bottom;
-    const ww = Math.max(MIN_W, Math.min(app.defaultSize.w, usableW));
-    const hh = Math.max(MIN_H, Math.min(app.defaultSize.h, usableH));
+    const ww = Math.max(MIN_W, Math.min(options.defaultSize.w, usableW));
+    const hh = Math.max(MIN_H, Math.min(options.defaultSize.h, usableH));
     const openCount = windows.size;
 
     const state: WindowState = {
       id,
-      appId,
+      appId: options.appId,
       el: node,
       titlebar,
       body,
@@ -181,6 +190,7 @@ export function initWindowManager(apps: App[]) {
       h: hh,
       z: ++nextZ,
       maximized: mobile,
+      resizable,
     };
 
     const c = clampPos(state, state.x, state.y);
@@ -188,12 +198,82 @@ export function initWindowManager(apps: App[]) {
     state.y = c.y;
 
     windows.set(id, state);
-    activeByApp.set(appId, id);
+    activeByApp.set(options.appId, id);
     host!.appendChild(node);
     applyGeometry(state);
     bindWindow(state);
     focusWindow(id);
-    updateDockBadge(appId);
+    updateDockBadge(options.appId);
+    options.onReady?.(state);
+  }
+
+  function openApp(appId: string) {
+    const app = byId.get(appId);
+    if (!app) return;
+    openWindow({
+      appId,
+      title: app.title,
+      defaultSize: app.defaultSize,
+      populate: (body) => {
+        body.innerHTML = app.content;
+      },
+    });
+  }
+
+  const PHOTO_MAX_W = 500;
+  const PHOTO_MAX_H = 380;
+
+  function sizeToImage(state: WindowState, img: HTMLImageElement) {
+    if (!windows.has(state.id) || state.maximized) return;
+    if (!img.naturalWidth || !img.naturalHeight) return;
+
+    // Chrome = window minus body content area. Body has zero padding in
+    // image windows, so this is effectively just the titlebar + borders.
+    const chromeX = state.w - state.body.clientWidth;
+    const chromeY = state.h - state.body.clientHeight;
+
+    const surface = surfaceMetrics();
+    const viewportMaxW = surface.w - APP_PADDING.left - APP_PADDING.right - chromeX;
+    const viewportMaxH = surface.h - APP_PADDING.top - APP_PADDING.bottom - chromeY;
+    const boundW = Math.max(1, Math.min(PHOTO_MAX_W, viewportMaxW));
+    const boundH = Math.max(1, Math.min(PHOTO_MAX_H, viewportMaxH));
+
+    const scale = Math.min(boundW / img.naturalWidth, boundH / img.naturalHeight);
+    const imgW = Math.floor(img.naturalWidth * scale);
+    const imgH = Math.floor(img.naturalHeight * scale);
+
+    state.w = Math.max(MIN_W, imgW + chromeX);
+    state.h = Math.max(MIN_H, imgH + chromeY);
+    state.x = Math.round((surface.w - state.w) / 2);
+    state.y = Math.round((surface.h - state.h) / 2);
+    const c = clampPos(state, state.x, state.y);
+    state.x = c.x;
+    state.y = c.y;
+    applyGeometry(state);
+  }
+
+  function openImageWindow(src: string, title: string) {
+    openWindow({
+      appId: `photo:${src}`,
+      title,
+      defaultSize: { w: PHOTO_MAX_W, h: PHOTO_MAX_H },
+      resizable: false,
+      populate: (body) => {
+        body.classList.add("photo-viewer");
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = title;
+        img.className = "photo-full";
+        body.appendChild(img);
+      },
+      onReady: (state) => {
+        const img = state.body.querySelector<HTMLImageElement>("img.photo-full");
+        if (!img) return;
+        const fit = () => sizeToImage(state, img);
+        if (img.complete && img.naturalWidth > 0) fit();
+        else img.addEventListener("load", fit, { once: true });
+      },
+    });
   }
 
   function closeWindow(id: string) {
@@ -216,7 +296,7 @@ export function initWindowManager(apps: App[]) {
 
   function toggleMaximize(id: string) {
     const w = windows.get(id);
-    if (!w) return;
+    if (!w || !w.resizable) return;
     if (w.maximized) {
       if (w.prev) {
         const s = surfaceMetrics();
@@ -389,6 +469,15 @@ export function initWindowManager(apps: App[]) {
     if (inline?.dataset.openApp) {
       e.preventDefault();
       openApp(inline.dataset.openApp);
+      return;
+    }
+
+    const imageBtn = target.closest<HTMLElement>("[data-open-image]");
+    if (imageBtn?.dataset.openImage) {
+      openImageWindow(
+        imageBtn.dataset.openImage,
+        imageBtn.dataset.imageTitle ?? "Photo",
+      );
       return;
     }
 
