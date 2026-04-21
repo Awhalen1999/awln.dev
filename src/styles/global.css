@@ -675,7 +675,7 @@ a[target="_blank"]::after {
   flex-shrink: 0;
 }
 
-/* ── Dotted link style override ─────────────────────────── */
+/* ── Link style overrides ───────────────────────────────── */
 
 [data-link-style="dotted"] a {
   text-decoration-style: dotted;
@@ -686,6 +686,11 @@ a[target="_blank"]::after {
   text-underline-offset: 3px;
 }
 
+[data-link-style="none"] a,
+[data-link-style="none"] a:hover {
+  text-decoration: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -693,4 +698,100 @@ a[target="_blank"]::after {
     transition-duration: 0.001ms !important;
     animation-duration: 0.001ms !important;
   }
+}
+
+/* ── Terminal window ──────────────────────────────────────
+   Overrides window CSS vars locally so titlebar, buttons, and
+   body all inherit a terminal-style palette without per-element
+   restyling. Two palettes (light/dark) keyed to [data-theme].
+   Accent stays the user's theme accent in both modes. */
+
+.window[data-app-id="terminal"] {
+  --window-bg: #FAFBFC;
+  --window-bg-alt: #EDEFF2;
+  --window-border: #D0D7DE;
+  --text: #1F2328;
+  --text-muted: #656D76;
+  --terminal-scrollbar: #CDD4DB;
+  --terminal-scrollbar-hover: #B1BAC4;
+}
+
+[data-theme="dark"] .window[data-app-id="terminal"] {
+  --window-bg: #0E1116;
+  --window-bg-alt: #161A21;
+  --window-border: #2A2F37;
+  --text: #E6EDF3;
+  --text-muted: #7D8590;
+  --terminal-scrollbar: #2A2F37;
+  --terminal-scrollbar-hover: #3A4049;
+}
+
+.window-body.terminal-view {
+  padding: 12px 14px;
+  gap: 0;
+  background: var(--window-bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.55;
+  cursor: text;
+}
+
+.terminal-view .terminal-output {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  min-height: 0;
+}
+
+.terminal-view .terminal-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.terminal-view .terminal-line-muted  { color: var(--text-muted); }
+.terminal-view .terminal-line-error  { color: var(--color-error); }
+.terminal-view .terminal-line-echo   { opacity: 0.85; }
+
+.terminal-view .terminal-accent { color: var(--accent); }
+.terminal-view .terminal-muted  { color: var(--text-muted); }
+.terminal-view .terminal-cmd { color: var(--text); }
+
+.terminal-view .terminal-prompt-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.terminal-view .terminal-prompt,
+.terminal-view .terminal-prompt-ghost {
+  user-select: none;
+  white-space: nowrap;
+}
+.terminal-view .terminal-prompt-ghost { color: var(--text-muted); }
+
+.terminal-view .terminal-user  { color: var(--accent); }
+.terminal-view .terminal-path  { color: var(--text-muted); }
+.terminal-view .terminal-caret { color: var(--text); }
+
+.terminal-view .terminal-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: inherit;
+  font: inherit;
+  caret-color: var(--accent);
+  padding: 0;
+}
+
+.window-body.terminal-view::-webkit-scrollbar { width: 8px; }
+.window-body.terminal-view::-webkit-scrollbar-track { background: transparent; }
+.window-body.terminal-view::-webkit-scrollbar-thumb {
+  background: var(--terminal-scrollbar);
+  border-radius: 4px;
+}
+.window-body.terminal-view::-webkit-scrollbar-thumb:hover {
+  background: var(--terminal-scrollbar-hover);
 }

@@ -389,6 +389,7 @@ const siteSettings = `
     <div class="btn-group" data-setting="link-style">
       <button type="button" class="btn" data-value="solid"><span style="text-decoration:underline;text-underline-offset:2px">Solid</span></button>
       <button type="button" class="btn" data-value="dotted"><span style="text-decoration:underline dotted;text-decoration-thickness:1.5px;text-underline-offset:2px">Dotted</span></button>
+      <button type="button" class="btn" data-value="none">None</button>
     </div>
   </div>
 </section>
@@ -500,6 +501,15 @@ export const APPS: App[] = [
     icon: "/icons/settings.svg",
     defaultSize: { w: 650, h: 500 },
     content: siteSettings,
+  },
+  {
+    id: "terminal",
+    title: "Terminal",
+    kind: "app",
+    iconLabel: "terminal",
+    icon: "/icons/terminal.svg",
+    defaultSize: { w: 700, h: 500 },
+    content: "",
   },
   {
     id: "help",

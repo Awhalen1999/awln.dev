@@ -1,7 +1,8 @@
 import type { App } from "../data/apps";
 import { showToast } from "./toast";
+import { terminalRenderer } from "./terminal";
 
-interface WindowState {
+export interface WindowState {
   id: string;
   appId: string;
   el: HTMLElement;
@@ -17,6 +18,20 @@ interface WindowState {
   resizable: boolean;
   prev?: { x: number; y: number; w: number; h: number };
 }
+
+export interface RendererActions {
+  openApp: (appId: string) => void;
+  closeWindow: (id: string) => void;
+}
+
+export interface CustomRenderer {
+  populate: (body: HTMLElement) => void;
+  onReady?: (state: WindowState, actions: RendererActions) => void;
+}
+
+const CUSTOM_RENDERERS: Record<string, CustomRenderer> = {
+  terminal: terminalRenderer,
+};
 
 type WindowAction = "close" | "maximize";
 
@@ -210,13 +225,19 @@ export function initWindowManager(apps: App[]) {
   function openApp(appId: string) {
     const app = byId.get(appId);
     if (!app) return;
+    const custom = CUSTOM_RENDERERS[appId];
     openWindow({
       appId,
       title: app.title,
       defaultSize: app.defaultSize,
-      populate: (body) => {
-        body.innerHTML = app.content;
-      },
+      populate:
+        custom?.populate ??
+        ((body) => {
+          body.innerHTML = app.content;
+        }),
+      onReady: custom?.onReady
+        ? (state) => custom.onReady!(state, { openApp, closeWindow })
+        : undefined,
     });
   }
 

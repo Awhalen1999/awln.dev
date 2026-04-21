@@ -27,7 +27,8 @@ const {
         var a = localStorage.getItem("accent-color");
         if (t === "dark") document.documentElement.setAttribute("data-theme", "dark");
         if (a && a !== "orange") document.documentElement.setAttribute("data-accent", a);
-        if (localStorage.getItem("link-style") === "dotted") document.documentElement.setAttribute("data-link-style", "dotted");
+        var l = localStorage.getItem("link-style");
+        if (l === "dotted" || l === "none") document.documentElement.setAttribute("data-link-style", l);
       })();
     </script>
   </head>

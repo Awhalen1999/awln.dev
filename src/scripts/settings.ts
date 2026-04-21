@@ -47,8 +47,8 @@ export function setAccent(value: string) {
 }
 
 export function setLinkStyle(value: string) {
-  if (value === "dotted") {
-    root.setAttribute("data-link-style", "dotted");
+  if (value === "dotted" || value === "none") {
+    root.setAttribute("data-link-style", value);
   } else {
     root.removeAttribute("data-link-style");
     value = "solid";
