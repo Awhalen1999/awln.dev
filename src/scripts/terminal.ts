@@ -174,6 +174,22 @@ function buildCommands(): Cmd[] {
       },
     },
     {
+      name: "contacts",
+      category: "Info",
+      summary: "Print email and profile links.",
+      run(_args, io) {
+        const rows = [
+          { key: "email", html: `<a href="mailto:awhalendev@gmail.com">awhalendev@gmail.com</a>` },
+          { key: "github", html: `<a href="https://github.com/Awhalen1999" target="_blank" rel="noopener">https://github.com/Awhalen1999</a>` },
+          { key: "linkedin", html: `<a href="https://www.linkedin.com/in/alex-whalen-0496b227b" target="_blank" rel="noopener">https://www.linkedin.com/in/alex-whalen-0496b227b</a>` },
+        ];
+        const width = Math.max(...rows.map((r) => r.key.length)) + 4;
+        for (const r of rows) {
+          io.print(`  <span class="terminal-cmd">${r.key.padEnd(width, " ")}</span>${r.html}`);
+        }
+      },
+    },
+    {
       name: "theme",
       category: "Utility",
       summary: "Switch between light and dark mode.",
@@ -322,7 +338,7 @@ export const terminalRenderer: CustomRenderer = {
     body.innerHTML = `
       <div class="terminal-output" data-terminal-output></div>
       <div class="terminal-prompt-line">
-        <span class="terminal-prompt" aria-hidden="true"><span class="terminal-user">alex@awlnOS</span> <span class="terminal-path">~</span> <span class="terminal-caret">$</span></span>
+        <span class="terminal-prompt" aria-hidden="true"><span class="terminal-user">awln@dev</span> <span class="terminal-path">~</span> <span class="terminal-caret">$</span></span>
         <input class="terminal-input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Terminal input" />
       </div>
     `;
@@ -375,7 +391,7 @@ export const terminalRenderer: CustomRenderer = {
     const echoCommand = (raw: string) => {
       const line = document.createElement("div");
       line.className = "terminal-line terminal-line-echo";
-      line.innerHTML = `<span class="terminal-prompt-ghost"><span class="terminal-user">alex@awlnOS</span> <span class="terminal-path">~</span> <span class="terminal-caret">$</span></span> ${escapeHtml(raw)}`;
+      line.innerHTML = `<span class="terminal-prompt-ghost"><span class="terminal-user">awln@dev</span> <span class="terminal-path">~</span> <span class="terminal-caret">$</span></span> ${escapeHtml(raw)}`;
       output.appendChild(line);
     };
 
@@ -488,7 +504,7 @@ export const terminalRenderer: CustomRenderer = {
     });
 
     // Intro.
-    print(`<span class="terminal-accent">awlnOS terminal v1.0</span>`);
+    print(`<span class="terminal-accent">awln.dev terminal v1.0</span>`);
     print(`<span class="terminal-muted">type 'help' to get started.</span>`);
     print("");
 
