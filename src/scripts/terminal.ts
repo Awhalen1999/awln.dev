@@ -147,15 +147,6 @@ function buildCommands(): Cmd[] {
       },
     },
     {
-      name: "whoami",
-      category: "Info",
-      summary: "About the operator.",
-      run(_args, io) {
-        io.print("Alex Whalen · software dev · St. John's, NL");
-        io.print(`<span class="terminal-muted">type 'open about' for the full bio.</span>`);
-      },
-    },
-    {
       name: "echo",
       category: "Utility",
       summary: "Print text back.",
@@ -165,11 +156,21 @@ function buildCommands(): Cmd[] {
       },
     },
     {
-      name: "date",
+      name: "uptime",
       category: "Info",
-      summary: "Print the current date and time.",
+      summary: "How long the site has been live.",
       run(_args, io) {
-        io.print(escapeHtml(new Date().toString()));
+        const start = new Date("2026-04-12T11:00:00-02:30").getTime();
+        const ms = Math.max(0, Date.now() - start);
+        const totalMinutes = Math.floor(ms / 60000);
+        const days = Math.floor(totalMinutes / (60 * 24));
+        const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+        const minutes = totalMinutes % 60;
+        const parts: string[] = [];
+        if (days) parts.push(`${days} day${days === 1 ? "" : "s"}`);
+        if (hours) parts.push(`${hours} hour${hours === 1 ? "" : "s"}`);
+        parts.push(`${minutes} minute${minutes === 1 ? "" : "s"}`);
+        io.print(`up ${parts.join(", ")}`);
       },
     },
     {
