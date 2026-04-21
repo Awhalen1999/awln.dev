@@ -21,8 +21,7 @@ export interface App {
 const about = `
 <h1>Alex Whalen</h1>
 <p>
-  Hey, I'm Alex. This is my website. I miss the old web, so I built something
-  that feels like it. I hope you like the place.
+  Hey, I'm Alex. This is my website. I hope you like the place.
 </p>
 <p>
   I'm a serial SaaS developer with way too many <em>amazing and revolutionary</em>
@@ -374,11 +373,11 @@ const siteSettings = `
     </button>
     <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper5">
       <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper5.png)"></span>
-      <span class="wallpaper-name">Hello Light (macOS)</span>
+      <span class="wallpaper-name">Hello Light</span>
     </button>
     <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper6">
       <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper6.png)"></span>
-      <span class="wallpaper-name">Hello Dark (macOS)</span>
+      <span class="wallpaper-name">Hello Dark</span>
     </button>
   </div>
 </section>
@@ -422,7 +421,7 @@ export const APPS: App[] = [
     iconLabel: "about",
 
     icon: "/icons/man.svg",
-    defaultSize: { w: 550, h: 650 },
+    defaultSize: { w: 500, h: 600 },
     content: about,
   },
   {
