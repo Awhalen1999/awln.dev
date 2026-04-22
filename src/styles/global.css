@@ -306,6 +306,14 @@ a[target="_blank"]::after {
   display: none;
 }
 
+/* Mobile: windows are always fullscreen — hide maximize + resize */
+@media (max-width: 700px) {
+  .window-max,
+  .window-resize {
+    display: none;
+  }
+}
+
 /* Window-body typography
    ─────────────────────────────────────────────────────
    Header:     Newsreader · 2rem · wt 400 · headings

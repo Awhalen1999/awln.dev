@@ -172,6 +172,11 @@ export function initWindowManager(apps: App[]) {
       return;
     }
 
+    // Mobile: one fullscreen window at a time.
+    if (isMobile()) {
+      for (const id of [...windows.keys()]) closeWindow(id);
+    }
+
     const node = template!.content.firstElementChild!.cloneNode(true) as HTMLElement;
     const titlebar = node.querySelector<HTMLElement>("[data-titlebar]")!;
     const body = node.querySelector<HTMLElement>("[data-body]")!;
@@ -216,9 +221,13 @@ export function initWindowManager(apps: App[]) {
       resizable,
     };
 
-    const c = clampPos(state, state.x, state.y);
-    state.x = c.x;
-    state.y = c.y;
+    if (mobile) {
+      fillSurface(state);
+    } else {
+      const c = clampPos(state, state.x, state.y);
+      state.x = c.x;
+      state.y = c.y;
+    }
 
     windows.set(id, state);
     activeByApp.set(options.appId, id);
@@ -347,7 +356,7 @@ export function initWindowManager(apps: App[]) {
 
   function toggleMaximize(id: string) {
     const w = windows.get(id);
-    if (!w || !w.resizable) return;
+    if (!w || !w.resizable || isMobile()) return;
     if (w.maximized) {
       if (w.prev) {
         const s = surfaceMetrics();
