@@ -691,6 +691,48 @@ a[target="_blank"]::after {
   text-decoration: none;
 }
 
+/* ── Recycle bin grid ───────────────────────────────────── */
+
+.trash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1.5rem 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.trash-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  transition: transform var(--dur-fast) ease;
+}
+.trash-item:hover {
+  transform: translateY(-1px);
+}
+
+.trash-icon {
+  display: block;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+}
+
+.trash-label {
+  display: block;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.trash-label-text {
+  padding: 0 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

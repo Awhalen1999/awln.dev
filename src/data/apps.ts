@@ -414,9 +414,32 @@ const contact = `
 `.trim();
 
 const recycleBin = `
-<h1>Recycle Bin</h1>
-<p class="lede">It's empty. What did you expect?</p>
-<p class="muted">Nothing to see here — just a clean desktop.</p>
+<div class="trash-grid">
+  <button type="button" class="trash-item" data-trash="placeholder1">
+    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
+    <span class="trash-label"><span class="trash-label-text">placeholder1.txt</span></span>
+  </button>
+  <button type="button" class="trash-item" data-trash="placeholder2">
+    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
+    <span class="trash-label"><span class="trash-label-text">placeholder2.pdf</span></span>
+  </button>
+  <button type="button" class="trash-item" data-trash="placeholder3">
+    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
+    <span class="trash-label"><span class="trash-label-text">placeholder3.docx</span></span>
+  </button>
+  <button type="button" class="trash-item" data-trash="placeholder4">
+    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
+    <span class="trash-label"><span class="trash-label-text">placeholder4.mov</span></span>
+  </button>
+  <button type="button" class="trash-item" data-trash="placeholder5">
+    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
+    <span class="trash-label"><span class="trash-label-text">placeholder5.png</span></span>
+  </button>
+  <button type="button" class="trash-item" data-trash="placeholder6">
+    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
+    <span class="trash-label"><span class="trash-label-text">placeholder6.zip</span></span>
+  </button>
+</div>
 `.trim();
 
 // --- Registry ------------------------------------------------------------
@@ -539,7 +562,7 @@ export const APPS: App[] = [
     kind: "app",
     iconLabel: "recycle bin",
     icon: "/icons/trash.svg",
-    defaultSize: { w: 400, h: 300 },
+    defaultSize: { w: 700, h: 500 },
     content: recycleBin,
   },
 ];
