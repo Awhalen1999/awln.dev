@@ -1,11 +1,12 @@
 import type { CustomRenderer } from "./window-manager";
 
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+const CHARS =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
 const SCRAMBLE_RADIUS = 80;
 
 const ENTRIES = [
   { site: "root", pass: "xK9#mL2$vQ7@nR4&jW8pT1!bF5cY3hZ" },
-  { site: "netflix", pass: "sunny4ever!" },
+  { site: "netflix", pass: "brooklyn99ever!" },
   { site: "wifi", pass: "Get0ffMyLawn2024" },
   { site: "gmail", pass: "p@ssword123" },
   { site: "bank", pass: "Wp6#dR8!kF3mJ9$vNx2" },
@@ -24,7 +25,7 @@ export const passwordsRenderer: CustomRenderer = {
         `<div class="pw-row">` +
           `<span class="pw-site">${e.site}:</span> ` +
           `<span class="pw-pass" data-original="${e.pass}"></span>` +
-        `</div>`,
+          `</div>`,
       );
     }
     body.innerHTML = lines.join("");
