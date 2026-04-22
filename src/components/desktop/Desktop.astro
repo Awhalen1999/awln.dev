@@ -1,26 +1,16 @@
 ---
 import MenuBar from "./MenuBar.astro";
 import DesktopIcons from "./DesktopIcons.astro";
-import DesktopIcon from "./DesktopIcon.astro";
 import WindowHost from "./WindowHost.astro";
 import { APPS } from "../../data/apps";
 
-const gridApps = APPS.filter((a) => a.id !== "recycle-bin");
-const recycleBin = APPS.find((a) => a.id === "recycle-bin")!;
+const desktopApps = APPS.filter((a) => a.id !== "passwords");
 ---
 
 <div class="desktop" data-desktop>
   <MenuBar />
   <div class="desktop-surface">
-    <DesktopIcons apps={gridApps} />
-    <div class="recycle-bin">
-      <DesktopIcon
-        appId={recycleBin.id}
-        title={recycleBin.title}
-        icon={recycleBin.icon!}
-        label={recycleBin.iconLabel}
-      />
-    </div>
+    <DesktopIcons apps={desktopApps} />
     <WindowHost />
   </div>
 </div>
@@ -45,22 +35,5 @@ const recycleBin = APPS.find((a) => a.id === "recycle-bin")!;
     position: relative;
     flex: 1;
     min-height: 0;
-  }
-
-  .recycle-bin {
-    --desktop-pad: 12px;
-
-    position: absolute;
-    bottom: var(--desktop-pad);
-    right: var(--desktop-pad);
-    z-index: 1;
-    width: 96px;
-  }
-
-  @media (max-width: 700px) {
-    .recycle-bin {
-      --desktop-pad: 8px;
-      width: 84px;
-    }
   }
 </style>

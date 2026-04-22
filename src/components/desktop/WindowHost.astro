@@ -72,9 +72,11 @@
   import { APPS } from "../../data/apps";
   import { initWindowManager, registerRenderer } from "../../scripts/window-manager";
   import { terminalRenderer } from "../../scripts/terminal";
+  import { passwordsRenderer } from "../../scripts/passwords";
   import "../../scripts/settings";
 
   registerRenderer("terminal", terminalRenderer);
+  registerRenderer("passwords", passwordsRenderer);
   initWindowManager(APPS);
 </script>
 

@@ -1,6 +1,5 @@
 ---
 import type { App } from "../../data/apps";
-import DesktopIcon from "./DesktopIcon.astro";
 
 interface Props {
   apps: App[];
@@ -11,12 +10,22 @@ const { apps } = Astro.props;
 <ul class="desktop-icons" aria-label="Desktop shortcuts">
   {apps.map((app) => (
     <li>
-      <DesktopIcon
-        appId={app.id}
-        title={app.title}
-        icon={app.icon ?? "/icons/folder.svg"}
-        label={app.iconLabel}
-      />
+      <button
+        type="button"
+        class="desktop-icon"
+        data-app={app.id}
+        aria-label={`Open ${app.title}`}
+      >
+        <span class="icon-slot">
+          <img
+            class="icon-glyph"
+            src={app.icon ?? "/icons/folder.svg"}
+            alt=""
+            aria-hidden="true"
+          />
+        </span>
+        <span class="icon-label"><span class="icon-label-text">{app.iconLabel}</span></span>
+      </button>
     </li>
   ))}
 </ul>
@@ -59,10 +68,74 @@ const { apps } = Astro.props;
     width: var(--col-w);
   }
 
+  /* Block layout (not flex) so the label can be `display: inline` and use
+     `box-decoration-break: clone` — this is what gives each wrapped line
+     its own tight pill on hover instead of one wide banner. */
+  .desktop-icon {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0;
+    color: var(--text);
+    text-align: center;
+    pointer-events: auto;
+    transition: transform var(--dur-fast) ease;
+  }
+  .desktop-icon:hover {
+    transform: translateY(-1px);
+  }
+  .desktop-icon:focus-visible {
+    outline: 1px dashed var(--window-border);
+    outline-offset: 2px;
+  }
+
+  .icon-slot {
+    display: block;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 0.5rem;
+  }
+  .icon-glyph {
+    display: block;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+  }
+
+  /* Outer label = block layout + typography. Inner text span is the
+     actual chip — inline so it wraps, with `box-decoration-break: clone`
+     painting a separate pill behind each wrapped line on hover. */
+  .icon-label {
+    display: block;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+  .icon-label-text {
+    padding: 0 4px;
+    background: var(--icon-label-bg);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition: background var(--dur-fast) ease;
+  }
+  .desktop-icon:hover .icon-label-text,
+  .desktop-icon:focus-visible .icon-label-text {
+    background: var(--icon-label-bg-hover);
+  }
+
   @media (max-width: 700px) {
     .desktop-icons {
       --col-w: 84px;
       --desktop-pad: 8px;
+    }
+    .icon-slot,
+    .icon-glyph {
+      width: 36px;
+      height: 36px;
+    }
+    .icon-label {
+      font-size: 11px;
     }
   }
 </style>

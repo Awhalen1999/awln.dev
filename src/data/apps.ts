@@ -413,35 +413,6 @@ const contact = `
 </p>
 `.trim();
 
-const recycleBin = `
-<div class="trash-grid">
-  <button type="button" class="trash-item" data-trash="placeholder1">
-    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
-    <span class="trash-label"><span class="trash-label-text">placeholder1.txt</span></span>
-  </button>
-  <button type="button" class="trash-item" data-trash="placeholder2">
-    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
-    <span class="trash-label"><span class="trash-label-text">placeholder2.pdf</span></span>
-  </button>
-  <button type="button" class="trash-item" data-trash="placeholder3">
-    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
-    <span class="trash-label"><span class="trash-label-text">placeholder3.docx</span></span>
-  </button>
-  <button type="button" class="trash-item" data-trash="placeholder4">
-    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
-    <span class="trash-label"><span class="trash-label-text">placeholder4.mov</span></span>
-  </button>
-  <button type="button" class="trash-item" data-trash="placeholder5">
-    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
-    <span class="trash-label"><span class="trash-label-text">placeholder5.png</span></span>
-  </button>
-  <button type="button" class="trash-item" data-trash="placeholder6">
-    <img class="trash-icon" src="/icons/placeholder.svg" alt="" aria-hidden="true" />
-    <span class="trash-label"><span class="trash-label-text">placeholder6.zip</span></span>
-  </button>
-</div>
-`.trim();
-
 // --- Registry ------------------------------------------------------------
 // Array order = desktop order. Icons flow top-to-bottom in column 1, then
 // wrap into subsequent columns based on viewport height.
@@ -555,14 +526,14 @@ export const APPS: App[] = [
     content: help,
   },
 
-  // Not shown in the main icon grid — rendered separately on the desktop.
+  // Easter egg — shows in terminal `ls` but not on the desktop.
   {
-    id: "recycle-bin",
-    title: "Recycle Bin",
-    kind: "app",
-    iconLabel: "recycle bin",
-    icon: "/icons/trash.svg",
-    defaultSize: { w: 700, h: 500 },
-    content: recycleBin,
+    id: "passwords",
+    title: "passwords",
+    kind: "file",
+    iconLabel: "passwords",
+    icon: "/icons/text-file.svg",
+    defaultSize: { w: 600, h: 340 },
+    content: "",
   },
 ];
