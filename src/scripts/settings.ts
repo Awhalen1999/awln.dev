@@ -1,90 +1,82 @@
 /**
- * Settings — single source of truth for all site preferences.
- * Handles persistence (localStorage), DOM state, and UI sync
- * across both the menu bar and the settings window.
+ * Settings — imperative adapter over nanostores.
+ *
+ * Re-exports the store constants and exposes get/set helpers so existing
+ * vanilla-TS call-sites (terminal, menu bar, window manager) keep working
+ * without importing nanostores directly. New Preact islands should import
+ * the atoms from `../stores/settings` instead.
  */
 
 import { showToast } from "./toast";
+import {
+  $theme,
+  $accent,
+  $linkStyle,
+  $wallpaper,
+  ACCENTS,
+  WALLPAPERS,
+  type Theme,
+  type Accent,
+  type LinkStyle,
+} from "../stores/settings";
 
-const root = document.documentElement;
+/* ── Re-exports ────────────────────────────────────────── */
+
+export { ACCENTS, WALLPAPERS };
 
 /* ── Read ──────────────────────────────────────────────── */
 
 export function currentTheme(): string {
-  return root.getAttribute("data-theme") ?? "light";
+  return $theme.get();
 }
 
 export function currentAccent(): string {
-  return root.getAttribute("data-accent") ?? "orange";
+  return $accent.get();
 }
 
 export function currentLinkStyle(): string {
-  return localStorage.getItem("link-style") ?? "solid";
+  return $linkStyle.get();
 }
 
 export function currentWallpaper(): string {
-  return localStorage.getItem("wallpaper") ?? "default";
+  return $wallpaper.get();
 }
 
 /* ── Write ─────────────────────────────────────────────── */
 
 export function setTheme(value: string) {
-  const resolved = value === "dark" ? "dark" : "light";
-  root.setAttribute("data-theme", resolved);
-  localStorage.setItem("theme", resolved);
+  $theme.set(value === "dark" ? "dark" : "light");
   syncAllUI();
 }
 
 export function setAccent(value: string) {
-  if (value && value !== "orange") {
-    root.setAttribute("data-accent", value);
-  } else {
-    root.removeAttribute("data-accent");
-    value = "orange";
-  }
-  localStorage.setItem("accent-color", value);
+  $accent.set(ACCENTS.includes(value as Accent) ? (value as Accent) : "orange");
   syncAllUI();
 }
 
 export function setLinkStyle(value: string) {
-  if (value === "dotted" || value === "none") {
-    root.setAttribute("data-link-style", value);
-  } else {
-    root.removeAttribute("data-link-style");
-    value = "solid";
-  }
-  localStorage.setItem("link-style", value);
+  $linkStyle.set(
+    value === "dotted" || value === "none" ? (value as LinkStyle) : "solid",
+  );
   syncSettingsWindow();
 }
 
 export function setWallpaper(value: string) {
-  const desktop = document.querySelector<HTMLElement>("[data-desktop]");
-  if (!desktop) return;
-  if (value && value !== "default") {
-    desktop.style.backgroundImage = `url(/wallpapers/${value}.png)`;
-    desktop.setAttribute("data-wallpaper", value);
-  } else {
-    desktop.style.backgroundImage = "";
-    desktop.removeAttribute("data-wallpaper");
-    value = "default";
-  }
-  localStorage.setItem("wallpaper", value);
+  $wallpaper.set(value || "default");
   syncSettingsWindow();
 }
 
 /* ── UI sync ────────────────────────────────────────────── */
 
 function syncAllUI() {
-  const theme = currentTheme();
-  const accent = currentAccent();
+  const theme = $theme.get();
+  const accent = $accent.get();
 
-  // Menu bar theme buttons
   for (const btn of document.querySelectorAll<HTMLElement>("[data-theme-value]")) {
     if (btn.dataset.themeValue === theme) btn.setAttribute("data-active", "");
     else btn.removeAttribute("data-active");
   }
 
-  // Menu bar accent swatches
   for (const s of document.querySelectorAll<HTMLElement>("[data-accent-swatch]")) {
     if (s.dataset.accentSwatch === accent) s.setAttribute("data-active", "");
     else s.removeAttribute("data-active");
@@ -104,9 +96,9 @@ function syncSettingsWindow() {
   )) {
     const setting = group.dataset.setting;
     let value = "";
-    if (setting === "theme") value = currentTheme();
-    else if (setting === "accent") value = currentAccent();
-    else if (setting === "link-style") value = currentLinkStyle();
+    if (setting === "theme") value = $theme.get();
+    else if (setting === "accent") value = $accent.get();
+    else if (setting === "link-style") value = $linkStyle.get();
 
     for (const btn of group.querySelectorAll<HTMLElement>(".btn[data-value]")) {
       if (btn.dataset.value === value) btn.setAttribute("data-active", "");
@@ -114,7 +106,7 @@ function syncSettingsWindow() {
     }
   }
 
-  const wp = currentWallpaper();
+  const wp = $wallpaper.get();
   for (const thumb of body.querySelectorAll<HTMLElement>(
     ".wallpaper-thumb[data-wallpaper]",
   )) {
@@ -177,8 +169,3 @@ if (host) {
     }
   }).observe(host, { childList: true });
 }
-
-/* ── Restore wallpaper on page load ──────────────────────── */
-
-const savedWp = localStorage.getItem("wallpaper");
-if (savedWp && savedWp !== "default") setWallpaper(savedWp);

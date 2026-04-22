@@ -1,6 +1,5 @@
 import type { App } from "../data/apps";
 import { showToast } from "./toast";
-import { terminalRenderer } from "./terminal";
 
 export interface WindowState {
   id: string;
@@ -29,14 +28,16 @@ export interface CustomRenderer {
   onReady?: (state: WindowState, actions: RendererActions) => void;
 }
 
-const CUSTOM_RENDERERS: Record<string, CustomRenderer> = {
-  terminal: terminalRenderer,
-};
+const CUSTOM_RENDERERS: Record<string, CustomRenderer> = {};
+
+export function registerRenderer(id: string, renderer: CustomRenderer) {
+  CUSTOM_RENDERERS[id] = renderer;
+}
 
 type WindowAction = "close" | "maximize";
 
 const CASCADE = 24;
-const MOBILE_Q = "(max-width: 699px)";
+const MOBILE_Q = "(max-width: 700px)";
 
 // Single source of truth for the "usable region" inside desktop-surface.
 // Every window — whether dragged, resized, maximized, or freshly opened —
@@ -46,6 +47,13 @@ const APP_PADDING = { left: 8, right: 8, top: 8, bottom: 8 };
 // Matches min-width/min-height on .window in global.css.
 const MIN_W = 320;
 const MIN_H = 220;
+
+function capturePointer(el: Element, id: number) {
+  try { el.setPointerCapture(id); } catch { /* already captured */ }
+}
+function releasePointer(el: Element, id: number) {
+  try { el.releasePointerCapture(id); } catch { /* already released */ }
+}
 
 export function initWindowManager(apps: App[]) {
   const host = document.querySelector<HTMLElement>("[data-window-host]");
@@ -393,11 +401,7 @@ export function initWindowManager(apps: App[]) {
       startWinX = w.x;
       startWinY = w.y;
       focusWindow(w.id);
-      try {
-        w.titlebar.setPointerCapture(pointerId);
-      } catch {
-        /* pointer already captured */
-      }
+      capturePointer(w.titlebar, pointerId);
       e.preventDefault();
     });
 
@@ -416,11 +420,7 @@ export function initWindowManager(apps: App[]) {
     const endDrag = (e: PointerEvent) => {
       if (!dragging || e.pointerId !== pointerId) return;
       dragging = false;
-      try {
-        w.titlebar.releasePointerCapture(pointerId);
-      } catch {
-        /* pointer already released */
-      }
+      releasePointer(w.titlebar, pointerId);
       pointerId = -1;
     };
     w.titlebar.addEventListener("pointerup", endDrag);
@@ -457,11 +457,7 @@ export function initWindowManager(apps: App[]) {
         rStartW = w.w;
         rStartH = w.h;
         focusWindow(w.id);
-        try {
-          resizeHandle.setPointerCapture(rPointerId);
-        } catch {
-          /* pointer already captured */
-        }
+        capturePointer(resizeHandle, rPointerId);
         e.preventDefault();
         e.stopPropagation();
       });
@@ -482,11 +478,7 @@ export function initWindowManager(apps: App[]) {
       const endResize = (e: PointerEvent) => {
         if (!resizing || e.pointerId !== rPointerId) return;
         resizing = false;
-        try {
-          resizeHandle.releasePointerCapture(rPointerId);
-        } catch {
-          /* pointer already released */
-        }
+        releasePointer(resizeHandle, rPointerId);
         rPointerId = -1;
       };
       resizeHandle.addEventListener("pointerup", endResize);

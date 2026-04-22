@@ -424,7 +424,7 @@ a[target="_blank"]::after {
 }
 .entry-list .entry {
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid rgba(43, 27, 16, 0.18);
+  border-bottom: 1px solid color-mix(in srgb, var(--window-border) 18%, transparent);
 }
 .entry-list .entry:last-child {
   border-bottom: 0;
@@ -478,7 +478,7 @@ a[target="_blank"]::after {
   font-weight: 400;
   letter-spacing: -0.01em;
   padding-bottom: 0.3rem;
-  border-bottom: 1px solid rgba(43, 27, 16, 0.18);
+  border-bottom: 1px solid color-mix(in srgb, var(--window-border) 18%, transparent);
   display: inline-block;
   margin: 0;
 }
@@ -786,6 +786,12 @@ a[target="_blank"]::after {
   padding: 0;
 }
 
+/* Firefox */
+.window-body.terminal-view {
+  scrollbar-width: thin;
+  scrollbar-color: var(--terminal-scrollbar) transparent;
+}
+/* Webkit */
 .window-body.terminal-view::-webkit-scrollbar { width: 8px; }
 .window-body.terminal-view::-webkit-scrollbar-track { background: transparent; }
 .window-body.terminal-view::-webkit-scrollbar-thumb {

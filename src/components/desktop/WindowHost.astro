@@ -70,8 +70,11 @@
 
 <script>
   import { APPS } from "../../data/apps";
-  import { initWindowManager } from "../../scripts/window-manager";
+  import { initWindowManager, registerRenderer } from "../../scripts/window-manager";
+  import { terminalRenderer } from "../../scripts/terminal";
   import "../../scripts/settings";
+
+  registerRenderer("terminal", terminalRenderer);
   initWindowManager(APPS);
 </script>
 

@@ -1,5 +1,7 @@
 import { APPS } from "../data/apps";
 import {
+  ACCENTS,
+  WALLPAPERS,
   currentAccent,
   currentLinkStyle,
   currentTheme,
@@ -9,18 +11,7 @@ import {
   setTheme,
   setWallpaper,
 } from "./settings";
-
-const ACCENTS = ["orange", "green", "blue", "purple"];
 import type { CustomRenderer, RendererActions, WindowState } from "./window-manager";
-
-const WALLPAPERS: { key: string; id: string; name: string }[] = [
-  { key: "default", id: "default", name: "Default" },
-  { key: "2", id: "wallpaper2", name: "Flying Kitty (macOS)" },
-  { key: "3", id: "wallpaper3", name: "Circuit Board (macOS)" },
-  { key: "4", id: "wallpaper4", name: "Bliss (Windows XP)" },
-  { key: "5", id: "wallpaper5", name: "Hello Light" },
-  { key: "6", id: "wallpaper6", name: "Hello Dark" },
-];
 
 const wallpaperIdToKey = (id: string) =>
   WALLPAPERS.find((w) => w.id === id)?.key ?? id;
