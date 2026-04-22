@@ -206,15 +206,19 @@ const help = `
     <p class="entry-desc">Toggle fullscreen for the focused window.</p>
   </li>
   <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>⌘ ⌥ F</div>
+    <div class="entry-title"><span class="entry-ico">▸</span>Cmd+Opt+T</div>
+    <p class="entry-desc">Open the terminal.</p>
+  </li>
+  <li class="entry">
+    <div class="entry-title"><span class="entry-ico">▸</span>Cmd+Opt+F</div>
     <p class="entry-desc">Fullscreen the focused window.</p>
   </li>
   <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>⌘ ⌥ C</div>
+    <div class="entry-title"><span class="entry-ico">▸</span>Cmd+Opt+C</div>
     <p class="entry-desc">Re-center the focused window.</p>
   </li>
   <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>⌘ ⌥ W</div>
+    <div class="entry-title"><span class="entry-ico">▸</span>Cmd+Opt+W</div>
     <p class="entry-desc">Close the focused window.</p>
   </li>
 </ul>

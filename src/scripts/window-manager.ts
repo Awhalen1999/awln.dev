@@ -527,18 +527,26 @@ export function initWindowManager(apps: App[]) {
   });
 
   document.addEventListener("keydown", (e) => {
-    // Cmd+Opt shortcuts for focused window
-    if (e.metaKey && e.altKey && focusedId) {
-      switch (e.key.toLowerCase()) {
-        case "f":
+    // Cmd+Opt shortcuts — use e.code (physical key) so Option-key
+    // character remapping on macOS Firefox doesn't break them.
+    if (e.metaKey && e.altKey) {
+      switch (e.code) {
+        case "KeyT":
+          e.preventDefault();
+          openApp("terminal");
+          return;
+        case "KeyF":
+          if (!focusedId) return;
           e.preventDefault();
           toggleMaximize(focusedId);
           return;
-        case "c":
+        case "KeyC":
+          if (!focusedId) return;
           e.preventDefault();
           centerWindow(focusedId);
           return;
-        case "w":
+        case "KeyW":
+          if (!focusedId) return;
           e.preventDefault();
           closeWindow(focusedId);
           return;
