@@ -413,6 +413,12 @@ const contact = `
 </p>
 `.trim();
 
+const recycleBin = `
+<h1>Recycle Bin</h1>
+<p class="lede">It's empty. What did you expect?</p>
+<p class="muted">Nothing to see here — just a clean desktop.</p>
+`.trim();
+
 // --- Registry ------------------------------------------------------------
 // Array order = desktop order. Icons flow top-to-bottom in column 1, then
 // wrap into subsequent columns based on viewport height.
@@ -524,5 +530,16 @@ export const APPS: App[] = [
     icon: "/icons/help.svg",
     defaultSize: { w: 450, h: 500 },
     content: help,
+  },
+
+  // Not shown in the main icon grid — rendered separately on the desktop.
+  {
+    id: "recycle-bin",
+    title: "Recycle Bin",
+    kind: "app",
+    iconLabel: "recycle bin",
+    icon: "/icons/trash.svg",
+    defaultSize: { w: 400, h: 300 },
+    content: recycleBin,
   },
 ];
