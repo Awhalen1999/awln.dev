@@ -233,6 +233,8 @@ export function initWindowManager(apps: App[]) {
     activeByApp.set(options.appId, id);
     host!.appendChild(node);
     applyGeometry(state);
+    node.setAttribute("data-entering", "");
+    node.addEventListener("animationend", () => node.removeAttribute("data-entering"), { once: true });
     bindWindow(state);
     focusWindow(id);
     updateDockBadge(options.appId);
@@ -336,6 +338,14 @@ export function initWindowManager(apps: App[]) {
     }
   }
 
+  function focusTopWindow() {
+    let top: WindowState | undefined;
+    for (const other of windows.values()) {
+      if (!top || other.z > top.z) top = other;
+    }
+    if (top) focusWindow(top.id);
+  }
+
   function closeWindow(id: string) {
     const w = windows.get(id);
     if (!w) return;
@@ -345,11 +355,7 @@ export function initWindowManager(apps: App[]) {
     if (activeByApp.get(appId) === id) activeByApp.delete(appId);
     if (focusedId === id) {
       focusedId = null;
-      let top: WindowState | undefined;
-      for (const other of windows.values()) {
-        if (!top || other.z > top.z) top = other;
-      }
-      if (top) focusWindow(top.id);
+      focusTopWindow();
     }
     updateDockBadge(appId);
   }
