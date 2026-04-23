@@ -52,6 +52,7 @@
         </div>
       </div>
       <button type="button" class="menubar-menu" tabindex="-1" data-open-app="help">Help</button>
+      <button type="button" class="menubar-menu" data-palette-trigger aria-label="Command palette">Search<span class="palette-hint">⌘K</span></button>
     </nav>
   </div>
   <div class="menubar-right">
@@ -68,6 +69,10 @@
 
   initMenuDropdowns();
   initClock();
+
+  document.querySelector("[data-palette-trigger]")?.addEventListener("click", () => {
+    document.dispatchEvent(new CustomEvent("palette:toggle"));
+  });
 
   // Sync menu bar UI to saved preferences
   setTheme(currentTheme());
@@ -275,6 +280,14 @@
     font-size: 12px;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
+  }
+
+  .palette-hint {
+    margin-left: 0.4rem;
+    color: var(--text-muted);
+  }
+  .menubar-menu:hover .palette-hint {
+    color: inherit;
   }
 
   @media (max-width: 700px) {

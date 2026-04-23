@@ -198,6 +198,10 @@ const help = `
 <div class="subhead">Keyboard</div>
 <ul class="entry-list">
   <li class="entry">
+    <div class="entry-title"><span class="entry-ico">▸</span>Cmd+K</div>
+    <p class="entry-desc">Open the command palette.</p>
+  </li>
+  <li class="entry">
     <div class="entry-title"><span class="entry-ico">▸</span>Escape</div>
     <p class="entry-desc">Close the focused window.</p>
   </li>

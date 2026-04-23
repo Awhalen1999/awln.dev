@@ -704,6 +704,121 @@ a[target="_blank"]::after {
   color: var(--text-muted);
 }
 
+/* ── Command palette ─────────────────────────────────── */
+
+.palette-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  padding-top: min(20vh, 160px);
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.palette {
+  width: 100%;
+  max-width: 500px;
+  max-height: min(420px, 70vh);
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  background: var(--window-bg);
+  border: 1px solid var(--window-border);
+}
+
+.palette-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--window-border);
+}
+
+.palette-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 0;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  caret-color: var(--accent);
+}
+.palette-input::placeholder {
+  color: var(--text-muted);
+}
+
+.palette-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.palette-group-label {
+  padding: 6px 12px 2px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.palette-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 12px;
+  color: var(--text);
+  font-size: 13px;
+  cursor: default;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+.palette-item--active {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.palette-shortcut {
+  margin-left: 1.5rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.palette-item--active .palette-shortcut {
+  color: var(--accent-ink);
+  opacity: 0.7;
+}
+
+.palette-empty {
+  padding: 24px 12px;
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+@media (max-width: 700px) {
+  .palette-backdrop {
+    padding-top: 0;
+  }
+  .palette {
+    max-width: none;
+    max-height: none;
+    height: 100%;
+    border: 0;
+  }
+  .palette-item {
+    padding: 10px 12px;
+    min-height: 44px;
+  }
+  .palette-shortcut {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

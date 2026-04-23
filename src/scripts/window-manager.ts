@@ -579,6 +579,13 @@ export function initWindowManager(apps: App[]) {
   document.addEventListener("wm:close-focused", () => {
     if (focusedId) closeWindow(focusedId);
   });
+  document.addEventListener("wm:open-app", ((e: CustomEvent) => {
+    const appId = e.detail;
+    if (appId && typeof appId === "string") openApp(appId);
+  }) as EventListener);
+  document.addEventListener("wm:close-all", () => {
+    for (const id of [...windows.keys()]) closeWindow(id);
+  });
 
   const openFromHash = () => {
     const hash = window.location.hash.slice(1);

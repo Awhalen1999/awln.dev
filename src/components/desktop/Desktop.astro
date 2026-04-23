@@ -2,6 +2,7 @@
 import MenuBar from "./MenuBar.astro";
 import DesktopIcons from "./DesktopIcons.astro";
 import WindowHost from "./WindowHost.astro";
+import CommandPalette from "../CommandPalette";
 import { APPS } from "../../data/apps";
 
 const desktopApps = APPS.filter((a) => a.id !== "passwords");
@@ -13,6 +14,7 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
     <DesktopIcons apps={desktopApps} />
     <WindowHost />
   </div>
+  <CommandPalette client:only="preact" />
 </div>
 
 <style>
