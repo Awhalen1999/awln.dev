@@ -276,7 +276,7 @@ export default function CommandPalette() {
             ref={inputRef}
             class="palette-input"
             type="text"
-            placeholder="Type a command…"
+            placeholder="Search..."
             value={query}
             onInput={(e) => {
               setQuery((e.target as HTMLInputElement).value);
