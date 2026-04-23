@@ -674,6 +674,22 @@ a[target="_blank"]::after {
   border-radius: 2px;
   flex-shrink: 0;
 }
+.settings-color-dot[data-color="orange"] { background: var(--color-orange); }
+.settings-color-dot[data-color="green"]  { background: var(--color-green); }
+.settings-color-dot[data-color="blue"]   { background: var(--color-blue); }
+.settings-color-dot[data-color="purple"] { background: var(--color-purple); }
+
+/* ── Link style previews (settings panel) ──────────────── */
+
+.link-preview--solid {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link-preview--dotted {
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
 
 /* ── Link style overrides ───────────────────────────────── */
 
@@ -746,7 +762,7 @@ a[target="_blank"]::after {
   outline: 0;
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 13px;
   caret-color: var(--accent);
 }
 .palette-input::placeholder {
@@ -785,7 +801,7 @@ a[target="_blank"]::after {
   margin-left: 1.5rem;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
 }
 .palette-item--active .palette-shortcut {
   color: var(--accent-ink);

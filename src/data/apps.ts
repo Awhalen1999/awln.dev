@@ -345,16 +345,16 @@ const siteSettings = `
     <span class="settings-label">Theme color</span>
     <div class="btn-group" data-setting="accent">
       <button type="button" class="btn" data-value="orange">
-        <span class="settings-color-dot" style="background:var(--color-orange)"></span>Orange
+        <span class="settings-color-dot" data-color="orange"></span>Orange
       </button>
       <button type="button" class="btn" data-value="green">
-        <span class="settings-color-dot" style="background:var(--color-green)"></span>Green
+        <span class="settings-color-dot" data-color="green"></span>Green
       </button>
       <button type="button" class="btn" data-value="blue">
-        <span class="settings-color-dot" style="background:var(--color-blue)"></span>Blue
+        <span class="settings-color-dot" data-color="blue"></span>Blue
       </button>
       <button type="button" class="btn" data-value="purple">
-        <span class="settings-color-dot" style="background:var(--color-purple)"></span>Purple
+        <span class="settings-color-dot" data-color="purple"></span>Purple
       </button>
     </div>
   </div>
@@ -395,8 +395,8 @@ const siteSettings = `
   <div class="settings-field">
     <span class="settings-label">Underline style</span>
     <div class="btn-group" data-setting="link-style">
-      <button type="button" class="btn" data-value="solid"><span style="text-decoration:underline;text-underline-offset:2px">Solid</span></button>
-      <button type="button" class="btn" data-value="dotted"><span style="text-decoration:underline dotted;text-decoration-thickness:1.5px;text-underline-offset:2px">Dotted</span></button>
+      <button type="button" class="btn" data-value="solid"><span class="link-preview link-preview--solid">Solid</span></button>
+      <button type="button" class="btn" data-value="dotted"><span class="link-preview link-preview--dotted">Dotted</span></button>
       <button type="button" class="btn" data-value="none">None</button>
     </div>
   </div>

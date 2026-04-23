@@ -12,6 +12,7 @@ export function showToast(
   el.className = "toast";
   el.dataset.type = type;
   el.setAttribute("role", "status");
+  el.setAttribute("aria-live", "polite");
   el.innerHTML = `<span class="toast-bar"></span><span class="toast-msg">${message}</span>`;
 
   document.body.appendChild(el);
