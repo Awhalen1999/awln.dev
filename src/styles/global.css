@@ -720,6 +720,11 @@ a[target="_blank"]::after {
 .btn-group .btn {
   border: 0;
   border-right: 1px solid var(--window-border);
+  border-radius: 0;
+  background: var(--window-bg);
+  transition:
+    background var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease;
 }
 .btn-group .btn:last-child {
   border-right: 0;
@@ -727,6 +732,12 @@ a[target="_blank"]::after {
 .btn-group .btn:hover {
   background: var(--window-bg-alt);
   color: var(--text);
+}
+.btn-group .btn[data-active] {
+  background: var(--window-bg-alt);
+  border-bottom: 2px solid var(--accent);
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* ── Settings panel ──────────────────────────────────────── */
