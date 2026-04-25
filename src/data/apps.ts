@@ -12,6 +12,8 @@ export interface App {
   icon?: string;
   /** Default window size when opened on desktop viewports. */
   defaultSize: { w: number; h: number };
+  /** Set to false to disable window resizing. */
+  resizable?: boolean;
   /** HTML content rendered inside `.window-body`. */
   content: string;
 }
@@ -498,7 +500,8 @@ export const APPS: App[] = [
     kind: "folder",
     iconLabel: "pets",
     icon: "/icons/cat.svg",
-    defaultSize: { w: 520, h: 440 },
+    defaultSize: { w: 700, h: 500 },
+    resizable: false,
     content: pets,
   },
   {

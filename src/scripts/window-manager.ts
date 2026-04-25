@@ -249,6 +249,7 @@ export function initWindowManager(apps: App[]) {
       appId,
       title: app.title,
       defaultSize: app.defaultSize,
+      resizable: app.resizable,
       populate:
         custom?.populate ??
         ((body) => {
