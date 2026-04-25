@@ -624,8 +624,11 @@ a[target="_blank"]::after {
 }
 
 /* ── Buttons ───────────────────────────────────────────────
-   .btn          — bordered action / toggle button
+   .btn          — flat toggle segment (used inside .btn-group)
+   .btn-feature  — primary CTA, accent 3D raised
+   .btn-secondary — neutral action, grey 3D raised
    .btn-group    — segmented toggle container (children = .btn)
+   .btn-copy     — small inline modifier for copy/download
    ───────────────────────────────────────────────────────── */
 
 .btn {
@@ -642,14 +645,6 @@ a[target="_blank"]::after {
   transition:
     background var(--dur-fast) ease,
     color var(--dur-fast) ease;
-}
-.btn:hover {
-  background: var(--accent);
-  color: var(--accent-ink);
-}
-.btn[data-active] {
-  background: var(--window-bg-alt);
-  color: var(--text);
 }
 
 .btn-feature {
