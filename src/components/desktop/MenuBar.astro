@@ -113,7 +113,7 @@
     background: var(--menubar-bg);
     background-image: none;
     border-bottom: 1px solid var(--window-border);
-    font-size: 12px;
+    font-size: 0.75rem;
     user-select: none;
   }
 
@@ -130,7 +130,7 @@
     gap: 2px;
     padding: 0 0.45rem 0 0;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
   }
 
@@ -161,14 +161,8 @@
     padding: 0 0.55rem;
     color: var(--text);
     font-family: var(--font-mono);
-    font-size: 12px;
-    cursor: default;
-    transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
-  }
-  .menubar-menu:hover,
-  .menubar-menu[data-active] {
-    background: var(--accent);
-    color: var(--accent-ink);
+    font-size: 0.75rem;
+    cursor: pointer;
   }
 
   /* Dropdown wrapper — positions the dropdown relative to its trigger */
@@ -201,7 +195,7 @@
     padding: 6px 10px;
     white-space: nowrap;
     color: var(--text);
-    font-size: 12px;
+    font-size: 0.75rem;
     cursor: default;
     transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
   }
@@ -216,7 +210,7 @@
   .menubar-shortcut {
     margin-left: 2rem;
     opacity: 0.45;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .menubar-dropdown-sep {
@@ -236,11 +230,11 @@
     display: block;
     padding: 0 0 4px;
     color: var(--text-muted);
-    font-size: 12px;
+    font-size: 0.75rem;
   }
   .btn-group--sm .btn {
     padding: 2px 8px;
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
   .accent-swatch-row {
     display: flex;
@@ -265,7 +259,7 @@
   .menubar-status {
     color: var(--text-muted);
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 0.75rem;
     letter-spacing: 0.04em;
   }
   .menubar-status[data-online="true"]::first-letter {
@@ -279,7 +273,7 @@
     padding: 0 0.35rem;
     color: var(--text);
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
   }
@@ -288,9 +282,7 @@
     margin-left: 0.4rem;
     color: var(--text-muted);
   }
-  .menubar-menu:hover .palette-hint {
-    color: inherit;
-  }
+
 
   @media (max-width: 700px) {
     .menubar-menus,

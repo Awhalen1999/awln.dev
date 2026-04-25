@@ -50,14 +50,14 @@ const about = `
 <img src="/transparent-sig-white.gif" alt="AW signature" class="signature signature-dark" />
 
 <div class="btn-row">
-  <button type="button" class="btn" data-open-app="experience">Open Experience</button>
-  <button type="button" class="btn" data-open-app="contact">Contact</button>
+  <button type="button" class="btn-feature" data-open-app="experience">Open Experience</button>
+  <button type="button" class="btn-feature" data-open-app="contact">Contact</button>
 </div>
 `.trim();
 
 const projects = `
 <h1>Projects</h1>
-<p class="lede">
+<p>
   Some are finished, some are works in progress. My <a href="https://github.com/awhalen1999" target="_blank" rel="noopener">GitHub</a> is probably more up to date with older and dinky little projects as well.
 </p>
 
@@ -111,7 +111,7 @@ const projects = `
 
 const tools = `
 <h1>Tools</h1>
-<p class="lede">Hardware, software, apps, and extensions I reach for daily. Mostly here so I don't forget when people ask.</p>
+<p>Hardware, software, apps, and extensions I reach for daily. Mostly here so I don't forget when people ask.</p>
 
 <div class="subhead">Hardware</div>
 <ul class="tool-list">
@@ -163,7 +163,7 @@ const tools = `
 
 const experience = `
 <h1>Experience</h1>
-<p class="lede">
+<p>
   Where I've been, what I've done, and proof I don't just make side projects all day.
 </p>
 
@@ -190,7 +190,7 @@ const experience = `
 
 const help = `
 <h1>Help</h1>
-<p class="lede">Quick reference for finding your way around.</p>
+<p>Quick reference for finding your way around.</p>
 
 <div class="subhead">About</div>
 <p>Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> and TypeScript. Source code lives on <a href="https://github.com/Awhalen1999" target="_blank" rel="noopener">GitHub</a>.</p>
@@ -229,22 +229,22 @@ const help = `
 
 <div class="subhead">Actions</div>
 <div class="btn-row">
-  <button type="button" class="btn" data-util="refresh">Refresh</button>
-  <button type="button" class="btn" data-util="clear-cache">Clear cache</button>
-  <button type="button" class="btn" data-util="close-all">Close all windows</button>
+  <button type="button" class="btn-secondary" data-util="refresh">Refresh</button>
+  <button type="button" class="btn-secondary" data-util="clear-cache">Clear cache</button>
+  <button type="button" class="btn-secondary" data-util="close-all">Close all windows</button>
 </div>
 `.trim();
 
 const links = `
 <h1>Links</h1>
-<p class="lede">Where to find me around the internet.</p>
+<p>Where to find me around the internet.</p>
 
 <ul class="entry-list">
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
       <a href="https://github.com/Awhalen1999" target="_blank" rel="noopener">GitHub</a>
-      <button type="button" class="btn btn-copy" data-copy="https://github.com/Awhalen1999">Copy</button>
+      <button type="button" class="btn-secondary btn-copy" data-copy="https://github.com/Awhalen1999">Copy</button>
     </div>
     <p class="entry-desc">Code I share publicly</p>
   </li>
@@ -252,7 +252,7 @@ const links = `
     <div class="entry-title">
       <span class="entry-ico">▸</span>
       <a href="https://www.linkedin.com/in/alex-whalen-0496b227b" target="_blank" rel="noopener">LinkedIn</a>
-      <button type="button" class="btn btn-copy" data-copy="https://www.linkedin.com/in/alex-whalen-0496b227b">Copy</button>
+      <button type="button" class="btn-secondary btn-copy" data-copy="https://www.linkedin.com/in/alex-whalen-0496b227b">Copy</button>
     </div>
     <p class="entry-desc">Career history and network</p>
   </li>
@@ -260,7 +260,7 @@ const links = `
     <div class="entry-title">
       <span class="entry-ico">▸</span>
       <a href="mailto:awhalendev@gmail.com">Email</a>
-      <button type="button" class="btn btn-copy" data-copy="awhalendev@gmail.com">Copy</button>
+      <button type="button" class="btn-secondary btn-copy" data-copy="awhalendev@gmail.com">Copy</button>
     </div>
     <p class="entry-desc">awhalendev@gmail.com</p>
   </li>
@@ -268,7 +268,7 @@ const links = `
     <div class="entry-title">
       <span class="entry-ico">▸</span>
       <a href="/alex_whalen_resume.pdf" download>Resume</a>
-      <a href="/alex_whalen_resume.pdf" download class="btn btn-copy">Download Resume</a>
+      <a href="/alex_whalen_resume.pdf" download class="btn-secondary btn-copy">Download Resume</a>
     </div>
     <p class="entry-desc">PDF · latest version</p>
   </li>
@@ -277,7 +277,7 @@ const links = `
 
 const events = `
 <h1>Events</h1>
-<p class="lede">Photos from events I've been to or hosted.</p>
+<p>Photos from events I've been to or hosted.</p>
 
 <ul class="photo-grid">
   <li class="photo-item">
@@ -309,7 +309,7 @@ const events = `
 
 const pets = `
 <h1>Pets</h1>
-<p class="lede">Photos and info about the animals in my life.</p>
+<p>Photos and info about the animals in my life.</p>
 
 <div class="subhead">Roster</div>
 <ul class="entry-list">
@@ -405,11 +405,11 @@ const siteSettings = `
 
 const contact = `
 <h1>Contact</h1>
-<p class="lede">The best way to reach me.</p>
+<p>The best way to reach me.</p>
 
 <section class="focus-box email-box">
   <p><a href="mailto:awhalendev@gmail.com">awhalendev@gmail.com</a></p>
-  <button type="button" class="btn btn-copy" data-copy="awhalendev@gmail.com">Copy</button>
+  <button type="button" class="btn-secondary btn-copy" data-copy="awhalendev@gmail.com">Copy</button>
 </section>
 
 <p class="muted">
