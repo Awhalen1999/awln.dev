@@ -73,10 +73,12 @@
   import { initWindowManager, registerRenderer } from "../../scripts/window-manager";
   import { terminalRenderer } from "../../scripts/terminal";
   import { passwordsRenderer } from "../../scripts/passwords";
+  import { petsRenderer } from "../../scripts/pets";
   import "../../scripts/settings";
 
   registerRenderer("terminal", terminalRenderer);
   registerRenderer("passwords", passwordsRenderer);
+  registerRenderer("pets", petsRenderer);
   initWindowManager(APPS);
 </script>
 

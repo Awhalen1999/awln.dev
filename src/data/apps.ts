@@ -309,25 +309,7 @@ const events = `
 </ul>
 `.trim();
 
-const pets = `
-<h1>Pets</h1>
-<p>Photos and info about the animals in my life.</p>
-
-<div class="subhead">Roster</div>
-<ul class="entry-list">
-  <!-- EDIT ME: swap in your pets and their photos -->
-  <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>Pet name</div>
-    <p class="entry-date">Species · Age</p>
-    <p class="entry-desc">One-line intro — breed, favorite thing, personality.</p>
-  </li>
-  <li class="entry">
-    <div class="entry-title"><span class="entry-ico">▸</span>Another pet</div>
-    <p class="entry-date">Species · Age</p>
-    <p class="entry-desc">One-line intro.</p>
-  </li>
-</ul>
-`.trim();
+const pets = "";
 
 const siteSettings = `
 <h1>Settings</h1>
