@@ -430,7 +430,7 @@ export const APPS: App[] = [
     iconLabel: "about",
 
     icon: "/icons/man.svg",
-    defaultSize: { w: 500, h: 600 },
+    defaultSize: { w: 650, h: 600 },
     content: about,
   },
   {
@@ -470,7 +470,7 @@ export const APPS: App[] = [
     iconLabel: "contact",
 
     icon: "/icons/mail.svg",
-    defaultSize: { w: 420, h: 340 },
+    defaultSize: { w: 400, h: 300 },
     content: contact,
   },
   {
@@ -480,7 +480,7 @@ export const APPS: App[] = [
     iconLabel: "links",
     icon: "/icons/links.svg",
 
-    defaultSize: { w: 480, h: 420 },
+    defaultSize: { w: 480, h: 500 },
     content: links,
   },
   {
