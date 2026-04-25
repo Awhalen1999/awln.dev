@@ -783,15 +783,17 @@ a[target="_blank"]::after {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border: 2px solid transparent;
+  border: 1px solid var(--window-border);
   border-radius: var(--radius);
-  transition: border-color var(--dur-fast) ease;
+  transition:
+    border-color var(--dur-fast) ease,
+    border-width var(--dur-fast) ease;
 }
 .wallpaper-thumb:hover .wallpaper-preview {
-  border-color: var(--window-border);
+  border-color: var(--accent);
 }
 .wallpaper-thumb[data-active] .wallpaper-preview {
-  border-color: var(--accent);
+  border: 2px solid var(--accent);
 }
 .wallpaper-name {
   display: block;
