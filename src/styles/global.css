@@ -22,10 +22,10 @@
   --color-offline: #b04a3a;
   --color-error: #d6412f;
 
-  /* Surfaces — warm, paper-like */
-  --window-bg: #fdf8eb;
-  --window-bg-alt: #e8e5e1;
-  --window-border: #2b1b10;
+  /* Surfaces */
+  --window-bg: #fdfdf8;
+  --window-bg-alt: #eeefe9;
+  --window-border: #bfc1b7;
 
   /* Desktop */
   --wallpaper: #e6d3ad;
@@ -35,11 +35,13 @@
   --icon-label-bg-hover: rgba(253, 248, 235, 0.85);
 
   /* Menu bar */
-  --menubar-bg: #e8e5e1;
+  --menubar-bg: #eeefe9;
 
   /* Size */
   --menubar-h: 32px;
   --titlebar-h: 38px;
+  --radius: 4px;
+  --radius-lg: 2px;
 
   /* Motion */
   --dur-fast: 100ms;
@@ -190,6 +192,7 @@ a[target="_blank"]::after {
   min-height: 220px;
   background: var(--window-bg);
   border: 1px solid var(--window-border);
+  border-radius: var(--radius-lg);
   outline: none;
   pointer-events: auto;
 }
@@ -259,6 +262,7 @@ a[target="_blank"]::after {
   color: var(--text);
   background: var(--window-bg);
   border: 1px solid var(--window-border);
+  border-radius: var(--radius);
   transition:
     background var(--dur-fast) ease,
     color var(--dur-fast) ease;
@@ -371,6 +375,7 @@ a[target="_blank"]::after {
   padding: 0.5rem 1rem 0.75rem;
   background: var(--window-bg-alt);
   border: 1px solid var(--window-border);
+  border-radius: var(--radius);
 }
 .focus-box ul {
   margin: 0;
@@ -413,8 +418,10 @@ a[target="_blank"]::after {
   max-width: 320px;
   background: var(--window-bg);
   border: 1px solid var(--window-border);
+  border-radius: var(--radius-lg);
   opacity: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .toast-bar {
@@ -470,6 +477,7 @@ a[target="_blank"]::after {
   padding: 0;
   background: var(--window-bg);
   border: 1px solid var(--window-border);
+  border-radius: var(--radius);
   list-style: none;
 }
 .entry-list .entry {
@@ -512,6 +520,7 @@ a[target="_blank"]::after {
   vertical-align: middle;
   color: var(--accent-ink);
   background: var(--accent);
+  border-radius: var(--radius);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -573,6 +582,7 @@ a[target="_blank"]::after {
   padding: 0;
   margin: 0;
   border: 1px solid var(--window-border);
+  border-radius: var(--radius);
   background: var(--window-bg-alt);
   overflow: hidden;
   cursor: pointer;
@@ -628,6 +638,7 @@ a[target="_blank"]::after {
   color: var(--text);
   background: var(--window-bg);
   border: 1px solid var(--window-border);
+  border-radius: var(--radius);
   cursor: pointer;
   text-decoration: none;
   transition:
@@ -651,6 +662,8 @@ a[target="_blank"]::after {
 .btn-group {
   display: inline-flex;
   border: 1px solid var(--window-border);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 .btn-group .btn {
   border: 0;
@@ -670,6 +683,7 @@ a[target="_blank"]::after {
   margin: 0 0 1rem;
   padding: 0.75rem 1rem 1rem;
   border: 1px solid var(--window-border);
+  border-radius: var(--radius);
 }
 
 .settings-desc {
@@ -707,6 +721,7 @@ a[target="_blank"]::after {
   background-position: center;
   background-repeat: no-repeat;
   border: 2px solid transparent;
+  border-radius: var(--radius);
   transition: border-color var(--dur-fast) ease;
 }
 .wallpaper-thumb:hover .wallpaper-preview {
@@ -727,7 +742,7 @@ a[target="_blank"]::after {
   display: inline-block;
   width: 10px;
   height: 10px;
-  border-radius: 2px;
+  border-radius: var(--radius);
   flex-shrink: 0;
 }
 .settings-color-dot[data-color="orange"] {
@@ -807,6 +822,8 @@ a[target="_blank"]::after {
   align-self: flex-start;
   background: var(--window-bg);
   border: 1px solid var(--window-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .palette-input-row {
@@ -1027,7 +1044,7 @@ a[target="_blank"]::after {
 }
 .window-body.terminal-view::-webkit-scrollbar-thumb {
   background: var(--terminal-scrollbar);
-  border-radius: 4px;
+  border-radius: var(--radius);
 }
 .window-body.terminal-view::-webkit-scrollbar-thumb:hover {
   background: var(--terminal-scrollbar-hover);

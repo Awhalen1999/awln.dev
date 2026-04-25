@@ -185,7 +185,8 @@
     padding: 0;
     background: var(--window-bg);
     border: 1px solid var(--window-border);
-
+    border-radius: var(--radius-lg);
+    overflow: hidden;
     z-index: 1001;
   }
   .menubar-dropdown[data-open] {
@@ -249,6 +250,7 @@
     flex: 1;
     height: 24px;
     border: 2px solid transparent;
+    border-radius: var(--radius);
     cursor: pointer;
     transition: border-color var(--dur-fast) ease;
   }
