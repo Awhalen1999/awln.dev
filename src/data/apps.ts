@@ -160,6 +160,7 @@ const tools = `
   <li><strong>Figma</strong> <span class="muted">Design software</span></li>
   <li><strong>Mobbin</strong> <span class="muted">Design inspiration</span></li>
   <li><strong>Eagle</strong> <span class="muted">Design file organization</span></li>
+  <li><strong>Aseprite</strong> <span class="muted">Sprite editor</span></li>
 </ul>
 `.trim();
 
