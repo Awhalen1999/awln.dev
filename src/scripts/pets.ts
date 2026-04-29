@@ -57,7 +57,7 @@ interface PetConfig {
 const PET_CONFIGS: PetConfig[] = [
   {
     name: "cal",
-    scale: 2,
+    scale: 2.25,
     anims: {
       idle: { src: "/sprites/cal_idle.png", frames: 2, durations: [1500, 250] },
       walk: { src: "/sprites/cal_walk.png", frames: 2, durations: [250, 250] },
