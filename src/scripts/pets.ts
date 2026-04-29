@@ -127,7 +127,7 @@ export const petsRenderer: CustomRenderer = {
   populate(body) {
     body.style.padding = "0";
     body.style.overflow = "hidden";
-    body.style.background = "url(/wallpapers/wallpaper4.png) center / cover no-repeat";
+    body.style.background = "url(/pets_background.png) center / cover no-repeat";
     const canvas = document.createElement("canvas");
     canvas.style.width = "100%";
     canvas.style.height = "100%";
