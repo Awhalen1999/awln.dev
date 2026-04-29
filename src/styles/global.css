@@ -209,11 +209,11 @@ a[target="_blank"]::after {
   padding: 0 10px;
   background: var(--window-bg-alt);
   border-bottom: 1px solid var(--window-border);
-  cursor: grab;
+  cursor: move;
   user-select: none;
 }
 .window-titlebar:active {
-  cursor: grabbing;
+  cursor: move;
 }
 .window:not([data-focused]) .window-title {
   color: var(--text-muted);
