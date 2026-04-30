@@ -15,6 +15,13 @@ interface Heart {
   age: number;
 }
 
+interface Toy {
+  x: number;
+  y: number;
+  vy: number;
+  grounded: boolean;
+}
+
 interface Pet {
   name: string;
   scale: number;
@@ -28,6 +35,7 @@ interface Pet {
   walkDuration: number;
   petTimer: number;
   idleTimer: number;
+  targetX: number | null;
 }
 
 type AnimState = "idle" | "walk" | "pet";
@@ -41,6 +49,11 @@ const PET_DURATION = 1200;
 const HEART_SIZE = 24;
 const HEART_LIFETIME = 1000;
 const HEART_RISE_SPEED = 0.4;
+const TOY_GRAVITY = 0.3;
+const BONE_SCALE = 1.25;
+const BONE_SIZE = FRAME_SIZE * BONE_SCALE;
+const MOUSE_SCALE = 0.75;
+const MOUSE_SIZE = FRAME_SIZE * MOUSE_SCALE;
 
 interface AnimConfig {
   src: string;
@@ -112,6 +125,7 @@ function toIdle(p: Pet) {
   p.state = "idle";
   resetAnim(p);
   p.idleTimer = 2000 + Math.random() * 4000;
+  p.targetX = null;
 }
 
 function toWalk(p: Pet) {
@@ -120,12 +134,14 @@ function toWalk(p: Pet) {
   p.dir = Math.random() > 0.5 ? 1 : -1;
   p.walkTimer = 0;
   p.walkDuration = 1500 + Math.random() * 2500;
+  p.targetX = null;
 }
 
 function toPet(p: Pet) {
   p.state = "pet";
   resetAnim(p);
   p.petTimer = 0;
+  p.targetX = null;
 }
 
 // ── Renderer ────────────────────────────────────────────
@@ -135,10 +151,29 @@ export const petsRenderer: CustomRenderer = {
     body.style.padding = "0";
     body.style.overflow = "hidden";
     body.style.background = "url(/pets_background.png) center / cover no-repeat";
+    body.style.position = "relative";
 
     const canvas = document.createElement("canvas");
     canvas.style.cssText = "width:100%;height:100%;display:block;image-rendering:pixelated";
     body.appendChild(canvas);
+
+    const btnStyle =
+      "width:26px;height:26px;padding:0;border:none;" +
+      "border-radius:6px;background:rgba(255,255,255,0.55);cursor:pointer;" +
+      "font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;" +
+      "backdrop-filter:blur(4px);";
+
+    const boneBtn = document.createElement("button");
+    boneBtn.dataset.boneBtn = "";
+    boneBtn.textContent = "🦴";
+    boneBtn.style.cssText = "position:absolute;top:6px;left:6px;z-index:1;" + btnStyle;
+    body.appendChild(boneBtn);
+
+    const mouseBtn = document.createElement("button");
+    mouseBtn.dataset.mouseBtn = "";
+    mouseBtn.textContent = "🐭";
+    mouseBtn.style.cssText = "position:absolute;top:6px;left:36px;z-index:1;" + btnStyle;
+    body.appendChild(mouseBtn);
   },
 
   async onReady(state) {
@@ -147,6 +182,8 @@ export const petsRenderer: CustomRenderer = {
 
     const ctx = canvas.getContext("2d")!;
     const heartImg = await loadImage("/sprites/heart.png");
+    const boneImg = await loadImage("/sprites/bone.png");
+    const mouseImg = await loadImage("/sprites/mouse.png");
 
     // Load all pets
     const pets: Pet[] = await Promise.all(
@@ -156,7 +193,7 @@ export const petsRenderer: CustomRenderer = {
           name: cfg.name, scale: cfg.scale, anims,
           state: "idle", dir: 1, frame: 0, frameTick: 0,
           x: 0, walkTimer: 0, walkDuration: 0, petTimer: 0,
-          idleTimer: 2000 + Math.random() * 4000,
+          idleTimer: 2000 + Math.random() * 4000, targetX: null,
         };
         return pet;
       })
@@ -166,6 +203,8 @@ export const petsRenderer: CustomRenderer = {
     const drawOrder = [...pets].sort((a, b) => b.scale - a.scale);
 
     const hearts: Heart[] = [];
+    let bone: Toy | null = null;
+    let mouse: Toy | null = null;
     let viewW = 0;
     let viewH = 0;
     let raf = 0;
@@ -208,7 +247,9 @@ export const petsRenderer: CustomRenderer = {
     canvas.addEventListener("click", (e) => {
       const hit = hitTest(e.clientX, e.clientY);
       if (!hit) return;
+      const savedTarget = hit.targetX;
       toPet(hit);
+      hit.targetX = savedTarget;
       const size = drawSize(hit);
       hearts.push({
         x: hit.x + size / 2 + (Math.random() - 0.5) * 20,
@@ -216,6 +257,32 @@ export const petsRenderer: CustomRenderer = {
         opacity: 1,
         age: 0,
       });
+    });
+
+    // ── Bone button ─────────────────────────────────────
+
+    const boneBtn = state.body.querySelector("[data-bone-btn]") as HTMLButtonElement;
+    boneBtn.addEventListener("click", () => {
+      if (bone) return;
+      const margin = BONE_SIZE;
+      bone = {
+        x: margin + Math.random() * (viewW - margin * 2),
+        y: -BONE_SIZE,
+        vy: 0,
+        grounded: false,
+      };
+    });
+
+    const mouseBtn = state.body.querySelector("[data-mouse-btn]") as HTMLButtonElement;
+    mouseBtn.addEventListener("click", () => {
+      if (mouse) return;
+      const margin = MOUSE_SIZE;
+      mouse = {
+        x: margin + Math.random() * (viewW - margin * 2),
+        y: -MOUSE_SIZE,
+        vy: 0,
+        grounded: false,
+      };
     });
 
     // ── Loop ───────────────────────────────────────────
@@ -234,16 +301,79 @@ export const petsRenderer: CustomRenderer = {
           const maxX = viewW - drawSize(p);
           if (p.x <= 0) { p.x = 0; p.dir = 1; }
           if (p.x >= maxX) { p.x = maxX; p.dir = -1; }
-          p.walkTimer += dt;
-          if (p.walkTimer >= p.walkDuration) toIdle(p);
+          if (p.targetX !== null) {
+            // Walking toward bone — don't use timer, keep going
+            const calCenter = p.x + drawSize(p) / 2;
+            const targetCenter = p.targetX + drawSize(p) / 2;
+            p.dir = targetCenter > calCenter ? 1 : -1;
+          } else {
+            p.walkTimer += dt;
+            if (p.walkTimer >= p.walkDuration) toIdle(p);
+          }
         } else if (p.state === "pet") {
           p.petTimer += dt;
-          if (p.petTimer >= PET_DURATION) toIdle(p);
+          if (p.petTimer >= PET_DURATION) {
+            if (p.targetX !== null) {
+              // Resume walking to toy
+              const savedTarget = p.targetX;
+              const petCenter = p.x + drawSize(p) / 2;
+              const targetCenter = savedTarget + drawSize(p) / 2;
+              p.state = "walk";
+              resetAnim(p);
+              p.targetX = savedTarget;
+              p.dir = targetCenter > petCenter ? 1 : -1;
+            } else {
+              toIdle(p);
+            }
+          }
         } else {
           p.idleTimer -= dt;
           if (p.idleTimer <= 0) toWalk(p);
         }
       }
+
+      // ── Toy physics ───────────────────────────────────
+      function updateToy(toy: Toy, toySize: number, petName: string): Toy | null {
+        const groundY = viewH - toySize - GROUND_OFFSET;
+        if (!toy.grounded) {
+          toy.vy += TOY_GRAVITY * (dt / 16);
+          toy.y += toy.vy * (dt / 16);
+          if (toy.y >= groundY) {
+            toy.y = groundY;
+            toy.grounded = true;
+            const pet = pets.find((p) => p.name === petName);
+            if (pet) {
+              const petCenter = pet.x + drawSize(pet) / 2;
+              const toyCenter = toy.x + toySize / 2;
+              pet.targetX = toyCenter - drawSize(pet) / 2;
+              pet.dir = toyCenter > petCenter ? 1 : -1;
+              pet.state = "walk";
+              resetAnim(pet);
+            }
+          }
+        } else {
+          const pet = pets.find((p) => p.name === petName);
+          if (pet && pet.targetX !== null) {
+            const dist = Math.abs(pet.x - pet.targetX);
+            if (dist < 4) {
+              pet.targetX = null;
+              toPet(pet);
+              const size = drawSize(pet);
+              hearts.push({
+                x: pet.x + size / 2 + (Math.random() - 0.5) * 20,
+                y: petY(pet) - 10,
+                opacity: 1,
+                age: 0,
+              });
+              return null;
+            }
+          }
+        }
+        return toy;
+      }
+
+      if (bone) bone = updateToy(bone, BONE_SIZE, "cal");
+      if (mouse) mouse = updateToy(mouse, MOUSE_SIZE, "weez");
 
       for (let i = hearts.length - 1; i >= 0; i--) {
         const h = hearts[i];
@@ -271,6 +401,13 @@ export const petsRenderer: CustomRenderer = {
           ctx.drawImage(anim.img, p.frame * FRAME_SIZE, 0, FRAME_SIZE, FRAME_SIZE, p.x, y, size, size);
         }
         ctx.restore();
+      }
+
+      if (bone) {
+        ctx.drawImage(boneImg, 0, 0, FRAME_SIZE, FRAME_SIZE, bone.x, bone.y, BONE_SIZE, BONE_SIZE);
+      }
+      if (mouse) {
+        ctx.drawImage(mouseImg, 0, 0, FRAME_SIZE, FRAME_SIZE, mouse.x, mouse.y, MOUSE_SIZE, MOUSE_SIZE);
       }
 
       for (const h of hearts) {
