@@ -1,11 +1,15 @@
 import posthog from "posthog-js";
 
-posthog.init("phc_YrGXbAy5VOj2nn5PNaPp1uC9s8I7JMVkefOizAsQht6", {
-  api_host: "https://us.i.posthog.com",
-});
+const IS_PROD = window.location.hostname === "awln.dev";
+
+if (IS_PROD) {
+  posthog.init("phc_YrGXbAy5VOj2nn5PNaPp1uC9s8I7JMVkefOizAsQht6", {
+    api_host: "https://us.i.posthog.com",
+  });
+}
 
 export function track(event: string, properties?: Record<string, unknown>) {
-  posthog.capture(event, properties);
+  if (IS_PROD) posthog.capture(event, properties);
 }
 
 // Track link clicks, copy actions, and resume downloads
