@@ -771,6 +771,9 @@ a[target="_blank"]::after {
 }
 .wallpaper-thumb {
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 .wallpaper-preview {
   display: block;
