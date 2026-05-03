@@ -56,7 +56,21 @@
     </nav>
   </div>
   <div class="menubar-right">
-    <span class="menubar-status" data-status aria-live="polite">—</span>
+    <div class="menubar-dropdown-wrapper">
+      <button type="button" class="menubar-status" data-status data-menu-trigger="status" tabindex="-1" aria-live="polite">—</button>
+      <div class="menubar-dropdown status-dropdown" data-menu-dropdown="status">
+        <div class="status-dropdown-msg" data-status-online>
+          Hey! I'm online right now. Feel free to
+          <a href="#contact" data-open-app="contact">reach out</a>
+          and let's chat.
+        </div>
+        <div class="status-dropdown-msg" data-status-offline>
+          Hey! I'm offline right now, but feel free to
+          <a href="#contact" data-open-app="contact">contact me</a>
+          and I'll get back to you next time I'm around.
+        </div>
+      </div>
+    </div>
     <div class="menubar-clock" data-clock>—</div>
   </div>
 </header>
@@ -257,16 +271,43 @@
   .accent-swatch--purple { background: var(--color-purple); }
 
   .menubar-status {
+    display: inline-flex;
+    align-items: center;
+    height: calc(var(--menubar-h) - 1px);
     color: var(--text-muted);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     letter-spacing: 0.04em;
   }
-  .menubar-status[data-online="true"]::first-letter {
+  .menubar-status::before {
+    content: "\25CF";
+    margin-right: 0.35em;
+    letter-spacing: 0;
+  }
+  .menubar-status[data-online="true"]::before {
     color: var(--color-online);
   }
-  .menubar-status[data-online="false"]::first-letter {
+  .menubar-status[data-online="false"]::before {
     color: var(--color-offline);
+  }
+
+  .status-dropdown {
+    right: 0;
+    left: auto;
+    min-width: 220px;
+  }
+  .status-dropdown-msg {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+  [data-status-online],
+  [data-status-offline] {
+    display: none;
+  }
+  [data-online="true"] ~ .status-dropdown [data-status-online],
+  [data-online="false"] ~ .status-dropdown [data-status-offline] {
+    display: block;
   }
 
   .menubar-clock {

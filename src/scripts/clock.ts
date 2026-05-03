@@ -30,7 +30,7 @@ export function initClock() {
       const hour = parseInt(p.hour, 10) % 24;
       const online = hour >= 9 && hour < 22;
       statusEl.dataset.online = online ? "true" : "false";
-      statusEl.textContent = online ? "\u25CF online" : "\u25CF offline";
+      statusEl.textContent = online ? "online" : "offline";
     }
   };
 
