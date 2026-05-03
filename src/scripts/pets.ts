@@ -60,7 +60,6 @@ const BONE_SIZE = FRAME_SIZE * BONE_SCALE;
 const MOUSE_SCALE = 0.75;
 const MOUSE_SIZE = FRAME_SIZE * MOUSE_SCALE;
 const COOLDOWN = 10000;
-const BAR_H = 8;
 
 interface AnimConfig {
   src: string;
@@ -163,34 +162,21 @@ function toPet(p: Pet) {
 
 export const petsRenderer: CustomRenderer = {
   populate(body) {
-    body.style.padding = "0";
-    body.style.overflow = "hidden";
-    body.style.background = "url(/pets_background.png) center / cover no-repeat";
-    body.style.position = "relative";
+    body.classList.add("pets-view");
 
     const canvas = document.createElement("canvas");
-    canvas.style.cssText = "width:100%;height:100%;display:block;image-rendering:pixelated";
+    canvas.className = "pets-canvas";
     body.appendChild(canvas);
 
-    // ── Toolbar (top-left) ─────────────────────────────
+    // Toolbar
     const toolbar = document.createElement("div");
-    toolbar.dataset.petsToolbar = "";
-    toolbar.style.cssText =
-      "position:absolute;top:6px;left:6px;z-index:1;display:flex;gap:4px;";
+    toolbar.className = "pets-toolbar";
     body.appendChild(toolbar);
 
     const makeToyBtn = (id: string, emoji: string) => {
       const btn = document.createElement("button");
+      btn.className = "window-btn pets-toy-btn";
       btn.dataset[id] = "";
-      btn.style.cssText =
-        "width:30px;height:30px;padding:0;" +
-        "border:1px solid var(--window-border);border-radius:var(--radius);" +
-        "background:var(--window-bg);" +
-        "box-shadow:0 1.5px 0 var(--window-border);cursor:pointer;" +
-        "display:flex;align-items:center;justify-content:center;" +
-        "font-size:14px;line-height:1;" +
-        "transform:translateY(0);" +
-        "transition:transform 100ms ease,box-shadow 100ms ease,opacity 200ms ease;";
       btn.textContent = emoji;
       toolbar.appendChild(btn);
       return btn;
@@ -199,23 +185,16 @@ export const petsRenderer: CustomRenderer = {
     makeToyBtn("boneBtn", "🦴");
     makeToyBtn("mouseBtn", "🐭");
 
-    // ── Stats (top-right) ──────────────────────────────
+    // Stats
     const statsEl = document.createElement("div");
-    statsEl.dataset.petsStats = "";
-    statsEl.style.cssText =
-      "position:absolute;top:6px;right:6px;z-index:1;" +
-      "display:flex;gap:12px;" +
-      "font-family:var(--font-mono);" +
-      "font-size:0.75rem;font-weight:500;line-height:1.3;letter-spacing:0.02em;" +
-      "color:rgba(255,255,255,0.9);text-shadow:0 1px 2px rgba(0,0,0,0.5);" +
-      "pointer-events:none;";
+    statsEl.className = "pets-stats";
     body.appendChild(statsEl);
 
     const makeStatCol = (name: string, dataPrefix: string) => {
       const col = document.createElement("div");
-      col.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:1px;";
+      col.className = "pets-stat-col";
       const label = document.createElement("span");
-      label.style.cssText = "font-size:1rem;";
+      label.className = "pets-stat-name";
       label.textContent = name;
       col.appendChild(label);
       const pets = document.createElement("span");
@@ -232,26 +211,19 @@ export const petsRenderer: CustomRenderer = {
     makeStatCol("cal", "statsCal");
     makeStatCol("weez", "statsWeez");
 
-    // ── Cooldown bars (bottom) ─────────────────────────
+    // Cooldown bars
     const barWrap = document.createElement("div");
-    barWrap.dataset.petsBarWrap = "";
-    barWrap.style.cssText =
-      "position:absolute;bottom:0;left:0;right:0;z-index:1;" +
-      "display:flex;flex-direction:column;pointer-events:none;";
+    barWrap.className = "pets-bar-wrap";
     body.appendChild(barWrap);
 
     const calBar = document.createElement("div");
+    calBar.className = "pets-bar pets-bar--cal";
     calBar.dataset.barCal = "";
-    calBar.style.cssText =
-      `height:${BAR_H}px;width:0%;background:#4a94e6;` +
-      "transition:width 80ms linear;";
     barWrap.appendChild(calBar);
 
     const weezBar = document.createElement("div");
+    weezBar.className = "pets-bar pets-bar--weez";
     weezBar.dataset.barWeez = "";
-    weezBar.style.cssText =
-      `height:${BAR_H}px;width:0%;background:#e05555;` +
-      "transition:width 80ms linear;";
     barWrap.appendChild(weezBar);
   },
 

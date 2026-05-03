@@ -13,7 +13,13 @@ export function showToast(
   el.dataset.type = type;
   el.setAttribute("role", "status");
   el.setAttribute("aria-live", "polite");
-  el.innerHTML = `<span class="toast-bar"></span><span class="toast-msg">${message}</span>`;
+  const bar = document.createElement("span");
+  bar.className = "toast-bar";
+  const msg = document.createElement("span");
+  msg.className = "toast-msg";
+  msg.textContent = message;
+  el.appendChild(bar);
+  el.appendChild(msg);
 
   document.body.appendChild(el);
   active.push(el);

@@ -11,11 +11,20 @@ const VALID_ACTIONS = ["click", "treat"] as const;
 export const GET: APIRoute = async () => {
   const db = getDb();
   const rows = await db.select().from(petClicks);
-  return Response.json(rows);
+  return Response.json(rows, {
+    headers: { "Cache-Control": "public, max-age=30" },
+  });
 };
 
 export const POST: APIRoute = async ({ request }) => {
-  const { petName, action = "click" } = await request.json();
+  let body: Record<string, unknown>;
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const { petName, action = "click" } = body;
   if (!VALID_PETS.includes(petName) || !VALID_ACTIONS.includes(action)) {
     return Response.json({ error: "Invalid request" }, { status: 400 });
   }

@@ -323,15 +323,9 @@ export function initWindowManager(apps: App[]) {
         window.location.reload();
         break;
       case "clear-cache":
-        if (
-          window.confirm(
-            "Clear saved site data (theme, wallpaper, link style) and reload?",
-          )
-        ) {
-          localStorage.clear();
-          sessionStorage.clear();
-          window.location.reload();
-        }
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.reload();
         break;
       case "close-all":
         for (const id of [...windows.keys()]) closeWindow(id);
