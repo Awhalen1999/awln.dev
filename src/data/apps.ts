@@ -284,6 +284,12 @@ const events = `
 
 <ul class="photo-grid">
   <li class="photo-item">
+    <button type="button" class="photo-thumb" data-open-image="/events/colab-demo.avif" data-image-title="Colab Demo Night">
+      <img src="/events/colab-demo.avif" alt="Colab Demo Night" loading="lazy" />
+    </button>
+    <span class="photo-label">Colab Demo Night</span>
+  </li>
+  <li class="photo-item">
     <button type="button" class="photo-thumb" data-open-image="/events/spellbook-demo.avif" data-image-title="Spellbook Demo Night">
       <img src="/events/spellbook-demo.avif" alt="Spellbook Demo Night" loading="lazy" />
     </button>
