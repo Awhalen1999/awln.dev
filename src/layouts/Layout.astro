@@ -7,8 +7,8 @@ interface Props {
 }
 
 const {
-  title = "awln.dev",
-  description = "Alex Whalen — portfolio.",
+  title = "Alex Whalen",
+  description = "awln.dev - personal website",
 } = Astro.props;
 ---
 
@@ -18,7 +18,13 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href="https://awln.dev" />
     <link rel="icon" href="/favicon.ico" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://awln.dev" />
+    <!-- TODO: add og:image (1200x630px preview image) -->
     <title>{title}</title>
     <script is:inline>
       (function() {
