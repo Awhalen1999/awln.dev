@@ -59,8 +59,8 @@ const BONE_SCALE = 1.25;
 const BONE_SIZE = FRAME_SIZE * BONE_SCALE;
 const MOUSE_SCALE = 0.75;
 const MOUSE_SIZE = FRAME_SIZE * MOUSE_SCALE;
-const CLICK_COOLDOWN = 2000;
-const TOY_COOLDOWN = 5000;
+const COOLDOWN = 10000;
+const BAR_H = 8;
 
 interface AnimConfig {
   src: string;
@@ -172,25 +172,26 @@ export const petsRenderer: CustomRenderer = {
     canvas.style.cssText = "width:100%;height:100%;display:block;image-rendering:pixelated";
     body.appendChild(canvas);
 
-    // ── Toolbar ────────────────────────────────────────
+    // ── Toolbar (top-left) ─────────────────────────────
     const toolbar = document.createElement("div");
     toolbar.dataset.petsToolbar = "";
     toolbar.style.cssText =
-      "position:absolute;top:6px;left:6px;z-index:1;" +
-      "display:flex;gap:4px;";
+      "position:absolute;top:6px;left:6px;z-index:1;display:flex;gap:4px;";
     body.appendChild(toolbar);
 
-    const makeToyBtn = (id: string, icon: string) => {
+    const makeToyBtn = (id: string, emoji: string) => {
       const btn = document.createElement("button");
       btn.dataset[id] = "";
       btn.style.cssText =
-        "width:30px;height:30px;padding:0;border:1px solid var(--window-border);" +
-        "border-radius:var(--radius);background:var(--window-bg);" +
+        "width:30px;height:30px;padding:0;" +
+        "border:1px solid var(--window-border);border-radius:var(--radius);" +
+        "background:var(--window-bg);" +
         "box-shadow:0 1.5px 0 var(--window-border);cursor:pointer;" +
         "display:flex;align-items:center;justify-content:center;" +
         "font-size:14px;line-height:1;" +
-        "transform:translateY(0);transition:transform 100ms ease,box-shadow 100ms ease,opacity 200ms ease;";
-      btn.textContent = icon;
+        "transform:translateY(0);" +
+        "transition:transform 100ms ease,box-shadow 100ms ease,opacity 200ms ease;";
+      btn.textContent = emoji;
       toolbar.appendChild(btn);
       return btn;
     };
@@ -198,32 +199,60 @@ export const petsRenderer: CustomRenderer = {
     makeToyBtn("boneBtn", "🦴");
     makeToyBtn("mouseBtn", "🐭");
 
-    // ── Stats bar ──────────────────────────────────────
-    const statsBar = document.createElement("div");
-    statsBar.dataset.petsStats = "";
-    statsBar.style.cssText =
+    // ── Stats (top-right) ──────────────────────────────
+    const statsEl = document.createElement("div");
+    statsEl.dataset.petsStats = "";
+    statsEl.style.cssText =
+      "position:absolute;top:6px;right:6px;z-index:1;" +
+      "display:flex;gap:12px;" +
+      "font-family:var(--font-mono);" +
+      "font-size:0.75rem;font-weight:500;line-height:1.3;letter-spacing:0.02em;" +
+      "color:rgba(255,255,255,0.9);text-shadow:0 1px 2px rgba(0,0,0,0.5);" +
+      "pointer-events:none;";
+    body.appendChild(statsEl);
+
+    const makeStatCol = (name: string, dataPrefix: string) => {
+      const col = document.createElement("div");
+      col.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:1px;";
+      const label = document.createElement("span");
+      label.style.cssText = "font-size:1rem;";
+      label.textContent = name;
+      col.appendChild(label);
+      const pets = document.createElement("span");
+      pets.dataset[dataPrefix + "Pets"] = "";
+      pets.textContent = "0 pets";
+      col.appendChild(pets);
+      const treats = document.createElement("span");
+      treats.dataset[dataPrefix + "Treats"] = "";
+      treats.textContent = "0 treats";
+      col.appendChild(treats);
+      statsEl.appendChild(col);
+    };
+
+    makeStatCol("cal", "statsCal");
+    makeStatCol("weez", "statsWeez");
+
+    // ── Cooldown bars (bottom) ─────────────────────────
+    const barWrap = document.createElement("div");
+    barWrap.dataset.petsBarWrap = "";
+    barWrap.style.cssText =
       "position:absolute;bottom:0;left:0;right:0;z-index:1;" +
-      "display:flex;justify-content:center;gap:16px;" +
-      "padding:5px 12px;" +
-      "background:rgba(255,255,255,0.45);backdrop-filter:blur(6px);" +
-      "font-family:var(--font-mono);font-size:0.6875rem;color:var(--text-muted);" +
-      "letter-spacing:0.02em;pointer-events:none;";
-    body.appendChild(statsBar);
+      "display:flex;flex-direction:column;pointer-events:none;";
+    body.appendChild(barWrap);
 
-    const calStats = document.createElement("span");
-    calStats.dataset.statsCal = "";
-    calStats.textContent = "cal — 0 pets · 0 treats";
-    statsBar.appendChild(calStats);
+    const calBar = document.createElement("div");
+    calBar.dataset.barCal = "";
+    calBar.style.cssText =
+      `height:${BAR_H}px;width:0%;background:#4a94e6;` +
+      "transition:width 80ms linear;";
+    barWrap.appendChild(calBar);
 
-    const sep = document.createElement("span");
-    sep.textContent = "·";
-    sep.style.opacity = "0.4";
-    statsBar.appendChild(sep);
-
-    const weezStats = document.createElement("span");
-    weezStats.dataset.statsWeez = "";
-    weezStats.textContent = "weez — 0 pets · 0 treats";
-    statsBar.appendChild(weezStats);
+    const weezBar = document.createElement("div");
+    weezBar.dataset.barWeez = "";
+    weezBar.style.cssText =
+      `height:${BAR_H}px;width:0%;background:#e05555;` +
+      "transition:width 80ms linear;";
+    barWrap.appendChild(weezBar);
   },
 
   async onReady(state) {
@@ -241,15 +270,20 @@ export const petsRenderer: CustomRenderer = {
       weez: { clicks: 0, treats: 0 },
     };
 
-    const calStatsEl = state.body.querySelector("[data-stats-cal]") as HTMLElement;
-    const weezStatsEl = state.body.querySelector("[data-stats-weez]") as HTMLElement;
+    const calPetsEl = state.body.querySelector("[data-stats-cal-pets]") as HTMLElement;
+    const calTreatsEl = state.body.querySelector("[data-stats-cal-treats]") as HTMLElement;
+    const weezPetsEl = state.body.querySelector("[data-stats-weez-pets]") as HTMLElement;
+    const weezTreatsEl = state.body.querySelector("[data-stats-weez-treats]") as HTMLElement;
+    const calBarEl = state.body.querySelector("[data-bar-cal]") as HTMLElement;
+    const weezBarEl = state.body.querySelector("[data-bar-weez]") as HTMLElement;
 
     function updateStatsDisplay() {
-      calStatsEl.textContent = `cal — ${stats.cal.clicks} pets · ${stats.cal.treats} treats`;
-      weezStatsEl.textContent = `weez — ${stats.weez.clicks} pets · ${stats.weez.treats} treats`;
+      calPetsEl.textContent = `${stats.cal.clicks} pets`;
+      calTreatsEl.textContent = `${stats.cal.treats} treats`;
+      weezPetsEl.textContent = `${stats.weez.clicks} pets`;
+      weezTreatsEl.textContent = `${stats.weez.treats} treats`;
     }
 
-    // Fetch initial stats
     fetch("/api/pets/clicks")
       .then((r) => r.json())
       .then((rows: { petName: string; clicks: number; treats: number }[]) => {
@@ -276,7 +310,6 @@ export const petsRenderer: CustomRenderer = {
       })
     );
 
-    // Draw order: larger pets behind, smaller in front
     const drawOrder = [...pets].sort((a, b) => b.scale - a.scale);
 
     const hearts: Heart[] = [];
@@ -287,10 +320,23 @@ export const petsRenderer: CustomRenderer = {
     let raf = 0;
     let lastTime = 0;
 
-    // ── Cooldowns ──────────────────────────────────────
-    let lastClickTime = 0;
-    let lastBoneTime = 0;
-    let lastMouseTime = 0;
+    // ── Unified cooldowns ──────────────────────────────
+    let calCooldownEnd = 0;
+    let weezCooldownEnd = 0;
+
+    function isOnCooldown(petName: string): boolean {
+      const now = performance.now();
+      return petName === "cal" ? now < calCooldownEnd : now < weezCooldownEnd;
+    }
+
+    function startCooldown(petName: string) {
+      const end = performance.now() + COOLDOWN;
+      if (petName === "cal") calCooldownEnd = end;
+      else weezCooldownEnd = end;
+    }
+
+    const boneBtn = state.body.querySelector("[data-bone-btn]") as HTMLButtonElement;
+    const mouseBtn = state.body.querySelector("[data-mouse-btn]") as HTMLButtonElement;
 
     function syncSize() {
       const dpr = window.devicePixelRatio || 1;
@@ -320,32 +366,18 @@ export const petsRenderer: CustomRenderer = {
       return null;
     }
 
-    // ── Button setup ────────────────────────────────────
-
-    const boneBtn = state.body.querySelector("[data-bone-btn]") as HTMLButtonElement;
-    const mouseBtn = state.body.querySelector("[data-mouse-btn]") as HTMLButtonElement;
-
-    function setCooldownStyle(btn: HTMLButtonElement, onCooldown: boolean) {
-      btn.style.opacity = onCooldown ? "0.4" : "1";
-      btn.style.pointerEvents = onCooldown ? "none" : "auto";
-    }
-
     // ── Input ──────────────────────────────────────────
 
     canvas.addEventListener("mousemove", (e) => {
-      const now = performance.now();
-      const onCooldown = now - lastClickTime < CLICK_COOLDOWN;
-      canvas.style.cursor = !onCooldown && hitTest(e.clientX, e.clientY) ? "grab" : "";
+      const hit = hitTest(e.clientX, e.clientY);
+      canvas.style.cursor = hit && !isOnCooldown(hit.name) ? "grab" : "";
     });
 
     canvas.addEventListener("click", (e) => {
-      const now = performance.now();
-      if (now - lastClickTime < CLICK_COOLDOWN) return;
-
       const hit = hitTest(e.clientX, e.clientY);
-      if (!hit) return;
+      if (!hit || isOnCooldown(hit.name)) return;
 
-      lastClickTime = now;
+      startCooldown(hit.name);
       const savedTarget = hit.targetX;
       toPet(hit);
       hit.targetX = savedTarget;
@@ -364,13 +396,11 @@ export const petsRenderer: CustomRenderer = {
       }
     });
 
-    // ── Bone button ─────────────────────────────────────
+    // ── Toy buttons ─────────────────────────────────────
 
     boneBtn.addEventListener("click", () => {
-      const now = performance.now();
-      if (bone || now - lastBoneTime < TOY_COOLDOWN) return;
-      lastBoneTime = now;
-      setCooldownStyle(boneBtn, true);
+      if (bone || isOnCooldown("cal")) return;
+      startCooldown("cal");
       const margin = BONE_SIZE;
       bone = {
         x: margin + Math.random() * (viewW - margin * 2),
@@ -381,10 +411,8 @@ export const petsRenderer: CustomRenderer = {
     });
 
     mouseBtn.addEventListener("click", () => {
-      const now = performance.now();
-      if (mouse || now - lastMouseTime < TOY_COOLDOWN) return;
-      lastMouseTime = now;
-      setCooldownStyle(mouseBtn, true);
+      if (mouse || isOnCooldown("weez")) return;
+      startCooldown("weez");
       const margin = MOUSE_SIZE;
       mouse = {
         x: margin + Math.random() * (viewW - margin * 2),
@@ -397,10 +425,19 @@ export const petsRenderer: CustomRenderer = {
     // ── Loop ───────────────────────────────────────────
 
     function update(dt: number) {
-      // Update cooldown visuals
+      // Update cooldown bars + button states
       const now = performance.now();
-      setCooldownStyle(boneBtn, bone !== null || now - lastBoneTime < TOY_COOLDOWN);
-      setCooldownStyle(mouseBtn, mouse !== null || now - lastMouseTime < TOY_COOLDOWN);
+      const calRemain = Math.max(0, calCooldownEnd - now);
+      const weezRemain = Math.max(0, weezCooldownEnd - now);
+      calBarEl.style.width = `${(calRemain / COOLDOWN) * 100}%`;
+      weezBarEl.style.width = `${(weezRemain / COOLDOWN) * 100}%`;
+
+      const calCd = calRemain > 0;
+      const weezCd = weezRemain > 0;
+      boneBtn.style.opacity = calCd ? "0.4" : "1";
+      boneBtn.style.pointerEvents = calCd ? "none" : "auto";
+      mouseBtn.style.opacity = weezCd ? "0.4" : "1";
+      mouseBtn.style.pointerEvents = weezCd ? "none" : "auto";
 
       for (const p of pets) {
         const anim = p.anims[p.state];
@@ -477,7 +514,6 @@ export const petsRenderer: CustomRenderer = {
                 opacity: 1,
                 age: 0,
               });
-              // Track treat
               if (petName === "cal" || petName === "weez") {
                 stats[petName].treats++;
                 updateStatsDisplay();
@@ -556,7 +592,6 @@ export const petsRenderer: CustomRenderer = {
 
     raf = requestAnimationFrame(loop);
 
-    // Cleanup when window is closed
     new MutationObserver((_, obs) => {
       if (!document.contains(canvas)) {
         cancelAnimationFrame(raf);
