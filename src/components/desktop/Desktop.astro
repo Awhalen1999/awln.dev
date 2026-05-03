@@ -17,6 +17,11 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
   <CommandPalette client:only="preact" />
 </div>
 
+<script>
+  import { initScreensaver } from "../../scripts/screensaver";
+  initScreensaver();
+</script>
+
 <style>
   .desktop {
     position: fixed;
