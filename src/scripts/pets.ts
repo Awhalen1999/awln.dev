@@ -40,6 +40,11 @@ interface Pet {
 
 type AnimState = "idle" | "walk" | "pet";
 
+interface PetStats {
+  cal: { clicks: number; treats: number };
+  weez: { clicks: number; treats: number };
+}
+
 // ── Config ───────────────────────────────────────────────
 
 const FRAME_SIZE = 64;
@@ -54,6 +59,8 @@ const BONE_SCALE = 1.25;
 const BONE_SIZE = FRAME_SIZE * BONE_SCALE;
 const MOUSE_SCALE = 0.75;
 const MOUSE_SIZE = FRAME_SIZE * MOUSE_SCALE;
+const CLICK_COOLDOWN = 2000;
+const TOY_COOLDOWN = 5000;
 
 interface AnimConfig {
   src: string;
@@ -114,6 +121,14 @@ function drawSize(pet: Pet) {
   return FRAME_SIZE * pet.scale;
 }
 
+function trackAction(petName: string, action: "click" | "treat") {
+  fetch("/api/pets/clicks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ petName, action }),
+  });
+}
+
 // ── State transitions ───────────────────────────────────
 
 function resetAnim(p: Pet) {
@@ -157,23 +172,58 @@ export const petsRenderer: CustomRenderer = {
     canvas.style.cssText = "width:100%;height:100%;display:block;image-rendering:pixelated";
     body.appendChild(canvas);
 
-    const btnStyle =
-      "width:26px;height:26px;padding:0;border:none;" +
-      "border-radius:6px;background:rgba(255,255,255,0.55);cursor:pointer;" +
-      "font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;" +
-      "backdrop-filter:blur(4px);";
+    // ── Toolbar ────────────────────────────────────────
+    const toolbar = document.createElement("div");
+    toolbar.dataset.petsToolbar = "";
+    toolbar.style.cssText =
+      "position:absolute;top:6px;left:6px;z-index:1;" +
+      "display:flex;gap:4px;";
+    body.appendChild(toolbar);
 
-    const boneBtn = document.createElement("button");
-    boneBtn.dataset.boneBtn = "";
-    boneBtn.textContent = "🦴";
-    boneBtn.style.cssText = "position:absolute;top:6px;left:6px;z-index:1;" + btnStyle;
-    body.appendChild(boneBtn);
+    const makeToyBtn = (id: string, icon: string) => {
+      const btn = document.createElement("button");
+      btn.dataset[id] = "";
+      btn.style.cssText =
+        "width:30px;height:30px;padding:0;border:1px solid var(--window-border);" +
+        "border-radius:var(--radius);background:var(--window-bg);" +
+        "box-shadow:0 1.5px 0 var(--window-border);cursor:pointer;" +
+        "display:flex;align-items:center;justify-content:center;" +
+        "font-size:14px;line-height:1;" +
+        "transform:translateY(0);transition:transform 100ms ease,box-shadow 100ms ease,opacity 200ms ease;";
+      btn.textContent = icon;
+      toolbar.appendChild(btn);
+      return btn;
+    };
 
-    const mouseBtn = document.createElement("button");
-    mouseBtn.dataset.mouseBtn = "";
-    mouseBtn.textContent = "🐭";
-    mouseBtn.style.cssText = "position:absolute;top:6px;left:36px;z-index:1;" + btnStyle;
-    body.appendChild(mouseBtn);
+    makeToyBtn("boneBtn", "🦴");
+    makeToyBtn("mouseBtn", "🐭");
+
+    // ── Stats bar ──────────────────────────────────────
+    const statsBar = document.createElement("div");
+    statsBar.dataset.petsStats = "";
+    statsBar.style.cssText =
+      "position:absolute;bottom:0;left:0;right:0;z-index:1;" +
+      "display:flex;justify-content:center;gap:16px;" +
+      "padding:5px 12px;" +
+      "background:rgba(255,255,255,0.45);backdrop-filter:blur(6px);" +
+      "font-family:var(--font-mono);font-size:0.6875rem;color:var(--text-muted);" +
+      "letter-spacing:0.02em;pointer-events:none;";
+    body.appendChild(statsBar);
+
+    const calStats = document.createElement("span");
+    calStats.dataset.statsCal = "";
+    calStats.textContent = "cal — 0 pets · 0 treats";
+    statsBar.appendChild(calStats);
+
+    const sep = document.createElement("span");
+    sep.textContent = "·";
+    sep.style.opacity = "0.4";
+    statsBar.appendChild(sep);
+
+    const weezStats = document.createElement("span");
+    weezStats.dataset.statsWeez = "";
+    weezStats.textContent = "weez — 0 pets · 0 treats";
+    statsBar.appendChild(weezStats);
   },
 
   async onReady(state) {
@@ -184,6 +234,33 @@ export const petsRenderer: CustomRenderer = {
     const heartImg = await loadImage("/sprites/heart.png");
     const boneImg = await loadImage("/sprites/bone.png");
     const mouseImg = await loadImage("/sprites/mouse.png");
+
+    // ── Stats ──────────────────────────────────────────
+    const stats: PetStats = {
+      cal: { clicks: 0, treats: 0 },
+      weez: { clicks: 0, treats: 0 },
+    };
+
+    const calStatsEl = state.body.querySelector("[data-stats-cal]") as HTMLElement;
+    const weezStatsEl = state.body.querySelector("[data-stats-weez]") as HTMLElement;
+
+    function updateStatsDisplay() {
+      calStatsEl.textContent = `cal — ${stats.cal.clicks} pets · ${stats.cal.treats} treats`;
+      weezStatsEl.textContent = `weez — ${stats.weez.clicks} pets · ${stats.weez.treats} treats`;
+    }
+
+    // Fetch initial stats
+    fetch("/api/pets/clicks")
+      .then((r) => r.json())
+      .then((rows: { petName: string; clicks: number; treats: number }[]) => {
+        for (const row of rows) {
+          if (row.petName === "cal" || row.petName === "weez") {
+            stats[row.petName] = { clicks: row.clicks, treats: row.treats };
+          }
+        }
+        updateStatsDisplay();
+      })
+      .catch(() => {});
 
     // Load all pets
     const pets: Pet[] = await Promise.all(
@@ -209,6 +286,11 @@ export const petsRenderer: CustomRenderer = {
     let viewH = 0;
     let raf = 0;
     let lastTime = 0;
+
+    // ── Cooldowns ──────────────────────────────────────
+    let lastClickTime = 0;
+    let lastBoneTime = 0;
+    let lastMouseTime = 0;
 
     function syncSize() {
       const dpr = window.devicePixelRatio || 1;
@@ -238,15 +320,32 @@ export const petsRenderer: CustomRenderer = {
       return null;
     }
 
+    // ── Button setup ────────────────────────────────────
+
+    const boneBtn = state.body.querySelector("[data-bone-btn]") as HTMLButtonElement;
+    const mouseBtn = state.body.querySelector("[data-mouse-btn]") as HTMLButtonElement;
+
+    function setCooldownStyle(btn: HTMLButtonElement, onCooldown: boolean) {
+      btn.style.opacity = onCooldown ? "0.4" : "1";
+      btn.style.pointerEvents = onCooldown ? "none" : "auto";
+    }
+
     // ── Input ──────────────────────────────────────────
 
     canvas.addEventListener("mousemove", (e) => {
-      canvas.style.cursor = hitTest(e.clientX, e.clientY) ? "grab" : "";
+      const now = performance.now();
+      const onCooldown = now - lastClickTime < CLICK_COOLDOWN;
+      canvas.style.cursor = !onCooldown && hitTest(e.clientX, e.clientY) ? "grab" : "";
     });
 
     canvas.addEventListener("click", (e) => {
+      const now = performance.now();
+      if (now - lastClickTime < CLICK_COOLDOWN) return;
+
       const hit = hitTest(e.clientX, e.clientY);
       if (!hit) return;
+
+      lastClickTime = now;
       const savedTarget = hit.targetX;
       toPet(hit);
       hit.targetX = savedTarget;
@@ -257,13 +356,21 @@ export const petsRenderer: CustomRenderer = {
         opacity: 1,
         age: 0,
       });
+
+      if (hit.name === "cal" || hit.name === "weez") {
+        stats[hit.name].clicks++;
+        updateStatsDisplay();
+        trackAction(hit.name, "click");
+      }
     });
 
     // ── Bone button ─────────────────────────────────────
 
-    const boneBtn = state.body.querySelector("[data-bone-btn]") as HTMLButtonElement;
     boneBtn.addEventListener("click", () => {
-      if (bone) return;
+      const now = performance.now();
+      if (bone || now - lastBoneTime < TOY_COOLDOWN) return;
+      lastBoneTime = now;
+      setCooldownStyle(boneBtn, true);
       const margin = BONE_SIZE;
       bone = {
         x: margin + Math.random() * (viewW - margin * 2),
@@ -273,9 +380,11 @@ export const petsRenderer: CustomRenderer = {
       };
     });
 
-    const mouseBtn = state.body.querySelector("[data-mouse-btn]") as HTMLButtonElement;
     mouseBtn.addEventListener("click", () => {
-      if (mouse) return;
+      const now = performance.now();
+      if (mouse || now - lastMouseTime < TOY_COOLDOWN) return;
+      lastMouseTime = now;
+      setCooldownStyle(mouseBtn, true);
       const margin = MOUSE_SIZE;
       mouse = {
         x: margin + Math.random() * (viewW - margin * 2),
@@ -288,6 +397,11 @@ export const petsRenderer: CustomRenderer = {
     // ── Loop ───────────────────────────────────────────
 
     function update(dt: number) {
+      // Update cooldown visuals
+      const now = performance.now();
+      setCooldownStyle(boneBtn, bone !== null || now - lastBoneTime < TOY_COOLDOWN);
+      setCooldownStyle(mouseBtn, mouse !== null || now - lastMouseTime < TOY_COOLDOWN);
+
       for (const p of pets) {
         const anim = p.anims[p.state];
         p.frameTick += dt;
@@ -302,7 +416,6 @@ export const petsRenderer: CustomRenderer = {
           if (p.x <= 0) { p.x = 0; p.dir = 1; }
           if (p.x >= maxX) { p.x = maxX; p.dir = -1; }
           if (p.targetX !== null) {
-            // Walking toward bone — don't use timer, keep going
             const calCenter = p.x + drawSize(p) / 2;
             const targetCenter = p.targetX + drawSize(p) / 2;
             p.dir = targetCenter > calCenter ? 1 : -1;
@@ -314,7 +427,6 @@ export const petsRenderer: CustomRenderer = {
           p.petTimer += dt;
           if (p.petTimer >= PET_DURATION) {
             if (p.targetX !== null) {
-              // Resume walking to toy
               const savedTarget = p.targetX;
               const petCenter = p.x + drawSize(p) / 2;
               const targetCenter = savedTarget + drawSize(p) / 2;
@@ -365,6 +477,12 @@ export const petsRenderer: CustomRenderer = {
                 opacity: 1,
                 age: 0,
               });
+              // Track treat
+              if (petName === "cal" || petName === "weez") {
+                stats[petName].treats++;
+                updateStatsDisplay();
+                trackAction(petName, "treat");
+              }
               return null;
             }
           }

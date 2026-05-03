@@ -1,2 +1,8 @@
 name = "awln-dev"
 compatibility_date = "2026-04-30"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "awln-db"
+database_id = "7d3fb7fd-cf8c-45b1-b946-be0e85ea82f0"
+migrations_dir = "drizzle"
