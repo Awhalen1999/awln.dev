@@ -1,4 +1,4 @@
-const IDLE_TIMEOUT = 30_000;
+const IDLE_TIMEOUT = 45_000;
 const FACE_SIZE = 150;
 const SPEED = 2;
 const FADE_MS = 300;
