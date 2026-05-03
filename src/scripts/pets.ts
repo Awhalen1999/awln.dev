@@ -1,4 +1,5 @@
 import type { CustomRenderer } from "./window-manager";
+import { track } from "./analytics";
 
 // ── Types ────────────────────────────────────────────────
 
@@ -126,6 +127,7 @@ function trackAction(petName: string, action: "click" | "treat") {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ petName, action }),
   });
+  track("pet_interacted", { pet_name: petName, action });
 }
 
 // ── State transitions ───────────────────────────────────
