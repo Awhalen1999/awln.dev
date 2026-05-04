@@ -201,11 +201,11 @@ export const petsRenderer: CustomRenderer = {
       col.appendChild(label);
       const pets = document.createElement("span");
       pets.dataset[dataPrefix + "Pets"] = "";
-      pets.textContent = "0 pets";
+      pets.textContent = "— pets";
       col.appendChild(pets);
       const treats = document.createElement("span");
       treats.dataset[dataPrefix + "Treats"] = "";
-      treats.textContent = "0 treats";
+      treats.textContent = "— treats";
       col.appendChild(treats);
       statsEl.appendChild(col);
     };
