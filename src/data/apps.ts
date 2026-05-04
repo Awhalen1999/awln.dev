@@ -196,7 +196,7 @@ const help = `
 <p>Quick reference for finding your way around.</p>
 
 <div class="subhead">About</div>
-<p>Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> and TypeScript. Source code lives on <a href="https://github.com/Awhalen1999" target="_blank" rel="noopener">GitHub</a>.</p>
+<p>Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> and TypeScript. Source code lives on <a href="https://github.com/Awhalen1999/awln.dev" target="_blank" rel="noopener">GitHub</a>.</p>
 
 <div class="subhead">Keyboard</div>
 <ul class="entry-list">
