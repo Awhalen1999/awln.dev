@@ -26,6 +26,7 @@ export const WALLPAPERS: { key: string; id: string; name: string }[] = [
   { key: "4", id: "wallpaper4", name: "Bliss (Windows XP)" },
   { key: "5", id: "wallpaper5", name: "Hello Light" },
   { key: "6", id: "wallpaper6", name: "Hello Dark" },
+  { key: "7", id: "wallpaper7", name: "Wallpaper (wallpaper)" },
 ];
 
 /* ── Helpers ───────────────────────────────────────────── */

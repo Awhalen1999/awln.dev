@@ -378,6 +378,10 @@ const siteSettings = `
       <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper6.png)"></span>
       <span class="wallpaper-name">Hello Dark</span>
     </button>
+    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper7">
+      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper7.png)"></span>
+      <span class="wallpaper-name">Wallpaper (wallpaper)</span>
+    </button>
   </div>
 </section>
 

@@ -28,7 +28,7 @@
   --window-border: #bfc1b7;
 
   /* Desktop */
-  --wallpaper: #e6d3ad;
+  --wallpaper: var(--accent);
 
   /* Desktop icon labels */
   --icon-label-bg: rgba(253, 248, 235, 0.55);
@@ -68,7 +68,7 @@
   --window-bg-alt: #333130;
   --window-border: #4a443e;
 
-  --wallpaper: #141210;
+  --wallpaper: var(--accent);
 
   --menubar-bg: #333130;
 
