@@ -411,7 +411,7 @@ a[target="_blank"]::after {
 .toast {
   position: fixed;
   right: 24px;
-  bottom: calc(24px + var(--toast-offset, 0px));
+  top: calc(var(--menubar-h) + 12px + var(--toast-offset, 0px));
   z-index: 10000;
   display: flex;
   flex-direction: column;
@@ -455,7 +455,7 @@ a[target="_blank"]::after {
 @keyframes toast-enter {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
@@ -469,7 +469,7 @@ a[target="_blank"]::after {
   }
   to {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(-8px);
   }
 }
 

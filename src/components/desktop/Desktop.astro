@@ -15,6 +15,9 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
     <WindowHost />
   </div>
   <CommandPalette client:only="preact" />
+  <div class="me-sprite" data-me-sprite>
+    <img src="/me.png" alt="" width="128" height="128" draggable="false" />
+  </div>
 </div>
 
 <script>
@@ -42,5 +45,37 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
     position: relative;
     flex: 1;
     min-height: 0;
+  }
+  .me-sprite {
+    position: fixed;
+    bottom: -55px;
+    right: 48px;
+    width: 128px;
+    height: 128px;
+    z-index: 9999;
+    cursor: pointer;
+    transition: bottom 0.5s cubic-bezier(0.22, 1.6, 0.36, 1);
+    image-rendering: pixelated;
+  }
+  .me-sprite:hover {
+    bottom: -8px;
+  }
+  .me-sprite:active {
+    bottom: -10px;
+    transition-duration: 0.1s;
+  }
+  .me-sprite img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    transition: transform 0.5s cubic-bezier(0.22, 1.6, 0.36, 1);
+  }
+  .me-sprite:hover img {
+    transform: scale(1.05);
+  }
+  .me-sprite:active img {
+    transform: scale(0.95);
+    transition-duration: 0.1s;
   }
 </style>
