@@ -46,16 +46,17 @@ function createOverlay() {
 function fadeUI(out: boolean) {
   const menubar = document.querySelector<HTMLElement>("[data-menubar]");
   const surface = document.querySelector<HTMLElement>(".desktop-surface");
+  const sprite = document.querySelector<HTMLElement>("[data-me-sprite]");
   if (!menubar || !surface) return;
 
-  for (const el of [menubar, surface]) {
+  for (const el of [menubar, surface, sprite].filter(Boolean) as HTMLElement[]) {
     el.style.transition = `opacity ${FADE_MS}ms ease`;
     el.style.opacity = out ? "0" : "1";
   }
 
   if (!out) {
     setTimeout(() => {
-      for (const el of [menubar, surface]) {
+      for (const el of [menubar, surface, sprite].filter(Boolean) as HTMLElement[]) {
         el.style.transition = "";
         el.style.opacity = "";
       }
