@@ -41,27 +41,35 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
     "ok fine look at the source code",
     "this is better than my resume",
     "professional computer toucher",
-    "¯\\_(ツ)_/¯",
+    "¯\_(ツ)_/¯",
     "git push --force origin main",
     "computer...",
     "i mass mass amounts of mass to mass",
     "the cloud is just someone else's computer",
     "ctrl+z",
     "divs all the way down",
-    "computer - execute unlimited wrist pain"
+    "computer - execute unlimited wrist pain",
+    "i mass mass amounts of mass to mass pt 2",
+    "why are you still hovering",
+    "welcome to the bottom right corner",
+    "i should go outside",
+    "em—dashed up",
   ];
 
-  let lastLine = -1;
+  // shuffle bag — every line shown once before any repeats
+  let bag: number[] = [];
   const bubble = document.querySelector<HTMLElement>("[data-speech-bubble]");
   const sprite = document.querySelector<HTMLElement>("[data-me-sprite]");
 
   function pickLine(): string {
-    let idx: number;
-    do {
-      idx = Math.floor(Math.random() * LINES.length);
-    } while (idx === lastLine && LINES.length > 1);
-    lastLine = idx;
-    return LINES[idx];
+    if (bag.length === 0) {
+      bag = Array.from({ length: LINES.length }, (_, i) => i);
+      for (let i = bag.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [bag[i], bag[j]] = [bag[j], bag[i]];
+      }
+    }
+    return LINES[bag.pop()!];
   }
 
   sprite?.addEventListener("mouseenter", () => {
