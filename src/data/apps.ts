@@ -353,7 +353,7 @@ const siteSettings = `
   <p class="settings-desc">Wallpaper</p>
   <div class="wallpaper-grid">
     <button type="button" class="wallpaper-thumb" data-wallpaper="default">
-      <span class="wallpaper-preview" style="background-color:var(--wallpaper)"></span>
+      <span class="wallpaper-preview wallpaper-preview--default"></span>
       <span class="wallpaper-name">Default</span>
     </button>
     <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper2">

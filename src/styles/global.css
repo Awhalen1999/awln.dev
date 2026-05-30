@@ -23,12 +23,14 @@
   --color-error: #d6412f;
 
   /* Surfaces */
-  --window-bg: #fdfdf8;
+  --window-bg: #fdfdfd;
   --window-bg-alt: #eeefe9;
   --window-border: #bfc1b7;
 
-  /* Desktop */
-  --wallpaper: var(--accent);
+  /* Desktop  */
+  --wallpaper:  #d8d8d8;
+  --grid-line: rgba(0, 0, 0, 0.08);
+  --grid-size: 22px; 
 
   /* Desktop icon labels */
   --icon-label-bg: rgba(253, 248, 235, 0.55);
@@ -68,7 +70,8 @@
   --window-bg-alt: #333130;
   --window-border: #4a443e;
 
-  --wallpaper: var(--accent);
+  --wallpaper: #15130f;
+  --grid-line: rgba(255, 255, 255, 0.06);
 
   --menubar-bg: #333130;
 
@@ -786,6 +789,14 @@ a[target="_blank"]::after {
   transition:
     border-color var(--dur-fast) ease,
     border-width var(--dur-fast) ease;
+}
+.wallpaper-preview--default {
+  background-color: var(--wallpaper);
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 12px 12px;
+  background-repeat: repeat;
 }
 .wallpaper-thumb:hover .wallpaper-preview {
   border-color: var(--accent);

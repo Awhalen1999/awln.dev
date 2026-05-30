@@ -84,11 +84,14 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
     display: flex;
     flex-direction: column;
     background-color: var(--wallpaper);
-    background-image: var(--paper-noise);
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
     background-repeat: repeat;
-    background-size: 200px 200px;
   }
   .desktop[data-wallpaper] {
+    background-image: none;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
