@@ -203,10 +203,9 @@ a[target="_blank"]::after {
   pointer-events: none;
 }
 
-/* Pen toggle active state */
-.menubar-pen[data-active] {
-  background: var(--accent);
-  color: var(--accent-ink);
+/* Pen toggle state — bold label when drawing mode is active */
+.desktop[data-pen-active] [data-pen-toggle] {
+  font-weight: 800;
 }
 
 /* Window chrome — defined globally because windows are cloned from a

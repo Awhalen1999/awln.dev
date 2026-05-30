@@ -56,11 +56,13 @@
         </div>
       </div>
       <button type="button" class="menubar-menu" tabindex="-1" data-open-app="help">Help</button>
-      <button type="button" class="menubar-menu menubar-pen" tabindex="-1" data-pen-toggle>Pen</button>
       <button type="button" class="menubar-menu" data-palette-trigger aria-label="Command palette">Search<span class="palette-hint">⌘K</span></button>
     </nav>
   </div>
   <div class="menubar-right">
+    <button type="button" class="menubar-menu" data-pen-toggle aria-label="Toggle drawing mode">
+      ✏️ Draw
+    </button>
     <div class="menubar-dropdown-wrapper">
       <button type="button" class="menubar-status" data-status data-menu-trigger="status" tabindex="-1" aria-live="polite">—</button>
       <div class="menubar-dropdown status-dropdown" data-menu-dropdown="status">
@@ -90,10 +92,8 @@
   initMenuDropdowns();
   initClock();
 
-  const penBtn = document.querySelector<HTMLElement>("[data-pen-toggle]");
-  penBtn?.addEventListener("click", () => {
-    const on = togglePen();
-    penBtn.toggleAttribute("data-active", on);
+  document.querySelector<HTMLElement>("[data-pen-toggle]")?.addEventListener("click", () => {
+    togglePen();
   });
 
   document
@@ -346,7 +346,8 @@
 
   @media (max-width: 700px) {
     .menubar-menus,
-    .menubar-status {
+    .menubar-status,
+    [data-pen-toggle] {
       display: none;
     }
   }
