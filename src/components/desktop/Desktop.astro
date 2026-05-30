@@ -11,6 +11,7 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
 <div class="desktop" data-desktop>
   <MenuBar />
   <div class="desktop-surface">
+    <canvas class="draw-canvas" data-draw-canvas aria-hidden="true"></canvas>
     <DesktopIcons apps={desktopApps} />
     <WindowHost />
   </div>
@@ -23,7 +24,9 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
 
 <script>
   import { initScreensaver } from "../../scripts/screensaver";
+  import { initDrawing } from "../../scripts/drawing";
   initScreensaver();
+  initDrawing();
 
   const LINES = [
     "sup",

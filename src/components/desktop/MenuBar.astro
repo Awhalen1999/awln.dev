@@ -20,6 +20,10 @@
             <span class="menubar-shortcut">Cmd+Opt+C</span>
           </button>
           <hr class="menubar-dropdown-sep" />
+          <button type="button" class="menubar-dropdown-item" data-action="draw:clear">
+            <span>Clear drawings</span>
+          </button>
+          <hr class="menubar-dropdown-sep" />
           <button type="button" class="menubar-dropdown-item" data-action="wm:close-focused">
             <span>Close</span>
             <span class="menubar-shortcut">Cmd+Opt+W</span>
@@ -52,6 +56,7 @@
         </div>
       </div>
       <button type="button" class="menubar-menu" tabindex="-1" data-open-app="help">Help</button>
+      <button type="button" class="menubar-menu menubar-pen" tabindex="-1" data-pen-toggle>Pen</button>
       <button type="button" class="menubar-menu" data-palette-trigger aria-label="Command palette">Search<span class="palette-hint">⌘K</span></button>
     </nav>
   </div>
@@ -80,9 +85,23 @@
   import { initClock } from "../../scripts/clock";
   import { setTheme, setAccent, currentTheme, currentAccent } from "../../scripts/settings";
   import { showToast } from "../../scripts/toast";
+  import { togglePen, clearDrawings } from "../../scripts/drawing";
 
   initMenuDropdowns();
   initClock();
+
+  const penBtn = document.querySelector<HTMLElement>("[data-pen-toggle]");
+  penBtn?.addEventListener("click", () => {
+    const on = togglePen();
+    penBtn.toggleAttribute("data-active", on);
+  });
+
+  document
+    .querySelector<HTMLElement>('[data-action="draw:clear"]')
+    ?.addEventListener("click", () => {
+      clearDrawings();
+      showToast("Drawings cleared", "success");
+    });
 
   document.querySelector("[data-palette-trigger]")?.addEventListener("click", () => {
     document.dispatchEvent(new CustomEvent("palette:toggle"));

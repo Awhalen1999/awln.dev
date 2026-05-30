@@ -182,6 +182,33 @@ a[target="_blank"]::after {
   display: block;
 }
 
+/* Drawing canvas — sits above the desktop bg/grid, below icons + windows.
+   Captures pointer events only when [data-pen-active] is on the desktop. */
+.draw-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.desktop[data-pen-active] .draw-canvas {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+.desktop[data-pen-active] .desktop-icons,
+.desktop[data-pen-active] .desktop-icon,
+.desktop[data-pen-active] .window,
+.desktop[data-pen-active] .me-sprite {
+  pointer-events: none;
+}
+
+/* Pen toggle active state */
+.menubar-pen[data-active] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
 /* Window chrome — defined globally because windows are cloned from a
    <template> at runtime and aren't part of Astro's scoped-style tree. */
 
