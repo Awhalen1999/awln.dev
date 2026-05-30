@@ -1,1 +1,0 @@
-ALTER TABLE `pet_clicks` ADD `treats` integer DEFAULT 0 NOT NULL;

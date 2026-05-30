@@ -316,8 +316,6 @@ const events = `
 </ul>
 `.trim();
 
-const pets = "";
-
 const siteSettings = `
 <h1>Settings</h1>
 
@@ -481,16 +479,6 @@ export const APPS: App[] = [
     icon: "/icons/camera.svg",
     defaultSize: { w: 850, h: 550 },
     content: events,
-  },
-  {
-    id: "pets",
-    title: "Pets",
-    kind: "folder",
-    iconLabel: "pets",
-    icon: "/icons/cat.svg",
-    defaultSize: { w: 700, h: 500 },
-    resizable: false,
-    content: pets,
   },
   {
     id: "site-settings",
