@@ -117,7 +117,7 @@ const tools = `
 
 <div class="subhead">Hardware</div>
 <ul class="tool-list">
-  <li><strong>Laptop</strong> <span class="muted">Macbook Pro 13 M1</span></li>
+  <li><strong>Laptop</strong> <span class="muted">Macbook Pro M5</span></li>
   <li><strong>Mouse</strong> <span class="muted">Logitech MX Master 3</span></li>
   <li><strong>Keyboard</strong> <span class="muted">ProtoArc Ergonomic</span></li>
   <li><strong>Monitor</strong> <span class="muted">LG 32GS95UE-B 32"</span></li>
