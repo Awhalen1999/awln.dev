@@ -92,8 +92,10 @@
   initMenuDropdowns();
   initClock();
 
-  document.querySelector<HTMLElement>("[data-pen-toggle]")?.addEventListener("click", () => {
-    togglePen();
+  const penToggle = document.querySelector<HTMLElement>("[data-pen-toggle]");
+  penToggle?.addEventListener("click", () => {
+    const active = togglePen();
+    penToggle.textContent = active ? "✏️ Stop drawing" : "✏️ Draw";
   });
 
   document
