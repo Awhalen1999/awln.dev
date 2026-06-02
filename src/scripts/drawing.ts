@@ -12,8 +12,15 @@ let bufferCtx: CanvasRenderingContext2D | null = null;
 let dpr = 1;
 
 let drawing = false;
+let hasDrawing = false;
 let lastX = 0;
 let lastY = 0;
+
+function setHasDrawing(value: boolean) {
+  if (hasDrawing === value) return;
+  hasDrawing = value;
+  document.dispatchEvent(new CustomEvent("draw:has-content", { detail: value }));
+}
 
 function readAccent(): string {
   return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
@@ -89,6 +96,8 @@ function onPointerDown(e: PointerEvent) {
   [lastX, lastY] = localCoords(e);
   dab(lastX, lastY);
   render();
+  setHasDrawing(true);
+  document.dispatchEvent(new CustomEvent("draw:stroke"));
 }
 
 function onPointerMove(e: PointerEvent) {
@@ -110,6 +119,7 @@ export function clearDrawings() {
   bufferCtx.clearRect(0, 0, buffer.width, buffer.height);
   bufferCtx.restore();
   render();
+  setHasDrawing(false);
 }
 
 export function isPenActive(): boolean {

@@ -85,6 +85,6 @@ function updateDynamicLabels(dropdown: HTMLElement) {
   if (label) label.textContent = isMaximized ? "Restore" : "Maximize";
 
   dropdown
-    .querySelectorAll<HTMLElement>("[data-action]")
+    .querySelectorAll<HTMLElement>('[data-action^="wm:"]')
     .forEach((item) => item.toggleAttribute("disabled", !hasWindow));
 }

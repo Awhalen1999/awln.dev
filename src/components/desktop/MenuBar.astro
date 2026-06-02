@@ -60,6 +60,9 @@
     </nav>
   </div>
   <div class="menubar-right">
+    <button type="button" class="menubar-menu" data-send-item aria-label="Send drawing" style="display: none;">
+      ❤️ Send me this artwork
+    </button>
     <button type="button" class="menubar-menu" data-pen-toggle aria-label="Toggle drawing mode">
       ✏️ Draw
     </button>
@@ -88,14 +91,39 @@
   import { setTheme, setAccent, currentTheme, currentAccent } from "../../scripts/settings";
   import { showToast } from "../../scripts/toast";
   import { togglePen, clearDrawings } from "../../scripts/drawing";
+  import { track } from "../../scripts/analytics";
 
   initMenuDropdowns();
   initClock();
 
+  const sendItem = document.querySelector<HTMLButtonElement>("[data-send-item]");
+  let penActive = false;
+  let hasContent = false;
+  let alreadySent = false;
+
+  function updateSendItem() {
+    if (!sendItem) return;
+    sendItem.style.display = penActive ? "" : "none";
+    sendItem.toggleAttribute("disabled", !hasContent || alreadySent);
+  }
+
+  document.addEventListener("draw:has-content", (e) => {
+    hasContent = (e as CustomEvent).detail === true;
+    if (!hasContent) alreadySent = false;
+    updateSendItem();
+  });
+
+  document.addEventListener("draw:stroke", () => {
+    if (!alreadySent) return;
+    alreadySent = false;
+    updateSendItem();
+  });
+
   const penToggle = document.querySelector<HTMLElement>("[data-pen-toggle]");
   penToggle?.addEventListener("click", () => {
-    const active = togglePen();
-    penToggle.textContent = active ? "✏️ Stop drawing" : "✏️ Draw";
+    penActive = togglePen();
+    penToggle.textContent = penActive ? "✏️ Stop drawing" : "✏️ Draw";
+    updateSendItem();
   });
 
   document
@@ -104,6 +132,14 @@
       clearDrawings();
       showToast("Drawings cleared", "success");
     });
+
+  sendItem?.addEventListener("click", () => {
+    if (alreadySent) return;
+    track("drawing_sent");
+    alreadySent = true;
+    updateSendItem();
+    showToast("thanks ❤️", "success");
+  });
 
   document.querySelector("[data-palette-trigger]")?.addEventListener("click", () => {
     document.dispatchEvent(new CustomEvent("palette:toggle"));
@@ -346,10 +382,16 @@
   }
 
 
+  [data-send-item]:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
   @media (max-width: 700px) {
     .menubar-menus,
     .menubar-status,
-    [data-pen-toggle] {
+    [data-pen-toggle],
+    [data-send-item] {
       display: none;
     }
   }
