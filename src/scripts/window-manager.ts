@@ -36,7 +36,25 @@ export function registerRenderer(id: string, renderer: CustomRenderer) {
 
 type WindowAction = "close" | "maximize";
 
-const CASCADE = 24;
+const CASCADE = 36;
+const FAN_RINGS = 3;
+const FAN_QUADRANTS: ReadonlyArray<readonly [number, number]> = [
+  [1, 1],   // SE
+  [-1, 1],  // SW
+  [-1, -1], // NW
+  [1, -1],  // NE
+];
+
+// Each window's offset is measured from the desktop center, not from the
+// previously opened window. Index 0 → center; subsequent windows rotate
+// through the four quadrants, stepping outward one ring every revolution.
+function fanOffset(index: number): { dx: number; dy: number } {
+  if (index === 0) return { dx: 0, dy: 0 };
+  const [sx, sy] = FAN_QUADRANTS[(index - 1) % 4];
+  const ring = (Math.floor((index - 1) / 4) % FAN_RINGS) + 1;
+  return { dx: sx * ring * CASCADE, dy: sy * ring * CASCADE };
+}
+
 const MOBILE_Q = "(max-width: 700px)";
 
 // Single source of truth for the "usable region" inside desktop-surface.
@@ -82,6 +100,7 @@ export function initWindowManager(apps: App[]) {
 
   const mobileMedia = window.matchMedia(MOBILE_Q);
   let nextZ = 10;
+  let cascadeIndex = 0;
   let focusedId: string | null = null;
   let resizeScheduled = false;
 
@@ -199,7 +218,7 @@ export function initWindowManager(apps: App[]) {
     const usableH = s.h - APP_PADDING.top - APP_PADDING.bottom;
     const ww = Math.max(MIN_W, Math.min(options.defaultSize.w, usableW));
     const hh = Math.max(MIN_H, Math.min(options.defaultSize.h, usableH));
-    const openCount = windows.size;
+    const offset = fanOffset(cascadeIndex++);
 
     const state: WindowState = {
       id,
@@ -210,10 +229,10 @@ export function initWindowManager(apps: App[]) {
       titleEl,
       x: mobile
         ? APP_PADDING.left
-        : Math.round((s.w - ww) / 2) + openCount * CASCADE,
+        : Math.round((s.w - ww) / 2) + offset.dx,
       y: mobile
         ? APP_PADDING.top
-        : Math.round((s.h - hh) / 2) - 40 + openCount * CASCADE,
+        : Math.round((s.h - hh) / 2) - 40 + offset.dy,
       w: ww,
       h: hh,
       z: ++nextZ,
@@ -352,6 +371,7 @@ export function initWindowManager(apps: App[]) {
       focusedId = null;
       focusTopWindow();
     }
+    if (windows.size === 0) cascadeIndex = 0;
     updateDockBadge(appId);
   }
 
