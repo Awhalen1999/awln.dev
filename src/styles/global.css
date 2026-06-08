@@ -28,9 +28,10 @@
   --window-border: #bfc1b7;
 
   /* Desktop  */
-  --wallpaper:  #d8d8d8;
+  --wallpaper:  #e7e7e7;
   --grid-line: rgba(0, 0, 0, 0.08);
-  --grid-size: 22px; 
+  --grid-cell: color-mix(in srgb, var(--wallpaper), rgba(0, 0, 0, 0.08));
+  --grid-size: 6px;
 
   /* Desktop icon labels */
   --icon-label-bg: rgba(253, 248, 235, 0.55);
@@ -72,6 +73,7 @@
 
   --wallpaper: #15130f;
   --grid-line: rgba(255, 255, 255, 0.06);
+  --grid-cell: color-mix(in srgb, var(--wallpaper), rgba(255, 255, 255, 0.06));
 
   --menubar-bg: #333130;
 
@@ -841,11 +843,11 @@ a[target="_blank"]::after {
     border-width var(--dur-fast) ease;
 }
 .wallpaper-preview--default {
-  background-color: var(--wallpaper);
+  background-color: var(--grid-cell);
   background-image:
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: 12px 12px;
+    linear-gradient(to right, var(--wallpaper) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--wallpaper) 1px, transparent 1px);
+  background-size: 6px 6px;
   background-repeat: repeat;
 }
 .wallpaper-thumb:hover .wallpaper-preview {
