@@ -127,7 +127,7 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
     bottom: 45px;
     right: 120px;
     background: var(--window-bg);
-    border: 2px solid var(--window-border);
+    border: 1.5px solid var(--window-border);
     color: var(--text);
     font-family: var(--font-mono);
     font-size: 12px;
@@ -147,25 +147,25 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
     content: "";
     position: absolute;
     top: 50%;
-    right: -8px;
-    margin-top: -8px;
+    right: -7px;
+    margin-top: -7px;
     width: 0;
     height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-left: 8px solid var(--window-border);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 7px solid var(--window-border);
   }
   .speech-bubble::before {
     content: "";
     position: absolute;
     top: 50%;
     right: -5px;
-    margin-top: -7px;
+    margin-top: -5px;
     width: 0;
     height: 0;
-    border-top: 7px solid transparent;
-    border-bottom: 7px solid transparent;
-    border-left: 7px solid var(--window-bg);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid var(--window-bg);
     z-index: 1;
   }
   .me-sprite:hover .speech-bubble {
