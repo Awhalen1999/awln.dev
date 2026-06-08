@@ -122,6 +122,22 @@ export function clearDrawings() {
   setHasDrawing(false);
 }
 
+export function exportDrawing(maxW = 800, maxH = 600): { dataUrl: string; w: number; h: number } | null {
+  if (!buffer) return null;
+  const scale = Math.min(1, maxW / buffer.width, maxH / buffer.height);
+  const w = Math.round(buffer.width * scale);
+  const h = Math.round(buffer.height * scale);
+  const out = document.createElement("canvas");
+  out.width = w;
+  out.height = h;
+  const octx = out.getContext("2d");
+  if (!octx) return null;
+  octx.fillStyle = "#ffffff";
+  octx.fillRect(0, 0, w, h);
+  octx.drawImage(buffer, 0, 0, w, h);
+  return { dataUrl: out.toDataURL("image/webp", 0.8), w, h };
+}
+
 export function isPenActive(): boolean {
   return root?.hasAttribute("data-pen-active") ?? false;
 }

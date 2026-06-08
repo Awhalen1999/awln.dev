@@ -90,7 +90,7 @@
   import { initClock } from "../../scripts/clock";
   import { setTheme, setAccent, currentTheme, currentAccent } from "../../scripts/settings";
   import { showToast } from "../../scripts/toast";
-  import { togglePen, clearDrawings } from "../../scripts/drawing";
+  import { togglePen, clearDrawings, exportDrawing } from "../../scripts/drawing";
   import { track } from "../../scripts/analytics";
 
   initMenuDropdowns();
@@ -135,7 +135,8 @@
 
   sendItem?.addEventListener("click", () => {
     if (alreadySent) return;
-    track("drawing_sent");
+    const art = exportDrawing();
+    track("drawing_sent", art ? { artwork: art.dataUrl, w: art.w, h: art.h } : undefined);
     alreadySent = true;
     updateSendItem();
     showToast("thanks ❤️", "success");
