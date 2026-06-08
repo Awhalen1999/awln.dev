@@ -135,8 +135,18 @@
 
   sendItem?.addEventListener("click", () => {
     if (alreadySent) return;
-    const art = exportDrawing();
-    track("drawing_sent", art ? { artwork: art.dataUrl, w: art.w, h: art.h } : undefined);
+    let props: Record<string, unknown> | undefined;
+    try {
+      const art = exportDrawing(600, 400);
+      if (art && art.dataUrl.length < 900_000) {
+        props = { artwork: art.dataUrl, w: art.w, h: art.h, bytes: art.dataUrl.length };
+      } else if (art) {
+        props = { w: art.w, h: art.h, bytes: art.dataUrl.length, dropped: "too_large" };
+      }
+    } catch (err) {
+      props = { export_error: String(err) };
+    }
+    track("drawing_sent", props);
     alreadySent = true;
     updateSendItem();
     showToast("thanks ❤️", "success");
