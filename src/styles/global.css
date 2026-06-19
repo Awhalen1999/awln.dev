@@ -970,12 +970,6 @@ a[target="_blank"]::after {
 [data-surface="glass"] .toast {
   backdrop-filter: blur(var(--glass-blur)) var(--glass-tint);
   -webkit-backdrop-filter: blur(var(--glass-blur)) var(--glass-tint);
-}
-
-[data-surface="glass"] .window,
-[data-surface="glass"] .menubar-dropdown,
-[data-surface="glass"] .palette,
-[data-surface="glass"] .toast {
   box-shadow: var(--glass-rim), var(--glass-drop);
 }
 
