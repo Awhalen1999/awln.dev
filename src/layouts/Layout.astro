@@ -35,6 +35,8 @@ const {
         var l = localStorage.getItem("link-style");
         if (l === "dotted" || l === "none") document.documentElement.setAttribute("data-link-style", l);
         if (localStorage.getItem("surface") === "glass") document.documentElement.setAttribute("data-surface", "glass");
+        var w = localStorage.getItem("wallpaper");
+        if (w && w !== "default") document.documentElement.setAttribute("data-wallpaper", w);
       })();
     </script>
   </head>

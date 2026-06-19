@@ -79,15 +79,8 @@ $linkStyle.subscribe((value) => {
 });
 
 $wallpaper.subscribe((value) => {
-  const desktop = document.querySelector<HTMLElement>("[data-desktop]");
-  if (!desktop) return;
-  if (value && value !== "default") {
-    desktop.style.backgroundImage = `url(/wallpapers/${value}.png)`;
-    desktop.setAttribute("data-wallpaper", value);
-  } else {
-    desktop.style.backgroundImage = "";
-    desktop.removeAttribute("data-wallpaper");
-  }
+  if (value && value !== "default") root.setAttribute("data-wallpaper", value);
+  else root.removeAttribute("data-wallpaper");
   localStorage.setItem("wallpaper", value || "default");
 });
 

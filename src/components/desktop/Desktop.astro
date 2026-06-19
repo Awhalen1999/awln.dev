@@ -87,11 +87,30 @@ const desktopApps = APPS.filter((a) => a.id !== "passwords");
     background-size: var(--grid-size) var(--grid-size);
     background-repeat: repeat;
   }
-  .desktop[data-wallpaper] {
-    background-image: none;
+  /* Wallpaper attribute lives on <html> (set by the inline boot guard in
+     Layout.astro before first paint, then kept in sync by the settings
+     store) so the chosen image paints immediately — no flash of the grid
+     while the JS module loads. :global() because the ancestor is <html>,
+     outside this component. */
+  :global([data-wallpaper]) .desktop {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+  }
+  :global([data-wallpaper="wallpaper2"]) .desktop {
+    background-image: url("/wallpapers/wallpaper2.png");
+  }
+  :global([data-wallpaper="wallpaper3"]) .desktop {
+    background-image: url("/wallpapers/wallpaper3.png");
+  }
+  :global([data-wallpaper="wallpaper4"]) .desktop {
+    background-image: url("/wallpapers/wallpaper4.png");
+  }
+  :global([data-wallpaper="wallpaper5"]) .desktop {
+    background-image: url("/wallpapers/wallpaper5.png");
+  }
+  :global([data-wallpaper="wallpaper6"]) .desktop {
+    background-image: url("/wallpapers/wallpaper6.png");
   }
   .desktop-surface {
     position: relative;

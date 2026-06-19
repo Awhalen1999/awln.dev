@@ -957,9 +957,14 @@ a[target="_blank"]::after {
 }
 
 /* Treat the backdrop behind the top-level floating surfaces only —
-   inner panels keep their translucent var fill (no nested blur). */
+   inner panels keep their translucent var fill (no nested blur).
+
+   The menu bar itself is intentionally NOT blurred: Chrome can't render a
+   backdrop-filter whose ancestor also has one, and the menu-bar dropdowns
+   are DOM children of the bar. Blurring the bar would silently kill the
+   dropdowns' blur. So the bar stays a translucent tint and the dropdowns
+   (theme, status, window) get the real glass. */
 [data-surface="glass"] .window,
-[data-surface="glass"] .menubar,
 [data-surface="glass"] .menubar-dropdown,
 [data-surface="glass"] .palette,
 [data-surface="glass"] .toast {
@@ -986,7 +991,7 @@ a[target="_blank"]::after {
 [data-surface="glass"] .btn-secondary,
 [data-surface="glass"] .btn-group,
 [data-surface="glass"] .window-btn {
-  border-radius: 13px;
+  border-radius: 10px;
 }
 
 /* ── Passwords easter egg ───────────────────────────────── */
