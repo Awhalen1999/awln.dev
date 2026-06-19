@@ -14,6 +14,7 @@ import { atom } from "nanostores";
 export type Theme = "light" | "dark";
 export type Accent = "orange" | "green" | "blue" | "purple";
 export type LinkStyle = "solid" | "dotted" | "none";
+export type Surface = "solid" | "glass";
 
 /* ── Constants ─────────────────────────────────────────── */
 
@@ -44,6 +45,9 @@ function readLinkStyle(): LinkStyle {
 function readWallpaper(): string {
   return localStorage.getItem("wallpaper") ?? "default";
 }
+function readSurface(): Surface {
+  return localStorage.getItem("surface") === "glass" ? "glass" : "solid";
+}
 
 /* ── Atoms ─────────────────────────────────────────────── */
 
@@ -51,6 +55,7 @@ export const $theme = atom<Theme>(readTheme());
 export const $accent = atom<Accent>(readAccent());
 export const $linkStyle = atom<LinkStyle>(readLinkStyle());
 export const $wallpaper = atom<string>(readWallpaper());
+export const $surface = atom<Surface>(readSurface());
 
 /* ── Side-effects: persist + sync DOM on every change ──── */
 
@@ -84,4 +89,10 @@ $wallpaper.subscribe((value) => {
     desktop.removeAttribute("data-wallpaper");
   }
   localStorage.setItem("wallpaper", value || "default");
+});
+
+$surface.subscribe((value) => {
+  if (value === "glass") root.setAttribute("data-surface", "glass");
+  else root.removeAttribute("data-surface");
+  localStorage.setItem("surface", value);
 });

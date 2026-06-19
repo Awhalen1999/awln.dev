@@ -912,6 +912,83 @@ a[target="_blank"]::after {
   text-decoration: none;
 }
 
+/* ── Liquid Glass ─────────────────────────────────────────
+   Opt-in surface mode (Settings → Appearance → Surface).
+   Re-points the surface color vars to translucent fills and adds the
+   glass treatment to the floating surfaces — windows, menu bar,
+   dropdowns, palette, toasts — with almost no per-element CSS.
+
+   This aims for Apple's Liquid Glass material, not plain frosted
+   glassmorphism. The difference: LOW blur (the backdrop stays clear,
+   not muddy), a saturate + brightness boost so colors behind it stay
+   vivid, high transparency, and a luminous refractive edge (bright
+   inner rim) over a faint dark hairline for separation. */
+
+[data-surface="glass"] {
+  /* Window + icon-label rounding stay at the normal --radius/--radius-sm.
+     Only buttons get rounder (see button rule below). */
+  --window-bg: rgba(255, 255, 255, 0.38);
+  --window-bg-alt: rgba(255, 255, 255, 0.28);
+  /* Faint dark hairline for separation; the bright edge is --glass-rim. */
+  --window-border: rgba(40, 33, 24, 0.12);
+  --menubar-bg: rgba(255, 255, 255, 0.4);
+
+  /* Clear, not frosted — keep the blur low and let saturation carry it. */
+  --glass-blur: 10px;
+  --glass-tint: saturate(180%) brightness(1.06);
+  /* Luminous refractive edge: bright top light + a faint all-round inner ring. */
+  --glass-rim:
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  --glass-drop: 0 12px 40px rgba(0, 0, 0, 0.16);
+}
+
+[data-surface="glass"][data-theme="dark"] {
+  --window-bg: rgba(28, 26, 24, 0.4);
+  --window-bg-alt: rgba(48, 46, 44, 0.32);
+  --window-border: rgba(255, 255, 255, 0.14);
+  --menubar-bg: rgba(24, 22, 20, 0.45);
+
+  --glass-tint: saturate(190%) brightness(1.1);
+  --glass-rim:
+    inset 0 1px 1px rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --glass-drop: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Treat the backdrop behind the top-level floating surfaces only —
+   inner panels keep their translucent var fill (no nested blur). */
+[data-surface="glass"] .window,
+[data-surface="glass"] .menubar,
+[data-surface="glass"] .menubar-dropdown,
+[data-surface="glass"] .palette,
+[data-surface="glass"] .toast {
+  backdrop-filter: blur(var(--glass-blur)) var(--glass-tint);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) var(--glass-tint);
+}
+
+[data-surface="glass"] .window,
+[data-surface="glass"] .menubar-dropdown,
+[data-surface="glass"] .palette,
+[data-surface="glass"] .toast {
+  box-shadow: var(--glass-rim), var(--glass-drop);
+}
+
+[data-surface="glass"] .palette-backdrop {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Buttons are the only thing that gains rounding in glass mode — rounder
+   than solid but not a full pill, matching Apple's glass controls.
+   Windows + icon labels keep the normal square-ish rounding. */
+[data-surface="glass"] .btn-feature,
+[data-surface="glass"] .btn-secondary,
+[data-surface="glass"] .btn-group,
+[data-surface="glass"] .window-btn {
+  border-radius: 13px;
+}
+
 /* ── Passwords easter egg ───────────────────────────────── */
 
 .pw-row {

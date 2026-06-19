@@ -13,6 +13,7 @@ import {
   $accent,
   $linkStyle,
   $wallpaper,
+  $surface,
   ACCENTS,
   WALLPAPERS,
   type Theme,
@@ -42,6 +43,10 @@ export function currentWallpaper(): string {
   return $wallpaper.get();
 }
 
+export function currentSurface(): string {
+  return $surface.get();
+}
+
 /* ── Write ─────────────────────────────────────────────── */
 
 export function setTheme(value: string) {
@@ -63,6 +68,11 @@ export function setLinkStyle(value: string) {
 
 export function setWallpaper(value: string) {
   $wallpaper.set(value || "default");
+  syncSettingsWindow();
+}
+
+export function setSurface(value: string) {
+  $surface.set(value === "glass" ? "glass" : "solid");
   syncSettingsWindow();
 }
 
@@ -99,6 +109,7 @@ function syncSettingsWindow() {
     if (setting === "theme") value = $theme.get();
     else if (setting === "accent") value = $accent.get();
     else if (setting === "link-style") value = $linkStyle.get();
+    else if (setting === "surface") value = $surface.get();
 
     for (const btn of group.querySelectorAll<HTMLElement>(".btn[data-value]")) {
       if (btn.dataset.value === value) btn.setAttribute("data-active", "");
@@ -149,6 +160,9 @@ document.addEventListener("click", (e) => {
   } else if (setting === "link-style") {
     setLinkStyle(value);
     showToast(`Links: ${value}`, "success");
+  } else if (setting === "surface") {
+    setSurface(value);
+    showToast(`Surface: ${value === "glass" ? "Liquid Glass" : "Solid"}`, "success");
   }
 });
 

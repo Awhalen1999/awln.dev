@@ -34,6 +34,7 @@ const {
         if (a && a !== "orange") document.documentElement.setAttribute("data-accent", a);
         var l = localStorage.getItem("link-style");
         if (l === "dotted" || l === "none") document.documentElement.setAttribute("data-link-style", l);
+        if (localStorage.getItem("surface") === "glass") document.documentElement.setAttribute("data-surface", "glass");
       })();
     </script>
   </head>

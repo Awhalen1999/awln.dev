@@ -347,6 +347,14 @@ const siteSettings = `
       </button>
     </div>
   </div>
+
+  <div class="settings-field">
+    <span class="settings-label">Surface</span>
+    <div class="btn-group" data-setting="surface">
+      <button type="button" class="btn" data-value="solid">Solid</button>
+      <button type="button" class="btn" data-value="glass">Liquid&nbsp;Glass</button>
+    </div>
+  </div>
 </section>
 
 <section class="settings-section">
