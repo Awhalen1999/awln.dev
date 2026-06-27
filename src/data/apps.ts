@@ -67,11 +67,11 @@ const projects = `
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
-      <span>RallyMail</span>
+      <span>MergeMole</span>
       <span class="badge">Current Focus</span>
     </div>
-    <p class="entry-date">2026</p>
-    <p class="entry-desc">A custom email client for fitness coaches. Pulls client threads into one place alongside their profiles and context, with built-in AI.</p>
+    <p class="entry-date">2026 · <a href="https://mergemole.app" target="_blank" rel="noopener">mergemole.app</a></p>
+    <p class="entry-desc">A macOS menu bar app that uses Apple Intelligence (or a local LLM) to triage your PRs from the diff and rank them by priority and effort, with a one-line summary of each.</p>
   </li>
   <li class="entry">
     <div class="entry-title">
