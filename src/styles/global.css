@@ -970,14 +970,16 @@ a[target="_blank"]::after {
 [data-surface="glass"] .menubar-dropdown,
 [data-surface="glass"] .palette,
 [data-surface="glass"] .toast {
+  /* Write only the standard property — Lightning CSS (Tailwind v4) adds the
+     -webkit- prefix per browser targets. Hand-writing both makes its minifier
+     dedupe to the -webkit- one and DROP the standard property, which kills the
+     blur in Firefox (it never supported -webkit-backdrop-filter). */
   backdrop-filter: blur(var(--glass-blur)) var(--glass-tint);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) var(--glass-tint);
   box-shadow: var(--glass-rim), var(--glass-drop);
 }
 
 [data-surface="glass"] .palette-backdrop {
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
 }
 
 /* Buttons are the only thing that gains rounding in glass mode — rounder
@@ -1014,7 +1016,6 @@ a[target="_blank"]::after {
   padding-top: min(20vh, 160px);
   background: color-mix(in srgb, var(--text) 4%, transparent);
   backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
 }
 
 .palette {
