@@ -39,7 +39,7 @@ const about = `
 </p>
 <p>
   Outside of coding, I enjoy exploring new places, sports,
-  <a href="https://letterboxd.com/Awln/" target="_blank" rel="noopener">anime and movies</a>.
+  <a href="https://moobie.awln.dev" target="_blank" rel="noopener">anime and movies</a>.
   <em>Oh and trying way too hard to be good at running...</em>
 </p>
 <p>
