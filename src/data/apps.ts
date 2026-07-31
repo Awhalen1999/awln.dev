@@ -67,6 +67,15 @@ const projects = `
   <li class="entry">
     <div class="entry-title">
       <span class="entry-ico">▸</span>
+      <span>moobie</span>
+      <span class="badge">Current Focus</span>
+    </div>
+    <p class="entry-date">2026 · <a href="https://moobie.awln.dev" target="_blank" rel="noopener">moobie.awln.dev</a></p>
+    <p class="entry-desc">A Discord bot and web UI that watches my friends Letterboxd RSS feeds, announces new logs in Discord, and builds a shared history for comparing ratings across the group.</p>
+  </li>
+  <li class="entry">
+    <div class="entry-title">
+      <span class="entry-ico">▸</span>
       <span>MergeMole</span>
       <span class="badge">Current Focus</span>
     </div>
