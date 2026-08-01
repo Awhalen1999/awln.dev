@@ -224,7 +224,7 @@ function buildCommands(): Cmd[] {
       name: "wallpaper",
       category: "Utility",
       summary: "Change the desktop wallpaper.",
-      usage: "wallpaper <default|2-6>",
+      usage: "wallpaper <default|2-3>",
       run(args, io) {
         if (args.length === 0) {
           io.print(`<span class="terminal-muted">current: </span>${escapeHtml(wallpaperIdToKey(currentWallpaper()))}`);

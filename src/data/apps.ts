@@ -373,25 +373,13 @@ const siteSettings = `
       <span class="wallpaper-preview wallpaper-preview--default"></span>
       <span class="wallpaper-name">Default</span>
     </button>
-    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper2">
-      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper2.png)"></span>
-      <span class="wallpaper-name">Flying Kitty (macOS)</span>
+    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper8">
+      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper8.png)"></span>
+      <span class="wallpaper-name">Wallpaper 2</span>
     </button>
-    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper3">
-      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper3.png)"></span>
-      <span class="wallpaper-name">Circuit Board (macOS)</span>
-    </button>
-    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper4">
-      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper4.png)"></span>
-      <span class="wallpaper-name">Bliss (Windows XP)</span>
-    </button>
-    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper5">
-      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper5.png)"></span>
-      <span class="wallpaper-name">Hello Light</span>
-    </button>
-    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper6">
-      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper6.png)"></span>
-      <span class="wallpaper-name">Hello Dark</span>
+    <button type="button" class="wallpaper-thumb" data-wallpaper="wallpaper9">
+      <span class="wallpaper-preview" style="background-image:url(/wallpapers/wallpaper9.png)"></span>
+      <span class="wallpaper-name">Wallpaper 3</span>
     </button>
   </div>
 </section>

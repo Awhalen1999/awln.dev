@@ -22,11 +22,8 @@ export const ACCENTS: readonly string[] = ["orange", "green", "blue", "purple"];
 
 export const WALLPAPERS: { key: string; id: string; name: string }[] = [
   { key: "default", id: "default", name: "Default" },
-  { key: "2", id: "wallpaper2", name: "Flying Kitty (macOS)" },
-  { key: "3", id: "wallpaper3", name: "Circuit Board (macOS)" },
-  { key: "4", id: "wallpaper4", name: "Bliss (Windows XP)" },
-  { key: "5", id: "wallpaper5", name: "Hello Light" },
-  { key: "6", id: "wallpaper6", name: "Hello Dark" },
+  { key: "2", id: "wallpaper8", name: "Wallpaper 2" },
+  { key: "3", id: "wallpaper9", name: "Wallpaper 3" },
 ];
 
 /* ── Helpers ───────────────────────────────────────────── */
