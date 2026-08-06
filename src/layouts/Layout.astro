@@ -40,11 +40,24 @@ const {
       })();
     </script>
     <script is:inline>
-      document.addEventListener("visibilitychange", function () {
-        document.getElementById("favicon").href = document.hidden
-          ? "/favicon-sad.png"
-          : "/favicon-happy.png";
-      });
+      (function () {
+        var sadTitles = [
+          "hey, where are you going?",
+          "come back :(",
+          "new tab? in this economy?",
+          "even the favicon is sad now",
+        ];
+        var happyTitle = document.title;
+        document.addEventListener("visibilitychange", function () {
+          if (document.hidden) {
+            document.getElementById("favicon").href = "/favicon-sad.png";
+            document.title = sadTitles[Math.floor(Math.random() * sadTitles.length)];
+          } else {
+            document.getElementById("favicon").href = "/favicon-happy.png";
+            document.title = happyTitle;
+          }
+        });
+      })();
     </script>
   </head>
   <body>
