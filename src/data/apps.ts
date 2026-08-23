@@ -97,7 +97,7 @@ const projects = `
       <span>cooked.photo</span>
       <span class="badge">Live</span>
     </div>
-    <p class="entry-date">2026 · <a href="https://cooked.photo" target="_blank" rel="noopener">cooked.photo</a></p>
+    <p class="entry-date">2026 · <a href="https://cooked.photo.awln.dev" target="_blank" rel="noopener">cooked.photo.awln.dev</a></p>
     <p class="entry-desc">A web app with a bunch of filters for twisting and breaking photos in interesting ways.</p>
   </li>
   <li class="entry">
